@@ -16,14 +16,8 @@ Ray::Ray(const glm::vec3 &origin, const glm::vec3 &direction) {
 }
 
 Ray Ray::getTransformedCopy(glm::mat4 tMat) const {
-	Ray ret;
 	glm::vec4 trans_orig = tMat * glm::vec4(this->origin, 1);
-	glm::vec4 trans_dir = tMat * glm::vec4(this->direction, 1);
-	ret.origin.x = trans_orig.x;
-	ret.origin.y = trans_orig.y;
-	ret.origin.z = trans_orig.z;
-	ret.direction.x = trans_dir.x;
-	ret.direction.y = trans_dir.y;
-	ret.direction.z = trans_dir.z;
-	return ret;
+	glm::vec4 trans_dir = tMat * glm::vec4(this->direction, 0);
+	return Ray(glm::vec3(trans_orig.x, trans_orig.y, trans_orig.z),
+				glm::vec3(trans_dir.x, trans_dir.y, trans_dir.z));
 }
