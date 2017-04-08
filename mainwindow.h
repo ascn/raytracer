@@ -35,4 +35,4 @@ private slots:
 	void saveImage();
 };
 
-#endif //__MAINWINDOW_H__
+#endif // __MAINWINDOW_H__

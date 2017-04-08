@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 
+#include <scene/geometry/geometry.h>
+
 class Intersection {
 public:
 	Intersection();
@@ -13,6 +15,6 @@ public:
 	glm::vec3 normal;
 	Geometry const *objectHit;
 	float t;
-}
+};
 
 #endif // __INTERSECTION_H__
