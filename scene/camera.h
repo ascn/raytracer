@@ -29,8 +29,7 @@ public:
 	void translateDown(float x);
 
 	void update();
-
-	Ray raycast(glm::vec2 point) const;
+	
 	Ray raycast(float x, float y) const;
 
 	float fovy;

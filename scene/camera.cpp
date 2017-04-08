@@ -1,5 +1,4 @@
 #include <glm/glm.hpp>
-#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
@@ -44,10 +43,6 @@ void Camera::update() {
 	float len = glm::length(ref - eye);
 	V = up * len * tan_alpha;
 	H = right * len * aspect * tan_alpha;
-}
-
-Ray Camera::raycast(glm::vec2 point) const {
-	return raycast(point.x, point.y);
 }
 
 Ray Camera::raycast(float x, float y) const {

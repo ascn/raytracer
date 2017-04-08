@@ -5,6 +5,7 @@
 #include <glm/vec3.hpp>
 
 #include <scene/geometry/geometry.h>
+#include <raytracer/ray.h>
 
 class Intersection {
 public:
@@ -16,5 +17,7 @@ public:
 	Geometry const *objectHit;
 	float t;
 };
+
+Intersection getIntersection(const Ray &ray);
 
 #endif // __INTERSECTION_H__
