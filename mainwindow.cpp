@@ -7,6 +7,10 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QMenuBar>
+#include <QSpacerItem>
+#include <QDockWidget>
+#include <QCheckBox>
+#include <QComboBox>
 
 #include "mainwindow.h"
 
@@ -23,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	createActions();
 	createMenus();
+
+	createOptionDock();
 
 	img = QImage(512, 512, QImage::Format_RGB888);
 	img.fill(qRgb(0, 0, 0));
@@ -50,6 +56,42 @@ void MainWindow::saveImage() {
 
 void MainWindow::renderScene() {
 	// CALL RENDER HERE
+}
+
+void MainWindow::createOptionDock() {
+	QGridLayout *optionDockLayout = new QGridLayout;
+	optionDockLayout->setVerticalSpacing(5);
+	optionDockContents = new QGroupBox(tr(""));
+
+	recursionDepthBox = new QSpinBox(optionDockContents);
+	recursionDepthBox->setRange(1, 20);
+	recursionDepthBox->setSingleStep(1);
+	recursionDepthBox->setValue(5);
+	recursionDepthLabel = new QLabel(tr("Recursion depth: "), optionDockContents);
+
+	AABox = new QComboBox(optionDockContents);
+	AABox->addItem(tr("None"));
+	AABox->addItem(tr("2x AA"));
+	AABox->addItem(tr("4x AA"));
+	AABox->addItem(tr("8x AA"));
+	AABox->addItem(tr("16x AA"));
+	AALabel = new QLabel(tr("Anti-aliasing: "), optionDockContents);
+
+	optionDock = new QDockWidget(tr("Raytracing options"), this);
+	optionDock->setAllowedAreas(Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, optionDock);
+
+	QSpacerItem *spacer = new QSpacerItem(
+					40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+	optionDockLayout->addWidget(recursionDepthLabel, 0, 0, Qt::AlignRight);
+	optionDockLayout->addWidget(recursionDepthBox, 0, 1);
+	optionDockLayout->addWidget(AALabel, 1, 0, Qt::AlignRight);
+	optionDockLayout->addWidget(AABox, 1, 1);
+
+	optionDockLayout->addItem(spacer, 2, 2, -1, -1, Qt::AlignTop);
+	optionDockContents->setLayout(optionDockLayout);
+	optionDock->setWidget(optionDockContents);
 }
 
 void MainWindow::createActions() {

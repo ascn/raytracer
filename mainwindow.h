@@ -7,6 +7,12 @@
 #include <QImage>
 #include <QMenu>
 #include <QAction>
+#include <QGroupBox>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QComboBox>
+
+#include <scene/scene.h>
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
@@ -18,6 +24,9 @@ public:
 public slots:
 
 private:
+	Scene *scene;
+
+	// GUI variables
 	QLabel *imgLabel;
 	QPixmap pixmap;
 	QImage img;
@@ -28,6 +37,15 @@ private:
 	QAction *loadSceneAct;
 	QAction *renderAct;
 	QAction *saveImageAct;
+
+	void createOptionDock();
+	QDockWidget *optionDock;
+	QGroupBox *optionDockContents;
+	QSpinBox *recursionDepthBox;
+	QComboBox *AABox;
+
+	QLabel *recursionDepthLabel;
+	QLabel *AALabel;
 
 private slots:
 	void loadScene();

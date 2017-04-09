@@ -25,7 +25,8 @@ SOURCES += \
     scene/transform.cpp \
     tinyobj/tiny_obj_loader.cc \
     mainwindow.cpp \
-    main.cpp
+    main.cpp \
+    scene/materials/material.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -201,4 +202,6 @@ HEADERS += \
     scene/scene.h \
     scene/transform.h \
     tinyobj/tiny_obj_loader.h \
-    mainwindow.h
+    mainwindow.h \
+    scene/geometry/geometry.h \
+    scene/materials/material.h

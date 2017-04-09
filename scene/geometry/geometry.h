@@ -1,6 +1,7 @@
 #ifndef __GEOMETRY_H__
 #define __GEOMETRY_H__
 
+#include <QString>
 #include <raytracer/ray.h>
 #include <raytracer/intersection.h>
 #include <scene/transform.h>
