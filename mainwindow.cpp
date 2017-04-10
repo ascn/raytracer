@@ -11,6 +11,7 @@
 #include <QDockWidget>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QDoubleSpinBox>
 
 #include <raytracer/RaytraceEngine.h>
 #include <scene/camera.h>
@@ -90,19 +91,52 @@ void MainWindow::createOptionDock() {
 	AABox->addItem(tr("16x AA"));
 	AALabel = new QLabel(tr("Anti-aliasing: "), optionDockContents);
 
-	optionDock = new QDockWidget(tr("Raytracing options"), this);
+	optionDock = new QDockWidget(tr("Settings"), this);
 	optionDock->setAllowedAreas(Qt::RightDockWidgetArea);
 	addDockWidget(Qt::RightDockWidgetArea, optionDock);
 
+	QGridLayout *AOSettingsLayout = new QGridLayout;
+	AOSettingsLayout->setVerticalSpacing(5);
+	AOSettings = new QGroupBox(tr("Ambient occlusion"));
+	AOSamplesLabel = new QLabel(tr("Samples: "), AOSettings);
+	AOSpreadLabel = new QLabel(tr("Spread: "), AOSettings);
+	AODistanceLabel = new QLabel(tr("Distance: "), AOSettings);
+
+	AOSamplesBox = new QSpinBox(AOSettings);
+	AOSamplesBox->setRange(1, 1000);
+	AOSamplesBox->setSingleStep(1);
+
+	AOSpreadBox = new QDoubleSpinBox(AOSettings);
+	AOSpreadBox->setRange(0, 1);
+	AOSpreadBox->setValue(1);
+
+	AODistanceBox = new QDoubleSpinBox(AOSettings);
+	AODistanceBox->setRange(0, 1000);
+	AODistanceBox->setValue(0);
+
+	AOButton = new QPushButton("Generate AO Pass", AOSettings);
+
+	AOSettingsLayout->addWidget(AOSamplesLabel, 0, 0, Qt::AlignRight);
+	AOSettingsLayout->addWidget(AOSpreadLabel, 1, 0, Qt::AlignRight);
+	AOSettingsLayout->addWidget(AODistanceLabel, 2, 0, Qt::AlignRight);
+	AOSettingsLayout->addWidget(AOSamplesBox, 0, 1);
+	AOSettingsLayout->addWidget(AOSpreadBox, 1, 1);
+	AOSettingsLayout->addWidget(AODistanceBox, 2, 1);
+	AOSettingsLayout->addWidget(AOButton, 3, 0, 1, -1);
+
 	QSpacerItem *spacer = new QSpacerItem(
 					40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+	AOSettingsLayout->addItem(spacer, 4, 3, -1, -1, Qt::AlignTop);
+	AOSettings->setLayout(AOSettingsLayout);
 
 	optionDockLayout->addWidget(recursionDepthLabel, 0, 0, Qt::AlignRight);
 	optionDockLayout->addWidget(recursionDepthBox, 0, 1);
 	optionDockLayout->addWidget(AALabel, 1, 0, Qt::AlignRight);
 	optionDockLayout->addWidget(AABox, 1, 1);
+	optionDockLayout->addWidget(AOSettings, 2, 0, -1, -1);
 
-	optionDockLayout->addItem(spacer, 2, 2, -1, -1, Qt::AlignTop);
+	optionDockLayout->addItem(spacer, 3, 2, -1, -1, Qt::AlignTop);
 	optionDockContents->setLayout(optionDockLayout);
 	optionDock->setWidget(optionDockContents);
 }

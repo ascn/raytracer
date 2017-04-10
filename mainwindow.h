@@ -8,9 +8,11 @@
 #include <QMenu>
 #include <QAction>
 #include <QGroupBox>
+#include <QDoubleSpinBox>
 #include <QSpinBox>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QPushButton>
 
 #include <scene/camera.h>
 #include <scene/scene.h>
@@ -46,8 +48,17 @@ private:
 	QSpinBox *recursionDepthBox;
 	QComboBox *AABox;
 
+	QGroupBox *AOSettings;
+	QSpinBox *AOSamplesBox;
+	QDoubleSpinBox *AOSpreadBox;
+	QDoubleSpinBox *AODistanceBox;
+	QPushButton *AOButton;
+
 	QLabel *recursionDepthLabel;
 	QLabel *AALabel;
+	QLabel *AOSamplesLabel;
+	QLabel *AOSpreadLabel;
+	QLabel *AODistanceLabel;
 
 private slots:
 	void loadScene();
