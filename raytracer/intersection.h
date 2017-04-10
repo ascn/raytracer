@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
-
+#include <scene/scene.h>
 #include <scene/geometry/geometry.h>
 #include <raytracer/ray.h>
 
@@ -12,7 +12,7 @@ public:
 	Intersection();
 	~Intersection();
 
-	static Intersection getIntersection(const Ray &ray);
+	static Intersection getIntersection(const Ray &ray, const Scene &scene);
 
 	glm::vec3 isectPoint;
 	glm::vec3 normal;

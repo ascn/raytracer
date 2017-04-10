@@ -33,7 +33,7 @@ public:
 	Ray raycast(float x, float y) const;
 
 	float fovy;
-	uint8_t width, height;
+	uint16_t width, height;
 	float near, far;
 	float aspect;
 	glm::vec3 eye;			// The position of the camera

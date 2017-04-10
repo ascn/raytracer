@@ -12,6 +12,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 
+#include <scene/camera.h>
 #include <scene/scene.h>
 
 class MainWindow : public QMainWindow {
@@ -25,6 +26,7 @@ public slots:
 
 private:
 	Scene *scene;
+	Camera *camera;
 
 	// GUI variables
 	QLabel *imgLabel;

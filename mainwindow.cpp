@@ -12,9 +12,14 @@
 #include <QCheckBox>
 #include <QComboBox>
 
+#include <raytracer/RaytraceEngine.h>
+#include <scene/camera.h>
+#include <scene/scene.h>
+
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
+	scene(nullptr), camera(nullptr) {
 	this->setWindowTitle("Raytracer");
 	imgLabel = new QLabel(this);
 
@@ -30,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	createOptionDock();
 
-	img = QImage(512, 512, QImage::Format_RGB888);
+	img = QImage(512, 512, QImage::Format_RGB32);
 	img.fill(qRgb(0, 0, 0));
 	pixmap = QPixmap::fromImage(img);
 	imgLabel->setPixmap(pixmap);
@@ -55,6 +60,14 @@ void MainWindow::saveImage() {
 }
 
 void MainWindow::renderScene() {
+
+	// TESTING BEFORE JSONREADER IS IMPLEMENTED
+	camera = new Camera(512, 512);
+	scene = new Scene();
+
+    RaytraceEngine::render(*camera, *scene, img);
+	pixmap = QPixmap::fromImage(img);
+	imgLabel->setPixmap(pixmap);
 	// CALL RENDER HERE
 }
 

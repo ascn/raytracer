@@ -6,11 +6,14 @@
 #include <scene/camera.h>
 #include <scene/scene.h>
 #include <raytracer/ray.h>
+#include <QImage>
 
 class RaytraceEngine {
+public:
 	static void render(const Camera &camera, const Scene &scene, QImage &image, 
-		uint8_t recursionDepth = 5, uint8_t samples = 1);
-	static glm::vec3 traceRay(const Ray &ray, uint8_t depth, uint8_t maxDepth);
-}
+		uint8_t maxDepth = 5, uint8_t samples = 1);
+	static glm::vec3 traceRay(const Ray &ray, const Scene &scene,
+		uint8_t depth, uint8_t maxDepth);
+};
 
 #endif // __RAYTRACEENGINE_H__

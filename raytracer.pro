@@ -26,7 +26,8 @@ SOURCES += \
     tinyobj/tiny_obj_loader.cc \
     mainwindow.cpp \
     main.cpp \
-    scene/materials/material.cpp
+    scene/materials/material.cpp \
+    raytracer/RaytraceEngine.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -204,4 +205,5 @@ HEADERS += \
     tinyobj/tiny_obj_loader.h \
     mainwindow.h \
     scene/geometry/geometry.h \
-    scene/materials/material.h
+    scene/materials/material.h \
+    raytracer/RaytraceEngine.h
