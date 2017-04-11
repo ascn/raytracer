@@ -7,27 +7,22 @@
 #include <scene/geometry/geometry.h>
 #include <scene/geometry/squareplane.h>
 
-SquarePlane::SquarePlane(QString name, Transform transform, Material material) {
+SquarePlane::SquarePlane(QString name, Transform transform, Material *material) {
     this->s = glm::vec3(0.5, 0.5, 0);
     this->name = name;
     this->transform = transform;
     this->material = material;
 }
 
-float SquarePlane::dotproduct(glm::vec3 a, glm::vec3 b) {
-    float result = (a[0]*b[0])+(a[1]*b[1])+(a[2]*b[2]);
-    return result;
-}
-
-float SquarePlane::getT(glm::vec3 n, glm::vec3 s, glm::vec3 origin, glm::vec3 direction) {
-    float resultTop = dotproduct(n, s.operator -=(origin));
-    float resultBot = dotproduct(n, direction);
+float SquarePlane::getT(glm::vec3 n, glm::vec3 s, glm::vec3 origin, glm::vec3 direction) const {
+    float resultTop = glm::dot(n, s - origin);
+    float resultBot = glm::dot(n, direction);
     float result = resultTop/resultBot;
     return result;
 }
 
 bool SquarePlane::intersect(const Ray &ray, Intersection *intersection) const {
-    Ray rayMod = ray.getTransformedCopy(transform.invTransMat());
+    Ray rayMod = ray.getTransformedCopy(transform.invTransform);
     glm::vec3 rayOriMod = rayMod.origin;
     glm::vec3 rayDirMod = rayMod.direction;
     glm::vec3 n = glm::vec3(0, 0, 0.5);

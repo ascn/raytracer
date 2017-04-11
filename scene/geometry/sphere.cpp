@@ -13,7 +13,7 @@ Sphere::Sphere(QString name, Transform transform, Material *material) {
     this->material = material;
 }
 
-float Sphere::getT(float a, float b, float c) {
+float Sphere::getT(float a, float b, float c) const {
     float result = ((-1*b) -sqrt((b*b)-(4*a*c)))/(2*a);
     if (result < 0) {
         result = ((-1*b) +sqrt((b*b)-(4*a*c)))/(2*a);
@@ -23,7 +23,7 @@ float Sphere::getT(float a, float b, float c) {
 
 bool Sphere::intersect(const Ray &ray, Intersection *intersection) const {
     float radius = 0.5;
-    Ray rayMod = ray.getTransformedCopy(transform.invTransMat());
+    Ray rayMod = ray.getTransformedCopy(transform.invTransform);
     glm::vec3 rayOriMod = rayMod.origin;
     glm::vec3 rayDirMod = rayMod.origin;
     float a = (rayDirMod[0]*rayDirMod[0]) + (rayDirMod[1]*rayDirMod[1]) + (rayDirMod[2]*rayDirMod[2]);
