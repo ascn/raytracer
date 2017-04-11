@@ -6,7 +6,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
-#include <QImage>Q
+#include <QImage>
 
 #include <scene/jsonreader.h>
 #include <scene/scene.h>
@@ -55,7 +55,7 @@ void parseCamera(Camera *camera, QJsonObject cameraObj) {
 
     eyeArr = cameraObj.value("eye").toArray();
     wUpArr = cameraObj.value("worldUp").toArray();
-    centerArr = cameraObj.value("center").toArray();
+    centerArr = cameraObj.value("target").toArray();
 
     for (int i = 0; i < 3; i++) {
         eye[i] = eyeArr[i].toDouble();
@@ -84,8 +84,10 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr) {
         QString type = currObj.value("type").toString();
 
         // Create objects that go into appropriate Geometry object
-        Transform *transform;
-        parseTransform(transform, currObj.value("transform").toObject());
+        Transform *transform = new Transform();
+        if (currObj.contains("transform")) {
+            //parseTransform(transform, currObj.value("transform").toObject());
+        }
         Material *material = scene->materialsMap.value(currObj.value("material").toString());
 
         if (type == QString("cube")) {
@@ -146,7 +148,6 @@ void parseTransform(Transform *transform, QJsonObject obj) {
 
 void parseMaterial(Scene *scene, QJsonArray materialArr) {
 
-    QMap<QString, Material *> materialsMap;
     QJsonObject currObj;
     for (int i = 0; i < materialArr.size(); i++) {
 
@@ -194,10 +195,9 @@ void parseMaterial(Scene *scene, QJsonArray materialArr) {
             if (!img.isNull()) material->normalMap = &img;
         }
 
-        materialsMap.insert(material->name, material);
+        scene->materialsMap.insert(material->name, material);
         scene->materials.append(material);
     }
-    scene->materialsMap = materialsMap;
 }
 
 }

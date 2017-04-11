@@ -25,7 +25,7 @@ bool Sphere::intersect(const Ray &ray, Intersection *intersection) const {
     float radius = 0.5;
     Ray rayMod = ray.getTransformedCopy(transform.invTransform);
     glm::vec3 rayOriMod = rayMod.origin;
-    glm::vec3 rayDirMod = rayMod.origin;
+    glm::vec3 rayDirMod = rayMod.direction;
     float a = (rayDirMod[0]*rayDirMod[0]) + (rayDirMod[1]*rayDirMod[1]) + (rayDirMod[2]*rayDirMod[2]);
     float b = 2*((rayDirMod[0]*rayOriMod[0]) + (rayDirMod[1]*rayOriMod[1]) + (rayDirMod[2]*rayOriMod[2]));
     float c = (rayOriMod[0]*rayOriMod[0]) + (rayOriMod[1]*rayOriMod[1]) + (rayOriMod[2]*rayOriMod[2]) - (radius*radius);
@@ -34,6 +34,7 @@ bool Sphere::intersect(const Ray &ray, Intersection *intersection) const {
         return false;
     } else {
         intersection->t = getT(a, b, c);
+        intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
         glm::vec3 normalInit = glm::vec3((isectInit[0]/radius), (isectInit[1]/radius), (isectInit[2]/radius));

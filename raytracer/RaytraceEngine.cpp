@@ -18,6 +18,10 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 	for (int i = 0; i < camera.width; ++i) {
 		for (int j = 0; j < camera.height; ++j) {
 			Ray ray = camera.raycast(i, j);
+            if (i == 256 && j == 256) {
+                int k = 0;
+				continue;
+			}
             glm::vec3 color = RaytraceEngine::traceRay(ray, scene, 0, maxDepth);
             //image.setPixel(i, j, qRgb(color.x, color.y, color.z));
 			QRgb *line = (QRgb *) image.scanLine(j);
@@ -41,7 +45,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	Intersection isect = Intersection::getIntersection(ray, scene);
 	if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
 
-	return isect.normal * glm::vec3(255);
+	return glm::vec3(255, 0, 0);
 
 	// Iterate through all lights, and call isect.raycast(light position) to
 	// get a light feeler ray. Calculate the intersection of each of these.

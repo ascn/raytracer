@@ -5,8 +5,8 @@
       "eye": [0, 0.5, 5],
       "worldUp": [0, 1, 0],
       "fov": 50,
-      "width": 400,
-      "height": 400
+      "width": 512,
+      "height": 512
     },
     "geometry": [
       {

@@ -75,6 +75,7 @@ bool Cube::intersect(const Ray &ray, Intersection *intersection) const {
         return false;
     } else {
         intersection->t = tNear;
+        intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
         glm::vec3 normalInit = glm::vec3(isectInit[0], isectInit[1], -0.5);

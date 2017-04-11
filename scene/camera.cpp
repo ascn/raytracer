@@ -8,7 +8,7 @@
 Camera::Camera() : Camera(512, 512) {}
 
 Camera::Camera(uint16_t w, uint16_t h) :
-	Camera(w, h, glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)) {}
+	Camera(w, h, glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)) {}
 
 Camera::Camera(uint16_t w, uint16_t h, const glm::vec3 &eye,
 	const glm::vec3 &ref, const glm::vec3 &wUp) :

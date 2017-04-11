@@ -63,15 +63,9 @@ void MainWindow::saveImage() {
 }
 
 void MainWindow::renderScene() {
-
-	// TESTING BEFORE JSONREADER IS IMPLEMENTED
-	camera = new Camera(512, 512);
-	scene = new Scene();
-
     RaytraceEngine::render(*camera, *scene, img);
 	pixmap = QPixmap::fromImage(img);
 	imgLabel->setPixmap(pixmap);
-	// CALL RENDER HERE
 }
 
 void MainWindow::createOptionDock() {

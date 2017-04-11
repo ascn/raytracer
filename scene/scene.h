@@ -9,7 +9,7 @@
 
 class Scene {
 public:
-
+	Scene();
     void reset();
 
     QList<Geometry *> primitives;
