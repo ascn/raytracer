@@ -6,6 +6,7 @@
 class Sphere : public Geometry {
 public:
     Sphere(QString name, Transform transform, Material *material);
+    float getT(float a, float b, float c);
     bool intersect(const Ray &ray, Intersection *intersection) const;
 };
 
