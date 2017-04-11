@@ -41,6 +41,8 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	Intersection isect = Intersection::getIntersection(ray, scene);
 	if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
 
+	return isect.normal * glm::vec3(255);
+
 	// Iterate through all lights, and call isect.raycast(light position) to
 	// get a light feeler ray. Calculate the intersection of each of these.
 	// If the object hit is the light itself (not obstructed), determine
@@ -48,8 +50,6 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	// isect.objectHit->material.getColor(). Store this. If the object
 	// is reflective or refractive, recursively call traceRay with a new
 	// transformed ray.
-
-	return glm::vec3(255, 0, 0);
 }
 
 QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
