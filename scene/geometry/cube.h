@@ -5,7 +5,7 @@
 
 class Cube : public Geometry
 {
-
-}
+    Cube(QString name, Transform transform, Material *material);
+};
 
 #endif

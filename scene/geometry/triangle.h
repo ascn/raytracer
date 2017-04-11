@@ -6,6 +6,6 @@
 class Triangle : public Geometry
 {
 
-}
+};
 
 #endif

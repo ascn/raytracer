@@ -6,6 +6,6 @@
 class SquarePlane : public Geometry
 {
 
-}
+};
 
 #endif
