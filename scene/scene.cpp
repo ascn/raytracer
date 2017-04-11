@@ -4,6 +4,10 @@
 
 #include <scene/scene.h>
 
-Scene::Scene() {
-//    Camera camera;
+//Scene::Scene() {
+
+//}
+
+void reset() {
+
 }
