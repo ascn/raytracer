@@ -4,6 +4,7 @@
 #include <scene/camera.h>
 #include <scene/scene.h>
 #include <raytracer/ray.h>
+#include <raytracer/intersection.h>
 #include <QImage>
 #include <QColor>
 #include <QDebug>
@@ -35,11 +36,24 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	// stop even if current recursion depth isn't max depth. Otherwise we
 	// reflect/refract the ray and continue.
 
+	if (depth > maxDepth) { return glm::vec3(0, 0, 0); }
+
+	Intersection isect = Intersection::getIntersection(ray, scene);
+	if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
+
+	// Iterate through all lights, and call isect.raycast(light position) to
+	// get a light feeler ray. Calculate the intersection of each of these.
+	// If the object hit is the light itself (not obstructed), determine
+	// the color of the current pixel by calling
+	// isect.objectHit->material.getColor(). Store this. If the object
+	// is reflective or refractive, recursively call traceRay with a new
+	// transformed ray.
+
 	return glm::vec3(255, 0, 0);
 }
 
-QImage generateAOPass(const Camera &camera, const Scene &scene,
-					  int samples, float spread, float distance) {
+QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
+									  int samples, float spread, float distance) {
 
 	// Cast rays through each pixel. If the ray hits a geometry,
 	// cast *samples* rays from the intersection point in a
