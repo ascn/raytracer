@@ -25,7 +25,8 @@ Intersection Intersection::getIntersection(const Ray &ray, const Scene &scene) {
 
 	for (auto &p : scene.primitives) {
 		if (p->intersect(ray, &tmp)) {
-			if (tmp.t > 0 && tmp.t < ret.t) {
+			if (ret.t < 0) { ret = tmp; }
+			else if (tmp.t > 0 && tmp.t < ret.t) {
 				ret = tmp;
 			}
 		}

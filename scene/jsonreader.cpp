@@ -86,7 +86,7 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr) {
         // Create objects that go into appropriate Geometry object
         Transform *transform = new Transform();
         if (currObj.contains("transform")) {
-            //parseTransform(transform, currObj.value("transform").toObject());
+            parseTransform(transform, currObj.value("transform").toObject());
         }
         Material *material = scene->materialsMap.value(currObj.value("material").toString());
 

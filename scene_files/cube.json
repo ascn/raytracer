@@ -12,6 +12,10 @@
       {
         "type": "cube",
         "name": "Cube",
+        "transform": {
+          "rotate": [30, 30, 0],
+          "scale" : [0.8, 0.8, 0.8]
+        },
         "material": "white_diffuse"
       },
       {
