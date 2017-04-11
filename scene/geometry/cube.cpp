@@ -1,4 +1,3 @@
-
 #include <scene/geometry/cube.h>
 
 

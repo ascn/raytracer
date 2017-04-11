@@ -4,6 +4,7 @@
 #include <scene/geometry/geometry.h>
 
 class Sphere : public Geometry {
+public:
     Sphere(QString name, Transform transform, Material *material);
     bool intersect(const Ray &ray, Intersection *intersection) const;
 };
