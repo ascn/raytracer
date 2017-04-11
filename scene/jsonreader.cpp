@@ -67,4 +67,12 @@ void parseCamera(Camera *camera, QJsonObject cameraObj) {
 //    camera(w, h, eye, center, wUp);
 }
 
+void parseGeometry(Scene *scene, QJsonArray geometry) {
+
+}
+
+void parseMaterial(Scene *scene, QJsonArray material) {
+
+}
+
 }

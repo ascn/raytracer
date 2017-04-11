@@ -7,3 +7,7 @@ Cube::Cube(QString name, Transform transform, Material *material) {
     this->transform = transform;
     this->material = material;
 }
+
+bool Cube::intersect(const Ray &ray, Intersection *intersection) const {
+    return false;
+}

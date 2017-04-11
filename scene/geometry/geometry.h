@@ -14,7 +14,7 @@ public:
 	Geometry() {}
 	virtual ~Geometry() {}
 
-	virtual bool intersect(const Ray &ray, Intersection *intersection) const;
+    virtual bool intersect(const Ray &ray, Intersection *intersection) const = 0;
 
 	QString name;
 	Transform transform;

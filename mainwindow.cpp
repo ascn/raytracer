@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 	pixmap = QPixmap::fromImage(img);
 	imgLabel->setPixmap(pixmap);
 
+    camera = new Camera();
+    scene = new Scene();
 }
 
 MainWindow::~MainWindow() {}
@@ -49,7 +51,7 @@ void MainWindow::loadScene() {
 	QString filename = QFileDialog::getOpenFileName(this,
 		tr("Load scene..."), "./", tr("Scene files (*.json)"));
 	if (filename == "") { return; }
-    jsonreader::readJson(filename);
+    jsonreader::readJson(camera, scene, filename);
 }
 
 void MainWindow::saveImage() {
