@@ -7,8 +7,13 @@
 
 class Transform {
 public:
-	glm::mat4 transMat();
-	glm::mat4 invTransMat();
+	Transform();
+	Transform(glm::vec3 t, glm::vec3 r, glm::vec3 s);
+
+	void update();
+
+	const glm::mat4 &transMat() { return transform; }
+	const glm::mat4 &invTransMat() { return invTransform; }
 
 	glm::vec3 translation;
 	glm::vec3 rotation;
