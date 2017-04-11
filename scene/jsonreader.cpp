@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
+#include <QImage>
 
 #include <scene/jsonreader.h>
 #include <scene/scene.h>
@@ -30,8 +31,6 @@ void readJson(Camera *camera, Scene *scene, const QString & filename)
       file.close();
       QJsonDocument doc = QJsonDocument::fromJson(val.toUtf8());
 
-      qDebug() << doc;
-
       QJsonObject object = doc.object();
 
       QJsonObject sceneObj = object.value("scene").toObject();
@@ -41,6 +40,7 @@ void readJson(Camera *camera, Scene *scene, const QString & filename)
 
       parseCamera(camera, cameraObj);
       parseGeometry(scene, geometryArr);
+
       parseMaterial(scene, materialArr);
 }
 
@@ -76,10 +76,60 @@ void parseCamera(Camera *camera, QJsonObject cameraObj) {
 
 void parseGeometry(Scene *scene, QJsonArray geometry) {
 
+
 }
 
-void parseMaterial(Scene *scene, QJsonArray material) {
+void parseMaterial(Scene *scene, QJsonArray materialArr) {
 
+    QJsonObject currObj;
+    for (int i = 0; i < materialArr.size(); i++) {
+
+        currObj = materialArr[i].toObject();
+        Material *material = new Material();
+
+        if (currObj.contains("type")) {
+
+            QString type = currObj.value("type").toString();
+            if (type == QString("lambert"))  {
+                material->type = MaterialType(0);
+            } else if (type == QString("phong")) {
+                material->type = MaterialType(1);
+            }
+        }
+
+        if (currObj.contains("name")) {
+            material->name = currObj.value("name").toString();
+        }
+
+        if (currObj.contains("baseColor")) {
+            QJsonArray bcArr = currObj.value("baseColor").toArray();
+            for (int i = 0; i < 3; i++) {
+                 material->baseColor[i] = bcArr[i].toDouble();
+            }
+        }
+
+        if (currObj.contains("texture")) {
+            QImage img(currObj.value("texture").toString());
+            if (!img.isNull()) material->texture = &img;
+        }
+
+        if (currObj.contains("emissive")) {
+
+            QString boolean = currObj.value("emissive").toString();
+            if (boolean == QString("true")) {
+                material->emissive = true;
+            } else {
+                material->emissive = false;
+            }
+        }
+
+        if (currObj.contains("normalMap")) {
+            QImage img(currObj.value("normalMap").toString());
+            if (!img.isNull()) material->normalMap = &img;
+        }
+
+        scene->materials.append(material);
+    }
 }
 
 }
