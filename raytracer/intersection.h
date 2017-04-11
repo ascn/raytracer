@@ -12,6 +12,7 @@ public:
 	Intersection();
 	~Intersection();
 
+	Ray raycast(glm::vec3 point);
 	static Intersection getIntersection(const Ray &ray, const Scene &scene);
 
 	glm::vec3 isectPoint;

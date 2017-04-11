@@ -6,12 +6,15 @@
 #include <QString>
 #include <QImage>
 
+enum class MaterialType { LAMBERT, PHONG };
+
 class Material {
 public:
 	Material();
 	virtual ~Material() {}
 
 	QString name;
+	MaterialType type;
 	glm::vec3 baseColor;
 	bool emissive;
 	float reflectivity;

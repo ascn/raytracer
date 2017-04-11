@@ -5,7 +5,9 @@
 #include <QImage>
 
 Material::Material() : 
-	name("Material"), baseColor(glm::vec3(0.1f, 0.1f, 0.1f)),
-	emissive(false), reflectivity(0), refractiveIn(1), refractiveOut(1),
+	name("Material"), type(MaterialType::LAMBERT),
+	baseColor(glm::vec3(0.1f, 0.1f, 0.1f)),
+	emissive(false), reflectivity(0), refractiveIn(0), refractiveOut(0),
 	texture(nullptr), normalMap(nullptr)
 {}
+
