@@ -11,7 +11,7 @@ public:
 	Ray(const glm::vec3 &origin, const glm::vec3 &direction);
 	Ray(const Ray &ray);
 
-	Ray getTransformedCopy(glm::mat4 tMat) const;
+    Ray getTransformedCopy(const glm::mat4 tMat) const;
 
 	glm::vec3 origin;
 	glm::vec3 direction;
