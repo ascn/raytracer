@@ -14,6 +14,7 @@ public:
     QList<Geometry *> primitives;
     QList<Geometry *> lights;
     QList<Material *> materials;
+
 };
 
 #endif // __SCENE_H__
