@@ -64,7 +64,14 @@ void parseCamera(Camera *camera, QJsonObject cameraObj) {
         center[i] = centerArr[i].toDouble();
     }
 
-//    camera(w, h, eye, center, wUp);
+    camera->width = w;
+    camera->height = h;
+    camera->fovy = fov;
+    camera->center = center;
+    camera->eye = eye;
+    camera->up = wUp;
+
+    camera->update();
 }
 
 void parseGeometry(Scene *scene, QJsonArray geometry) {
