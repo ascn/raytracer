@@ -3,9 +3,9 @@
 
 #include "geometry.h"
 
-class SquarePlane : public Geometry
-{
-
+class SquarePlane : public Geometry {
+    SquarePlane(QString name, Transform transform, Material *material);
+    bool intersect(const Ray &ray, Intersection *intersection) const;
 };
 
-#endif
+#endif // __SQUAREPLANE_H__

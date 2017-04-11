@@ -3,10 +3,9 @@
 
 #include "geometry.h"
 
-class Cube : public Geometry
-{
+class Cube : public Geometry {
     Cube(QString name, Transform transform, Material *material);
     bool intersect(const Ray &ray, Intersection *intersection) const;
 };
 
-#endif
+#endif // __CUBE_H__

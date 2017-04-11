@@ -1,11 +1,11 @@
 #ifndef __SPHERE_H__
 #define __SPHERE_H__
 
-#include "geometry.h"
+#include <scene/geometry/geometry.h>
 
-class Sphere : public Geometry
-{
-
+class Sphere : public Geometry {
+    Sphere(QString name, Transform transform, Material *material);
+    bool intersect(const Ray &ray, Intersection *intersection) const;
 };
 
-#endif
+#endif // __SPHERE_H__

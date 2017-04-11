@@ -3,9 +3,9 @@
 
 #include "geometry.h"
 
-class Triangle : public Geometry
-{
-
+class Triangle : public Geometry {
+    Triangle(QString name, Transform transform, Material *material);
+    bool intersect(const Ray &ray, Intersection *intersection) const;
 };
 
-#endif
+#endif // __TRIANGLE_H__
