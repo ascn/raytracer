@@ -6,7 +6,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
-#include <QImage>
+#include <QImage>Q
 
 #include <scene/jsonreader.h>
 #include <scene/scene.h>
@@ -39,9 +39,8 @@ void readJson(Camera *camera, Scene *scene, const QString & filename)
       QJsonArray materialArr = sceneObj.value("material").toArray();
 
       parseCamera(camera, cameraObj);
-      parseGeometry(scene, geometryArr);
-
       parseMaterial(scene, materialArr);
+      parseGeometry(scene, geometryArr);
 }
 
 void parseCamera(Camera *camera, QJsonObject cameraObj) {
@@ -74,13 +73,80 @@ void parseCamera(Camera *camera, QJsonObject cameraObj) {
     camera->update();
 }
 
-void parseGeometry(Scene *scene, QJsonArray geometry) {
+void parseGeometry(Scene *scene, QJsonArray geometryArr) {
+
+    QJsonObject currObj;
+    QString name;
+    for (int i = 0; i < geometryArr.size(); i++) {
+
+        currObj = geometryArr[i].toObject();
+        name = currObj.value("name").toString();
+        QString type = currObj.value("type").toString();
+
+        // Create objects that go into appropriate Geometry object
+        Transform *transform;
+        parseTransform(transform, currObj.value("transform").toObject());
+        Material *material = scene->materialsMap.value(currObj.value("material").toString());
+
+        if (type == QString("cube")) {
+
+            Cube *cube = new Cube(name, *transform, material);
+            scene->primitives.append(cube);
+
+        } else if (type == QString("sphere")) {
+
+            Sphere *sphere = new Sphere(name, *transform, material);
+            scene->primitives.append(sphere);
+
+            bool emissive = (scene->materialsMap.value(currObj.value("material").toString()))->emissive;
+            if (emissive) {
+                scene->lights.append(sphere);
+            }
+        } else if (type == QString("square")) {
+
+            SquarePlane *sp = new SquarePlane(name, *transform, material);
+            scene->primitives.append(sp);
+
+        } else if (type == QString("obj")) {
 
 
+        }
+    }
+}
+
+
+void parseTransform(Transform *transform, QJsonObject obj) {
+
+    int i;
+    if (obj.contains("translate")) {
+        QJsonArray tl = obj.value("translate").toArray();
+
+        for (i = 0; i < 3; i++) {
+            transform->translation[i] = tl[i].toDouble();
+        }
+    }
+
+    if (obj.contains("rotate")) {
+        QJsonArray rt = obj.value("rotate").toArray();
+
+        for (i = 0; i < 3; i++) {
+           transform->rotation[i] = rt[i].toDouble();
+        }
+    }
+
+    if (obj.contains("scale")) {
+        QJsonArray sc = obj.value("scale").toArray();
+        for (i = 0; i < 3; i++) {
+             transform->scale[i] = sc[i].toDouble();
+        }
+    }
+
+    transform->update();
 }
 
 void parseMaterial(Scene *scene, QJsonArray materialArr) {
 
+    QMap<QString, Material *> materialsMap;
     QJsonObject currObj;
     for (int i = 0; i < materialArr.size(); i++) {
 
@@ -128,8 +194,10 @@ void parseMaterial(Scene *scene, QJsonArray materialArr) {
             if (!img.isNull()) material->normalMap = &img;
         }
 
+        materialsMap.insert(material->name, material);
         scene->materials.append(material);
     }
+    scene->materialsMap = materialsMap;
 }
 
 }
