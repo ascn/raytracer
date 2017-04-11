@@ -3,9 +3,10 @@
 
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
-#include <scene/scene.h>
-#include <scene/geometry/geometry.h>
 #include <raytracer/ray.h>
+
+class Geometry;
+class Scene;
 
 class Intersection {
 public:

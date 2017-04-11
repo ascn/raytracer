@@ -16,9 +16,9 @@
 #include <raytracer/RaytraceEngine.h>
 #include <scene/camera.h>
 #include <scene/scene.h>
+#include <scene/jsonreader.h>
 
 #include "mainwindow.h"
-
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 	scene(nullptr), camera(nullptr) {
 	this->setWindowTitle("Raytracer");
@@ -49,7 +49,7 @@ void MainWindow::loadScene() {
 	QString filename = QFileDialog::getOpenFileName(this,
 		tr("Load scene..."), "./", tr("Scene files (*.json)"));
 	if (filename == "") { return; }
-	// CALL JSONREADER HERE TO LOAD SCENE
+    jsonreader::readJson(filename);
 }
 
 void MainWindow::saveImage() {
