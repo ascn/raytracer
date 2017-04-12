@@ -8,6 +8,12 @@ Scene::Scene() {
 
 }
 
-void reset() {
-
+void Scene::reset() {
+	for (auto &p : primitives) { delete(p);	}
+	for (auto &p : lights) { delete(p); }
+	for (auto &p : materials) { delete(p); }
+	primitives.clear();
+	lights.clear();
+	materials.clear();
+	materialsMap.clear();
 }

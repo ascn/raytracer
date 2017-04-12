@@ -21,6 +21,7 @@ namespace jsonreader {
 
 void readJson(Camera *camera, Scene *scene, const QString & filename)
 {
+    scene->reset();
       QString val;
       QFile file;
 

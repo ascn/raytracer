@@ -25,11 +25,16 @@ bool SquarePlane::intersect(const Ray &ray, Intersection *intersection) const {
     Ray rayMod = ray.getTransformedCopy(transform.invTransform);
     glm::vec3 rayOriMod = rayMod.origin;
     glm::vec3 rayDirMod = rayMod.direction;
-    glm::vec3 n = glm::vec3(0, 0, 0.5);
+    glm::vec3 n = glm::vec3(0, 0, 1);
     intersection->t = getT(n, glm::vec3(0.5, 0.5, 0), rayOriMod, rayDirMod);
     glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
-    intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-    glm::vec3 normalInit = glm::vec3(isectInit[0], isectInit[1], -0.5);
-    intersection->normal = transform.transform * glm::vec4(normalInit, 0);
-    return true;
+    if (isectInit.x >= -0.5 && isectInit.x <= 0.5 &&
+            isectInit.y >= -0.5 && isectInit.y <= 0.5) {
+        intersection->objectHit = this;
+        intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
+        glm::vec3 normalInit = glm::vec3(0, 0, 1);
+        intersection->normal = transform.transform * glm::vec4(normalInit, 0);
+        return true;
+    }
+    return false;
 }

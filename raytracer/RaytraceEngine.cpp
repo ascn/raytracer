@@ -41,7 +41,8 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	Intersection isect = Intersection::getIntersection(ray, scene);
 	if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
 
-	return isect.normal * glm::vec3(255);
+	//return isect.normal * glm::vec3(255);
+	return isect.objectHit->material->baseColor * glm::vec3(255);
 
 	// Iterate through all lights, and call isect.raycast(light position) to
 	// get a light feeler ray. Calculate the intersection of each of these.

@@ -78,7 +78,16 @@ bool Cube::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::vec3(isectInit[0], isectInit[1], -0.5);
+        glm::vec3 absIsect = glm::abs(isectInit);
+        float max = glm::max(absIsect.x, glm::max(absIsect.y, absIsect.z));
+        glm::vec3 normalInit;
+        if (max == absIsect.x) {
+            normalInit = glm::vec3(1, 0, 0);
+        } else if (max == absIsect.y) {
+            normalInit = glm::vec3(0, 1, 0);
+        } else {
+            normalInit = glm::vec3(0, 0, 1);
+        }
         intersection->normal = transform.transform * glm::vec4(normalInit, 0);
         return true;
     }

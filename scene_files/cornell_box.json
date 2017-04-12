@@ -1,0 +1,114 @@
+{
+	"scene": {
+		"camera": {
+			"target": [0, 0, 0],
+			"eye": [0, 0.5, 10],
+			"worldUp": [0, 1, 0],
+			"fov": 50,
+			"width": 512,
+			"height": 512
+		},
+		"geometry": [
+			{
+				"type": "square",
+				"name": "Back Wall",
+				"transform": {
+					"translate": [0, 0, -1],
+					"scale": [10, 10, 1]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "square",
+				"name": "Right Wall",
+				"transform": {
+					"translate": [-1, 0, 0],
+					"rotate": [0, 90, 0],
+					"scale": [10, 10, 1]
+				},
+				"material": "green_diffuse"				
+			},
+			{
+				"type": "square",
+				"name": "Left Wall",
+				"transform": {
+					"translate": [1, 0, 0],
+					"rotate": [0, -90, 0],
+					"scale": [10, 10, 1]
+				},
+				"material": "red_diffuse"
+			},
+			{
+				"type": "square",
+				"name": "Ceiling",
+				"transform": {
+					"translate": [0, -1, 0],
+					"rotate": [90, 0, 0],
+					"scale": [10, 10, 1]
+				},
+				"material": "gray_diffuse"				
+			},
+			{
+				"type": "square",
+				"name": "Floor",
+				"transform": {
+					"translate": [0, 1, 0],
+					"rotate": [-90, 0, 0],
+					"scale": [10, 10, 1]
+				},
+				"material": "gray_diffuse"				
+			},
+			{
+				"type": "cube",
+				"name": "Left Cube",
+				"transform": {
+					"translate": [0.3, 0.5, 0],
+					"rotate": [0, 30, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "left_cube"
+			},
+			{
+				"type": "sphere",
+				"name": "Right Sphere",
+				"transform": {
+					"translate": [-0.2, 0.6, 1],
+					"scale": [0.8, 0.8, 0.8]
+				},
+				"material": "right_sphere"
+			}
+		],
+		"material": [
+			{
+				"type": "lambert",
+				"name": "white_diffuse",
+				"baseColor": [1, 1, 1]
+			},
+			{
+				"type": "lambert",
+				"name": "red_diffuse",
+				"baseColor": [1, 0, 0]
+			},
+			{
+				"type": "lambert",
+				"name": "green_diffuse",
+				"baseColor": [0, 1, 0]
+			},
+			{
+				"type": "lambert",
+				"name": "gray_diffuse",
+				"baseColor": [0.1, 0.1, 0.1]
+			},
+			{
+				"type": "lambert",
+				"name": "left_cube",
+				"baseColor": [1, 0.39, 0.27]
+			},
+			{
+				"type": "lambert",
+				"name": "right_sphere",
+				"baseColor": [0.5, 0, 0.5]
+			}
+		]
+	}
+}
