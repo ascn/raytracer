@@ -38,7 +38,7 @@ bool Sphere::intersect(const Ray &ray, Intersection *intersection) const {
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
         glm::vec3 normalInit = glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z));
-        intersection->normal = transform.transform * glm::vec4(normalInit, 0);
+        intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     }
 }

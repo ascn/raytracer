@@ -33,7 +33,7 @@ bool SquarePlane::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->objectHit = this;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
         glm::vec3 normalInit = glm::vec3(0, 0, 1);
-        intersection->normal = transform.transform * glm::vec4(normalInit, 0);
+        intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     }
     return false;

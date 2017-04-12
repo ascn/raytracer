@@ -63,13 +63,12 @@ void parseCamera(Camera *camera, QJsonObject cameraObj) {
         wUp[i] = wUpArr[i].toDouble();
         center[i] = centerArr[i].toDouble();
     }
-
     camera->width = w;
     camera->height = h;
     camera->fovy = fov;
-    camera->center = center;
+    camera->ref = center;
     camera->eye = eye;
-    camera->up = wUp;
+    camera->wUp = wUp;
 
     camera->update();
 }
@@ -109,6 +108,9 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr) {
 
             SquarePlane *sp = new SquarePlane(name, *transform, material);
             scene->primitives.append(sp);
+            if (material->emissive) {
+                scene->lights.append(sp);
+            }
 
         } else if (type == QString("obj")) {
 
@@ -191,9 +193,21 @@ void parseMaterial(Scene *scene, QJsonArray materialArr) {
             }
         }
 
+        if (currObj.contains("reflectivity")) {
+            float refl = currObj.value("reflectivity").toDouble();
+            material->reflectivity = refl;
+        }
+
         if (currObj.contains("normalMap")) {
             QImage img(currObj.value("normalMap").toString());
             if (!img.isNull()) material->normalMap = &img;
+        }
+
+        if (currObj.contains("ks")) {
+            material->ks = currObj.value("ks").toDouble();
+        }
+        if (currObj.contains("n")) {
+            material->n = currObj.value("n").toInt();
         }
 
         scene->materialsMap.insert(material->name, material);

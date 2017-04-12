@@ -21,6 +21,7 @@ public:
 
 	glm::mat4 transform;
 	glm::mat4 invTransform;
+	glm::mat4 invTransTrans;
 };
 
 #endif // __TRANSFORM_H__

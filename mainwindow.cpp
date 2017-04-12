@@ -12,16 +12,20 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDoubleSpinBox>
+#include <QIcon>
 
 #include <raytracer/RaytraceEngine.h>
 #include <scene/camera.h>
 #include <scene/scene.h>
 #include <scene/jsonreader.h>
+#include <glm/glm.hpp>
 
 #include "mainwindow.h"
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 	scene(nullptr), camera(nullptr) {
 	this->setWindowTitle("Raytracer");
+	this->setWindowIcon(QIcon("icon.png"));
 	imgLabel = new QLabel(this);
 
 	QGridLayout *mainGridLayout = new QGridLayout;
@@ -52,18 +56,23 @@ void MainWindow::loadScene() {
 		tr("Load scene..."), "./", tr("Scene files (*.json)"));
 	if (filename == "") { return; }
     jsonreader::readJson(camera, scene, filename);
+    img = QImage(camera->width, camera->height, QImage::Format_RGB32);
+    img.fill(qRgb(0, 0, 0));
+    pixmap = QPixmap::fromImage(img);
+    imgLabel->setPixmap(pixmap);
 }
 
 void MainWindow::saveImage() {
 	QString filename = QFileDialog::getSaveFileName(this,
 		tr("Save image"), "./",
-		tr("Image files (*.ppm *.png *.jpg *.bmp)"));
+		tr("Image files (*.png *.jpg)"));
 	if (filename == "") { return ; }
 	img.save(filename);
 }
 
 void MainWindow::renderScene() {
-    RaytraceEngine::render(*camera, *scene, img);
+    RaytraceEngine::render(*camera, *scene, img,
+    		recursionDepthBox->value(), glm::pow(2, AABox->currentIndex()));
 	pixmap = QPixmap::fromImage(img);
 	imgLabel->setPixmap(pixmap);
 }

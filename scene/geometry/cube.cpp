@@ -82,13 +82,25 @@ bool Cube::intersect(const Ray &ray, Intersection *intersection) const {
         float max = glm::max(absIsect.x, glm::max(absIsect.y, absIsect.z));
         glm::vec3 normalInit;
         if (max == absIsect.x) {
-            normalInit = glm::vec3(1, 0, 0);
+            if (isectInit.x < 0) {
+                normalInit = glm::vec3(-1, 0, 0);
+            } else {
+                normalInit = glm::vec3(1, 0, 0);
+            }
         } else if (max == absIsect.y) {
-            normalInit = glm::vec3(0, 1, 0);
+            if (isectInit.y < 0) {
+                normalInit = glm::vec3(0, -1, 0);
+            } else {
+                normalInit = glm::vec3(0, 1, 0);
+            }
         } else {
-            normalInit = glm::vec3(0, 0, 1);
+            if (isectInit.z < 0) {
+                normalInit = glm::vec3(0, 0, -1);
+            } else {
+                normalInit = glm::vec3(0, 0, 1);
+            }
         }
-        intersection->normal = transform.transform * glm::vec4(normalInit, 0);
+        intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     }
 }

@@ -1,5 +1,6 @@
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
+#include <glm/gtc/constants.hpp>
 #include <raytracer/RaytraceEngine.h>
 #include <scene/camera.h>
 #include <scene/scene.h>
@@ -19,7 +20,6 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 		for (int j = 0; j < camera.height; ++j) {
 			Ray ray = camera.raycast(i, j);
             glm::vec3 color = RaytraceEngine::traceRay(ray, scene, 0, maxDepth);
-            //image.setPixel(i, j, qRgb(color.x, color.y, color.z));
 			QRgb *line = (QRgb *) image.scanLine(j);
 			line += i;
 			*line = qRgb(color.x, color.y, color.z);
@@ -41,8 +41,79 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	Intersection isect = Intersection::getIntersection(ray, scene);
 	if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
 
-	//return isect.normal * glm::vec3(255);
-	return isect.objectHit->material->baseColor * glm::vec3(255);
+	if (isect.objectHit->material->emissive) {
+		return isect.objectHit->material->baseColor * glm::vec3(255);
+	}
+
+	switch (isect.objectHit->material->type) {
+	case MaterialType::LAMBERT: {
+		glm::vec3 total = glm::vec3(0);
+	    for (auto &p : scene.lights) {
+	        Ray feeler = isect.raycast(p->transform.translation);
+			if (Intersection::getIntersection(feeler, scene).objectHit == p) {
+				total += isect.objectHit->material->baseColor *
+	                    glm::max(0.f, glm::dot(glm::normalize(isect.normal),
+	                    			  glm::normalize(feeler.direction))) *
+						glm::vec3(255);
+			}
+		}
+
+		glm::vec3 rColor = glm::vec3(0);
+		if (isect.objectHit->material->reflectivity > 0) {
+			glm::vec3 reflectDirection = glm::reflect(ray.direction, isect.normal);
+			Ray reflect;
+			reflect.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
+			reflect.direction = reflectDirection;
+			rColor = traceRay(reflect, scene, depth + 1, maxDepth);
+		}
+
+		total /= glm::vec3(scene.lights.size());
+		total = total * glm::vec3(1 - isect.objectHit->material->reflectivity) + 
+				rColor * glm::vec3(isect.objectHit->material->reflectivity);
+		total = glm::clamp(total, 0.f, 255.f);
+		return total;
+		break;
+	}
+	case MaterialType::PHONG: {
+		glm::vec3 diffuse = glm::vec3(0);
+		glm::vec3 specular = glm::vec3(0);
+		for (auto &p : scene.lights) {
+			Ray feeler = isect.raycast(p->transform.translation);
+			if (Intersection::getIntersection(feeler, scene).objectHit == p) {
+				diffuse += isect.objectHit->material->baseColor *
+	                    glm::max(0.f, glm::dot(glm::normalize(isect.normal),
+	                    			  glm::normalize(feeler.direction))) *
+						glm::vec3(255);
+
+				glm::vec3 r = glm::reflect(feeler.direction, isect.normal);
+				specular += glm::vec3(glm::pow(glm::max(0.f,
+					glm::dot(glm::normalize(r), glm::normalize(ray.direction))),
+					isect.objectHit->material->n)) * glm::vec3(255);
+			}
+		}
+
+		glm::vec3 reflective = glm::vec3(0);
+		if (isect.objectHit->material->reflectivity > 0) {
+			glm::vec3 reflectDirection = glm::reflect(ray.direction, isect.normal);
+			Ray reflect;
+			reflect.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
+			reflect.direction = reflectDirection;
+			reflective = traceRay(reflect, scene, depth + 1, maxDepth);			
+		}
+		diffuse = diffuse * glm::vec3(1 - isect.objectHit->material->reflectivity) +
+					reflective * glm::vec3(isect.objectHit->material->reflectivity);
+		glm::vec3 total = diffuse * glm::vec3(1 - isect.objectHit->material->ks) + 
+						  specular * glm::vec3(isect.objectHit->material->ks);
+		total /= glm::vec3(scene.lights.size());
+		return total;
+		break;
+	}
+	default:
+		break;
+	}
+
+
+	return glm::vec3(0);
 
 	// Iterate through all lights, and call isect.raycast(light position) to
 	// get a light feeler ray. Calculate the intersection of each of these.

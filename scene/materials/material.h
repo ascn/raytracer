@@ -22,6 +22,8 @@ public:
 	float refractiveOut;
 	QImage *texture;
 	QImage *normalMap;
+	float ks;
+	int n;
 };
 
 #endif // __MATERIAL_H__

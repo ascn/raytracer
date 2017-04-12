@@ -19,4 +19,5 @@ void Transform::update() {
 				glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z), glm::vec3(0, 0, 1)) *
 				glm::scale(glm::mat4(1.0f), scale);
 	invTransform = glm::inverse(transform);
+	invTransTrans = glm::inverse(glm::transpose(transform));
 }

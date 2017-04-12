@@ -46,8 +46,8 @@ void Camera::update() {
 }
 
 Ray Camera::raycast(float x, float y) const {
-	float sx = (2.0f * x / width - 1);
-	float sy = (1 - 2.0f * y / height);
+	float sx = (2.0f * x / width) - 1;
+	float sy = 1 - (2.0f * y / height);
 	glm::vec3 p = ref + sx * H + sy * V;
 	return Ray(eye, glm::normalize(p - eye));
 }
