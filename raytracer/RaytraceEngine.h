@@ -11,7 +11,7 @@
 class RaytraceEngine {
 public:
 	static void render(const Camera &camera, const Scene &scene, QImage &image, 
-		uint8_t maxDepth = 5, uint8_t samples = 1);
+		uint8_t maxDepth = 5, uint8_t samples = 1, bool multithreading = true);
 	static glm::vec3 traceRay(const Ray &ray, const Scene &scene,
 		uint8_t depth, uint8_t maxDepth);
 	static QImage generateAOPass(const Camera &camera, const Scene &scene,

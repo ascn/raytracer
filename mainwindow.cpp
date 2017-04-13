@@ -72,7 +72,8 @@ void MainWindow::saveImage() {
 
 void MainWindow::renderScene() {
     RaytraceEngine::render(*camera, *scene, img,
-    		recursionDepthBox->value(), glm::pow(2, AABox->currentIndex()));
+    		recursionDepthBox->value(), glm::pow(2, AABox->currentIndex()),
+    		multithreadingBox->isChecked());
 	pixmap = QPixmap::fromImage(img);
 	imgLabel->setPixmap(pixmap);
 }
@@ -94,6 +95,10 @@ void MainWindow::createOptionDock() {
 	recursionDepthBox->setSingleStep(1);
 	recursionDepthBox->setValue(5);
 	recursionDepthLabel = new QLabel(tr("Recursion depth: "), optionDockContents);
+
+	multithreadingBox = new QCheckBox(optionDockContents);
+	multithreadingBox->setChecked(true);
+	multithreadingLabel = new QLabel(tr("Multithreading: "), optionDockContents);
 
 	AABox = new QComboBox(optionDockContents);
 	AABox->addItem(tr("None"));
@@ -127,7 +132,7 @@ void MainWindow::createOptionDock() {
 	AODistanceBox->setValue(0);
 
 	AOButton = new QPushButton("Generate AO Pass", AOSettings);
-    connect(AOButton, QPushButton::clicked, this, &MainWindow::genAOPass);
+    connect(AOButton, &QPushButton::clicked, this, &MainWindow::genAOPass);
 
 	AOSettingsLayout->addWidget(AOSamplesLabel, 0, 0, Qt::AlignRight);
 	AOSettingsLayout->addWidget(AOSpreadLabel, 1, 0, Qt::AlignRight);
@@ -145,11 +150,13 @@ void MainWindow::createOptionDock() {
 
 	optionDockLayout->addWidget(recursionDepthLabel, 0, 0, Qt::AlignRight);
 	optionDockLayout->addWidget(recursionDepthBox, 0, 1);
-	optionDockLayout->addWidget(AALabel, 1, 0, Qt::AlignRight);
-	optionDockLayout->addWidget(AABox, 1, 1);
-	optionDockLayout->addWidget(AOSettings, 2, 0, -1, -1);
+	optionDockLayout->addWidget(multithreadingLabel, 1, 0, Qt::AlignRight);
+	optionDockLayout->addWidget(multithreadingBox, 1, 1);
+	optionDockLayout->addWidget(AALabel, 2, 0, Qt::AlignRight);
+	optionDockLayout->addWidget(AABox, 2, 1);
+	optionDockLayout->addWidget(AOSettings, 3, 0, -1, -1);
 
-	optionDockLayout->addItem(spacer, 3, 2, -1, -1, Qt::AlignTop);
+	optionDockLayout->addItem(spacer, 4, 2, -1, -1, Qt::AlignTop);
 	optionDockContents->setLayout(optionDockLayout);
 	optionDock->setWidget(optionDockContents);
 }

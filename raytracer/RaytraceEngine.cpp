@@ -17,57 +17,56 @@
 #include <QThread>
 
 void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &image,
-                            uint8_t maxDepth, uint8_t samples) {
+                            uint8_t maxDepth, uint8_t samples, bool multithreading) {
 	// For each pixel, cast *samples* rays using traceRay.
 	// Average the color over all samples from traceRay and set
 	// color of pixel (SSAA).
 
-	/*
-	for (int i = 0; i < camera.width; ++i) {
-		for (int j = 0; j < camera.height; ++j) {
-			glm::vec3 total = glm::vec3(0);
-			for (float k = 0; k < 1; k += 1 / (float) samples) {
-                for (float l = 0; l < 1; l += 1 / (float) samples) {
-					Ray ray = camera.raycast(i + k, j + l);
-		            glm::vec3 color = RaytraceEngine::traceRay(ray, scene, 0, maxDepth);
-					total += color;
+	if (!multithreading) {
+		for (int i = 0; i < camera.width; ++i) {
+			for (int j = 0; j < camera.height; ++j) {
+				glm::vec3 total = glm::vec3(0);
+				for (float k = 0; k < 1; k += 1 / (float) samples) {
+	                for (float l = 0; l < 1; l += 1 / (float) samples) {
+						Ray ray = camera.raycast(i + k, j + l);
+			            glm::vec3 color = RaytraceEngine::traceRay(ray, scene, 0, maxDepth);
+						total += color;
+					}
 				}
-			}
-			total /= glm::vec3(samples * samples);
-			QRgb *line = (QRgb *) image.scanLine(j);
-			line += i;
-			*line = qRgb(total.x, total.y, total.z);
-        }
-	}
-
-	*/
-
-	QThreadPool *qtp = QThreadPool::globalInstance();
-	QVector<RenderTask *> taskList;
-	qtp->setMaxThreadCount(QThread::idealThreadCount() - 1);
-
-	for (int i = 0; i < camera.width; i += 16) {
-		for (int j = 0; j < camera.height; j += 16) {
-			glm::vec2 minPoint;
-			glm::vec2 maxPoint;
-			minPoint.x = i;
-			minPoint.y = j;
-			if (i + 16 > camera.width) {
-				maxPoint.x = camera.width;
-			} else {
-				maxPoint.x = i + 16;
-			}
-			if (j + 16 > camera.height) {
-				maxPoint.y = camera.height;
-			} else {
-				maxPoint.y = j + 16;
-			}
-			taskList.push_back(new RenderTask(
-				minPoint, maxPoint, &camera, &scene, &image, maxDepth, samples));
-			qtp->start(taskList.back());
+				total /= glm::vec3(samples * samples);
+				QRgb *line = (QRgb *) image.scanLine(j);
+				line += i;
+				*line = qRgb(total.x, total.y, total.z);
+	        }
 		}
+	} else {
+		QThreadPool *qtp = QThreadPool::globalInstance();
+		QVector<RenderTask *> taskList;
+		qtp->setMaxThreadCount(QThread::idealThreadCount() - 1);
+
+		for (int i = 0; i < camera.width; i += 16) {
+			for (int j = 0; j < camera.height; j += 16) {
+				glm::vec2 minPoint;
+				glm::vec2 maxPoint;
+				minPoint.x = i;
+				minPoint.y = j;
+				if (i + 16 > camera.width) {
+					maxPoint.x = camera.width;
+				} else {
+					maxPoint.x = i + 16;
+				}
+				if (j + 16 > camera.height) {
+					maxPoint.y = camera.height;
+				} else {
+					maxPoint.y = j + 16;
+				}
+				taskList.push_back(new RenderTask(
+					minPoint, maxPoint, &camera, &scene, &image, maxDepth, samples));
+				qtp->start(taskList.back());
+			}
+		}
+		qtp->waitForDone(-1);
 	}
-	qtp->waitForDone(-1);
 
 }
 

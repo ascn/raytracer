@@ -46,6 +46,7 @@ private:
 	QDockWidget *optionDock;
 	QGroupBox *optionDockContents;
 	QSpinBox *recursionDepthBox;
+	QCheckBox *multithreadingBox;
 	QComboBox *AABox;
 
 	QGroupBox *AOSettings;
@@ -55,6 +56,7 @@ private:
 	QPushButton *AOButton;
 
 	QLabel *recursionDepthLabel;
+	QLabel *multithreadingLabel;
 	QLabel *AALabel;
 	QLabel *AOSamplesLabel;
 	QLabel *AOSpreadLabel;
