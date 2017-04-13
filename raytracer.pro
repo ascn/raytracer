@@ -27,7 +27,8 @@ SOURCES += \
     main.cpp \
     scene/materials/material.cpp \
     raytracer/RaytraceEngine.cpp \
-    scene/geometry/geometry.cpp
+    scene/geometry/geometry.cpp \
+    raytracer/RenderTask.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -205,4 +206,5 @@ HEADERS += \
     mainwindow.h \
     scene/geometry/geometry.h \
     scene/materials/material.h \
-    raytracer/RaytraceEngine.h
+    raytracer/RaytraceEngine.h \
+    raytracer/RenderTask.h

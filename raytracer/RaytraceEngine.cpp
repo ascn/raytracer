@@ -1,4 +1,5 @@
 #include <glm/glm.hpp>
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/gtc/constants.hpp>
 #include <raytracer/RaytraceEngine.h>
@@ -10,17 +11,18 @@
 #include <QColor>
 #include <QDebug>
 #include <cstdlib>
+#include <raytracer/RenderTask.h>
+#include <QThreadPool>
+#include <QVector>
+#include <QThread>
 
 void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &image,
                             uint8_t maxDepth, uint8_t samples) {
-
-	qDebug() << samples;
-
-	// First divide up the pixel into samples * samples subpixels
-
 	// For each pixel, cast *samples* rays using traceRay.
 	// Average the color over all samples from traceRay and set
 	// color of pixel (SSAA).
+
+	/*
 	for (int i = 0; i < camera.width; ++i) {
 		for (int j = 0; j < camera.height; ++j) {
 			glm::vec3 total = glm::vec3(0);
@@ -37,6 +39,36 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 			*line = qRgb(total.x, total.y, total.z);
         }
 	}
+
+	*/
+
+	QThreadPool *qtp = QThreadPool::globalInstance();
+	QVector<RenderTask *> taskList;
+	qtp->setMaxThreadCount(QThread::idealThreadCount() - 1);
+
+	for (int i = 0; i < camera.width; i += 16) {
+		for (int j = 0; j < camera.height; j += 16) {
+			glm::vec2 minPoint;
+			glm::vec2 maxPoint;
+			minPoint.x = i;
+			minPoint.y = j;
+			if (i + 16 > camera.width) {
+				maxPoint.x = camera.width;
+			} else {
+				maxPoint.x = i + 16;
+			}
+			if (j + 16 > camera.height) {
+				maxPoint.y = camera.height;
+			} else {
+				maxPoint.y = j + 16;
+			}
+			taskList.push_back(new RenderTask(
+				minPoint, maxPoint, &camera, &scene, &image, maxDepth, samples));
+			qtp->start(taskList.back());
+		}
+	}
+	qtp->waitForDone(-1);
+
 }
 
 glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene, 

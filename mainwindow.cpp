@@ -97,10 +97,10 @@ void MainWindow::createOptionDock() {
 
 	AABox = new QComboBox(optionDockContents);
 	AABox->addItem(tr("None"));
-	AABox->addItem(tr("2x AA"));
-	AABox->addItem(tr("4x AA"));
-	AABox->addItem(tr("8x AA"));
-	AABox->addItem(tr("16x AA"));
+	AABox->addItem(tr("4x SSAA"));
+	AABox->addItem(tr("16x SSAA"));
+	AABox->addItem(tr("64x SSAA"));
+	AABox->addItem(tr("256x SSAA"));
 	AALabel = new QLabel(tr("Anti-aliasing: "), optionDockContents);
 
 	optionDock = new QDockWidget(tr("Settings"), this);
