@@ -127,7 +127,7 @@ void MainWindow::createOptionDock() {
 	AODistanceBox->setValue(0);
 
 	AOButton = new QPushButton("Generate AO Pass", AOSettings);
-    connect(AOButton, QPushButton::clicked, this, &MainWindow::genAOPass);
+    connect(AOButton, &QPushButton::clicked, this, &MainWindow::genAOPass);
 
 	AOSettingsLayout->addWidget(AOSamplesLabel, 0, 0, Qt::AlignRight);
 	AOSettingsLayout->addWidget(AOSpreadLabel, 1, 0, Qt::AlignRight);
