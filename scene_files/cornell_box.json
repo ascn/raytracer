@@ -14,7 +14,8 @@
 				"name": "Back Wall",
 				"transform": {
 					"translate": [0, 0, -1],
-					"scale": [10, 10, 1]
+					"scale": [10, 10, 1],
+					"rotate": [0, 0, 0]
 				},
 				"material": "white_diffuse"
 			},
@@ -60,30 +61,50 @@
 			},
 			{
 				"type": "cube",
-				"name": "Left Cube",
+				"name": "Left Cube B1",
 				"transform": {
-					"translate": [0.3, 0.5, 1],
+					"translate": [0.3, 0.75, 1],
 					"rotate": [0, 30, 0],
-					"scale": [0.5, 1, 0.5]
+					"scale": [0.5, 0.5, 0.5]
 				},
 				"material": "mirror"
+			},
+			{
+				"type": "cube",
+				"name": "Left Cube B2",
+				"transform": {
+					"translate": [0.3, 0.4, 1.2],
+					"rotate": [0, 50, 0],
+					"scale": [0.4, 0.2, 0.4]
+				},
+				"material": "blue_diffuse"
 			},
 			{
 				"type": "sphere",
 				"name": "Right Sphere",
 				"transform": {
-					"translate": [-0.4, 0.6, 1.3],
+					"translate": [-0.4, 0.7, 1.3],
 					"scale": [0.6, 0.6, 0.6]
 				},
-				"material": "phong_sphere"
+				"material": "phong_purple"
 			},
 			{
 				"type": "square",
-				"name": "Light",
+				"name": "Light1",
 				"transform": {
 					"translate": [0, -0.99, 3],
 					"rotate": [90, 0, 0],
 					"scale": [0.5, 0.5, 0.5]
+				},
+				"material": "emissive_white"
+			},
+			{
+				"type": "square",
+				"name": "Light2",
+				"transform": {
+					"translate": [0, -0.99, 1],
+					"rotate": [90, 0, 0],
+					"scale":[0.5, 0.5, 0.5]
 				},
 				"material": "emissive_white"
 			}
@@ -126,18 +147,35 @@
 				"emissive": "true"
 			},
 			{
-				"type": "lambert",
+				"type": "phong",
 				"name": "mirror",
 				"baseColor": [1, 1, 1],
-				"reflectivity": 0.9
+				"reflectivity": 1,
+				"ks": 0.2,
+				"n": 1000
 			},
 			{
 				"type": "phong",
-				"name": "phong_sphere",
-				"baseColor": [0.5, 0, 0.5],
+				"name": "phong_purple",
+				"baseColor": [1, 0, 1],
+				"ks": 0.5,
+				"n": 50,
+				"reflectivity": 0.5
+			},
+			{
+				"type": "phong",
+				"name": "glass_sphere",
+				"baseColor": [1, 1, 1],
 				"ks": 0.2,
 				"n": 10,
-				"reflectivity": 0.9
+				"reflectivity": 0.2,
+				"iorIn": 1.52,
+				"iorOut": 1
+			},
+			{
+				"type": "lambert",
+				"name": "blue_diffuse",
+				"baseColor": [0.1, 0.1, 1]
 			}
 		]
 	}

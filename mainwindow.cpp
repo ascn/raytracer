@@ -77,6 +77,13 @@ void MainWindow::renderScene() {
 	imgLabel->setPixmap(pixmap);
 }
 
+void MainWindow::genAOPass() {
+	img = RaytraceEngine::generateAOPass(*camera, *scene,
+		AOSamplesBox->value(), AOSpreadBox->value(), AODistanceBox->value());
+	pixmap = QPixmap::fromImage(img);
+	imgLabel->setPixmap(pixmap);
+}
+
 void MainWindow::createOptionDock() {
 	QGridLayout *optionDockLayout = new QGridLayout;
 	optionDockLayout->setVerticalSpacing(5);
@@ -120,6 +127,7 @@ void MainWindow::createOptionDock() {
 	AODistanceBox->setValue(0);
 
 	AOButton = new QPushButton("Generate AO Pass", AOSettings);
+    connect(AOButton, QPushButton::clicked, this, &MainWindow::genAOPass);
 
 	AOSettingsLayout->addWidget(AOSamplesLabel, 0, 0, Qt::AlignRight);
 	AOSettingsLayout->addWidget(AOSpreadLabel, 1, 0, Qt::AlignRight);

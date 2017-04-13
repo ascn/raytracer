@@ -209,6 +209,12 @@ void parseMaterial(Scene *scene, QJsonArray materialArr) {
         if (currObj.contains("n")) {
             material->n = currObj.value("n").toInt();
         }
+        if (currObj.contains("iorIn")) {
+            material->refractiveIn = currObj.value("iorIn").toDouble();
+        }
+        if (currObj.contains("iorOut")) {
+            material->refractiveOut = currObj.value("iorOut").toDouble();
+        }
 
         scene->materialsMap.insert(material->name, material);
         scene->materials.append(material);

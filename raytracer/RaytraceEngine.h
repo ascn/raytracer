@@ -16,6 +16,8 @@ public:
 		uint8_t depth, uint8_t maxDepth);
 	static QImage generateAOPass(const Camera &camera, const Scene &scene,
 		int samples, float spread, float distance);
+	static glm::vec4 traceAORay(const Ray &ray, const Scene &scene,
+		int samples, float spread, float distance);
 };
 
 #endif // __RAYTRACEENGINE_H__

@@ -9,27 +9,38 @@
 #include <QImage>
 #include <QColor>
 #include <QDebug>
+#include <cstdlib>
 
 void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &image,
                             uint8_t maxDepth, uint8_t samples) {
+
+	qDebug() << samples;
+
+	// First divide up the pixel into samples * samples subpixels
 
 	// For each pixel, cast *samples* rays using traceRay.
 	// Average the color over all samples from traceRay and set
 	// color of pixel (SSAA).
 	for (int i = 0; i < camera.width; ++i) {
 		for (int j = 0; j < camera.height; ++j) {
-			Ray ray = camera.raycast(i, j);
-            glm::vec3 color = RaytraceEngine::traceRay(ray, scene, 0, maxDepth);
+			glm::vec3 total = glm::vec3(0);
+			for (float k = 0; k < 1; k += 1 / (float) samples) {
+                for (float l = 0; l < 1; l += 1 / (float) samples) {
+					Ray ray = camera.raycast(i + k, j + l);
+		            glm::vec3 color = RaytraceEngine::traceRay(ray, scene, 0, maxDepth);
+					total += color;
+				}
+			}
+			total /= glm::vec3(samples * samples);
 			QRgb *line = (QRgb *) image.scanLine(j);
 			line += i;
-			*line = qRgb(color.x, color.y, color.z);
-		}
+			*line = qRgb(total.x, total.y, total.z);
+        }
 	}
 }
 
 glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene, 
 								   uint8_t depth, uint8_t maxDepth) {
-
 	// Recursively traces a ray up to maxDepth. If the ray hits a geometry,
 	// we cast light feeler rays, add up contribution, and divide by number
 	// lights. If the geometry hit is not reflective or transmissive, we
@@ -91,7 +102,8 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 					isect.objectHit->material->n)) * glm::vec3(255);
 			}
 		}
-
+		diffuse /= glm::vec3(scene.lights.size());
+		specular /= glm::vec3(scene.lights.size());
 		glm::vec3 reflective = glm::vec3(0);
 		if (isect.objectHit->material->reflectivity > 0) {
 			glm::vec3 reflectDirection = glm::reflect(ray.direction, isect.normal);
@@ -100,11 +112,12 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 			reflect.direction = reflectDirection;
 			reflective = traceRay(reflect, scene, depth + 1, maxDepth);			
 		}
+
 		diffuse = diffuse * glm::vec3(1 - isect.objectHit->material->reflectivity) +
 					reflective * glm::vec3(isect.objectHit->material->reflectivity);
 		glm::vec3 total = diffuse * glm::vec3(1 - isect.objectHit->material->ks) + 
 						  specular * glm::vec3(isect.objectHit->material->ks);
-		total /= glm::vec3(scene.lights.size());
+		//total /= glm::vec3(scene.lights.size());
 		return total;
 		break;
 	}
@@ -138,5 +151,56 @@ QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
 	// completely transparent.
 	// This resulting AO image can be blended (multiply) with
 	// the rendered image to generate the desired effect.
+	QImage ret = QImage(camera.width, camera.height, QImage::Format_RGB32);
+	for (int i = 0; i < camera.width; ++i) {
+		for (int j = 0; j < camera.height; ++j) {
+			if (i == 304 && j == 208) {
+				int k = 0;
+			}
+			Ray ray = camera.raycast(i, j);
+			glm::vec4 color = RaytraceEngine::traceAORay(ray, scene, samples, spread, distance);
+			QRgb *line = (QRgb *) ret.scanLine(j);
+			line += i;
+			*line = qRgba(color.x, color.y, color.z, color.w);
+		}
+	}
 
+	return ret;
+}
+
+glm::vec3 UniformSampleHemisphere(glm::vec3 norm) {
+	glm::vec3 b = glm::vec3(rand() % 2 - 0.5f, rand() % 2 - 0.5f, rand() % 2 - 0.5f);
+	b = glm::normalize(b);
+    if (glm::dot(b, norm) > 0) {
+		b = -b;
+	}
+	return b;
+}
+
+// Uses consine weighted sampling to uniformly sample
+// points on a hemisphere.
+// https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
+glm::vec3 CosSampleHemisphere(glm::vec3 norm) {
+
+}
+
+glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
+								 int samples, float spread, float distance) {
+	Intersection isect = Intersection::getIntersection(ray, scene);
+	if (isect.objectHit == nullptr) { return glm::vec4(0); }
+
+	int hitCount = 0;
+	for (int i = 0; i < samples; ++i) {
+        glm::vec3 sample = UniformSampleHemisphere(isect.normal);
+        sample = isect.normal;
+		Ray sampleRay = isect.raycast(sample);
+		Intersection sampleIsect = Intersection::getIntersection(sampleRay, scene);
+        if (sampleIsect.t > 0 && sampleIsect.t < distance) {
+			hitCount++;
+		}
+	}
+
+	float intensity = hitCount / (float) samples;
+
+	return glm::vec4(glm::vec3(255 * (1 - intensity)), 255);
 }

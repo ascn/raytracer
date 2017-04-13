@@ -64,6 +64,7 @@ private slots:
 	void loadScene();
 	void renderScene();
 	void saveImage();
+	void genAOPass();
 };
 
 #endif // __MAINWINDOW_H__
