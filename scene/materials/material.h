@@ -6,7 +6,10 @@
 #include <QString>
 #include <QImage>
 
+#include <tinyobj/tiny_obj_loader.h>
+
 enum class MaterialType { LAMBERT, PHONG, TRANSMISSIVE };
+
 
 class Material {
 public:
@@ -23,6 +26,8 @@ public:
 	QImage *normalMap;
 	float ks;
 	int n;
+
+    void convertMaterial(tinyobj::material_t material);
 };
 
 #endif // __MATERIAL_H__
