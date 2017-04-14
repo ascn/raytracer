@@ -152,6 +152,48 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 		return total;
 		break;
 	}
+	case MaterialType::TRANSMISSIVE: {
+		// Calculate Fresnel
+		float kr = 0;
+		float cosi = glm::clamp(glm::dot(ray.direction, isect.normal), -1.f, 1.f);
+		float etai = 1;
+		float etat = isect.objectHit->material->refractive;
+		if (cosi > 0) {
+			etai = etat;
+			etat = 1;
+		}
+		float sint = etai / etat * glm::sqrt(glm::max(0.f, 1 - cosi * cosi));
+		if (sint >= 1) {
+			kr = 1;
+		} else {
+			float cost = glm::sqrt(glm::max(0.f, 1 - sint * sint));
+			cosi = glm::abs(cosi);
+			float Rs = ((etat * cosi) - (etai * cost)) / ((etat * cosi) + (etai * cost));
+			float Rp = ((etai * cosi) - (etat * cost)) / ((etai * cosi) + (etat * cost));
+			kr = (Rs * Rs + Rp * Rp) / 2;
+		}
+		bool isOutside = glm::dot(ray.direction, isect.normal) < 0;
+		glm::vec3 shift = glm::vec3(0.01) * isect.normal;
+		glm::vec3 refractive = glm::vec3(0);
+		if (kr < 1) {
+			float ior = isOutside ? isect.objectHit->material->refractive :
+									1.f / isect.objectHit->material->refractive;
+			glm::vec3 refractDirection = glm::refract(ray.direction, isect.normal, ior);
+			Ray refract;
+			refract.origin = isOutside ? isect.isectPoint - shift : isect.isectPoint + shift;
+			refract.direction = refractDirection;
+			refractive = traceRay(refract, scene, depth + 1, maxDepth);
+		}
+		glm::vec3 reflective = glm::vec3(0);
+		glm::vec3 reflectDirection = glm::reflect(ray.direction, isect.normal);
+		Ray reflect;
+		reflect.origin = isOutside ? isect.isectPoint + shift : isect.isectPoint - shift;
+		reflect.direction = reflectDirection;
+		reflective = traceRay(reflect, scene, depth + 1, maxDepth);
+		glm::vec3 total = reflective * glm::vec3(kr) + refractive * glm::vec3(1 - kr);
+        return total * glm::vec3(255);
+		break;
+	}
 	default:
 		break;
 	}

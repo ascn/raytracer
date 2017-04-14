@@ -6,7 +6,7 @@
 #include <QString>
 #include <QImage>
 
-enum class MaterialType { LAMBERT, PHONG };
+enum class MaterialType { LAMBERT, PHONG, TRANSMISSIVE };
 
 class Material {
 public:
@@ -18,8 +18,7 @@ public:
 	glm::vec3 baseColor;
 	bool emissive;
 	float reflectivity;
-	float refractiveIn;
-	float refractiveOut;
+	float refractive;
 	QImage *texture;
 	QImage *normalMap;
 	float ks;
