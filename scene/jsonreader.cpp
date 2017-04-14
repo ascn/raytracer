@@ -212,11 +212,11 @@ void parseMaterial(Scene *scene, QJsonArray materialArr) {
         if (currObj.contains("n")) {
             material->n = currObj.value("n").toInt();
         }
-        if (currObj.contains("iorIn")) {
-            material->refractiveIn = currObj.value("iorIn").toDouble();
-        }
-        if (currObj.contains("iorOut")) {
-            material->refractiveOut = currObj.value("iorOut").toDouble();
+        if (currObj.contains("ior")) {
+            material->refractive = currObj.value("ior").toDouble();
+            if (currObj.value("ior").toDouble() > 0) {
+                material->type = MaterialType::TRANSMISSIVE;
+            }
         }
 
         scene->materialsMap.insert(material->name, material);
