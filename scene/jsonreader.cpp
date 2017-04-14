@@ -16,6 +16,7 @@
 #include <scene/geometry/sphere.h>
 #include <scene/geometry/squareplane.h>
 #include <scene/geometry/triangle.h>
+#include <tinyobj/tiny_obj_loader.h>
 
 namespace jsonreader {
 
@@ -88,6 +89,7 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr) {
         if (currObj.contains("transform")) {
             parseTransform(transform, currObj.value("transform").toObject());
         }
+
         Material *material = scene->materialsMap.value(currObj.value("material").toString());
 
         if (type == QString("cube")) {
@@ -99,9 +101,7 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr) {
 
             Sphere *sphere = new Sphere(name, *transform, material);
             scene->primitives.append(sphere);
-
-            bool emissive = (scene->materialsMap.value(currObj.value("material").toString()))->emissive;
-            if (emissive) {
+            if (material->emissive) {
                 scene->lights.append(sphere);
             }
         } else if (type == QString("square")) {
@@ -114,11 +114,14 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr) {
 
         } else if (type == QString("obj")) {
 
+              Qstring filename = currObj.value("filename").toString();
+              std::vector<tinyobj::shape_t> &shapes;
+              std::vector<tinyobj::material_t> &materials;
 
+              tinyobj::LoadObj(shapes, materials,filename);
         }
     }
 }
-
 
 void parseTransform(Transform *transform, QJsonObject obj) {
 
