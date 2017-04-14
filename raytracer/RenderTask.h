@@ -7,13 +7,14 @@
 #include <scene/camera.h>
 #include <scene/scene.h>
 #include <QImage>
+#include <raytracer/RaytraceEngine.h>
 
 class RenderTask : public QRunnable {
 public:
 	RenderTask(glm::vec2 minPoint, glm::vec2 maxPoint, const Camera *c, const Scene *s,
-		QImage *img, uint8_t maxDepth, uint8_t samples) :
+		QImage *img, uint8_t maxDepth, uint8_t samples, RaytraceEngine *re) :
 		minPoint(minPoint), maxPoint(maxPoint), camera(c), scene(s),
-		img(img), maxDepth(maxDepth), samples(samples) {}
+		img(img), maxDepth(maxDepth), samples(samples), re(re) {}
 
 	void run();
 
@@ -24,6 +25,7 @@ public:
 	QImage *img;
 	uint8_t maxDepth;
 	uint8_t samples;
+	RaytraceEngine *re;
 };
 
 #endif // __RENDERTASK_H__

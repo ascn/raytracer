@@ -7,17 +7,26 @@
 #include <scene/scene.h>
 #include <raytracer/ray.h>
 #include <QImage>
+#include <QObject>
 
-class RaytraceEngine {
+class RaytraceEngine : public QObject {
+	Q_OBJECT
 public:
-	static void render(const Camera &camera, const Scene &scene, QImage &image, 
+	RaytraceEngine();
+
+	void render(const Camera &camera, const Scene &scene, QImage &image, 
 		uint8_t maxDepth = 5, uint8_t samples = 1, bool multithreading = true);
-	static glm::vec3 traceRay(const Ray &ray, const Scene &scene,
+	glm::vec3 traceRay(const Ray &ray, const Scene &scene,
 		uint8_t depth, uint8_t maxDepth);
-	static QImage generateAOPass(const Camera &camera, const Scene &scene,
+	QImage generateAOPass(const Camera &camera, const Scene &scene,
 		int samples, float spread, float distance);
-	static glm::vec4 traceAORay(const Ray &ray, const Scene &scene,
+	glm::vec4 traceAORay(const Ray &ray, const Scene &scene,
 		int samples, float spread, float distance);
+	void writeColorToImage(QImage &img, int x, int y, glm::vec3 color);
+	void emitUpdateGUI();
+
+signals:
+	void updateGUI();
 };
 
 #endif // __RAYTRACEENGINE_H__

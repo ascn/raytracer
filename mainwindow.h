@@ -16,6 +16,8 @@
 
 #include <scene/camera.h>
 #include <scene/scene.h>
+#include <ProgPreviewWidget.h>
+#include <raytracer/RaytraceEngine.h>
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
@@ -27,10 +29,12 @@ public:
 public slots:
 
 private:
+	RaytraceEngine re;
 	Scene *scene;
 	Camera *camera;
 
 	// GUI variables
+	ProgPreviewWidget *imgDisplay;
 	QLabel *imgLabel;
 	QPixmap pixmap;
 	QImage img;

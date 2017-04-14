@@ -19,6 +19,7 @@
 #include <scene/scene.h>
 #include <scene/jsonreader.h>
 #include <glm/glm.hpp>
+#include <ProgPreviewWidget.h>
 
 #include "mainwindow.h"
 
@@ -26,27 +27,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 	scene(nullptr), camera(nullptr) {
 	this->setWindowTitle("Raytracer");
 	this->setWindowIcon(QIcon("icon.png"));
-	imgLabel = new QLabel(this);
+
+	imgDisplay = new ProgPreviewWidget(this);
 
 	QGridLayout *mainGridLayout = new QGridLayout;
 	setCentralWidget(new QWidget());
 	centralWidget()->setLayout(mainGridLayout);
 
-	mainGridLayout->addWidget(imgLabel);
-	imgLabel->show();
+	mainGridLayout->addWidget(imgDisplay);
+	imgDisplay->show();
 
 	createActions();
 	createMenus();
 
 	createOptionDock();
 
-	img = QImage(512, 512, QImage::Format_RGB32);
-	img.fill(qRgb(0, 0, 0));
-	pixmap = QPixmap::fromImage(img);
-	imgLabel->setPixmap(pixmap);
+	imgDisplay->resetPreview();
 
     camera = new Camera();
     scene = new Scene();
+
+    connect(&re, &RaytraceEngine::updateGUI, imgDisplay, &ProgPreviewWidget::updatePreview);
 }
 
 MainWindow::~MainWindow() {}
@@ -56,10 +57,9 @@ void MainWindow::loadScene() {
 		tr("Load scene..."), "./", tr("Scene files (*.json)"));
 	if (filename == "") { return; }
     jsonreader::readJson(camera, scene, filename);
-    img = QImage(camera->width, camera->height, QImage::Format_RGB32);
-    img.fill(qRgb(0, 0, 0));
-    pixmap = QPixmap::fromImage(img);
-    imgLabel->setPixmap(pixmap);
+
+    imgDisplay->img = QImage(camera->width, camera->height, QImage::Format_RGB32);
+    imgDisplay->updatePreview();
 }
 
 void MainWindow::saveImage() {
@@ -67,22 +67,20 @@ void MainWindow::saveImage() {
 		tr("Save image"), "./",
 		tr("Image files (*.png *.jpg)"));
 	if (filename == "") { return ; }
-	img.save(filename);
+	imgDisplay->saveImage(filename);
 }
 
 void MainWindow::renderScene() {
-    RaytraceEngine::render(*camera, *scene, img,
+    re.render(*camera, *scene, imgDisplay->img,
     		recursionDepthBox->value(), glm::pow(2, AABox->currentIndex()),
     		multithreadingBox->isChecked());
-	pixmap = QPixmap::fromImage(img);
-	imgLabel->setPixmap(pixmap);
+	imgDisplay->updatePreview();
 }
 
 void MainWindow::genAOPass() {
-	img = RaytraceEngine::generateAOPass(*camera, *scene,
+	imgDisplay->img = re.generateAOPass(*camera, *scene,
 		AOSamplesBox->value(), AOSpreadBox->value(), AODistanceBox->value());
-	pixmap = QPixmap::fromImage(img);
-	imgLabel->setPixmap(pixmap);
+	imgDisplay->updatePreview();
 }
 
 void MainWindow::createOptionDock() {

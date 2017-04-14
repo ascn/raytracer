@@ -16,6 +16,8 @@
 #include <QVector>
 #include <QThread>
 
+RaytraceEngine::RaytraceEngine() {}
+
 void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &image,
                             uint8_t maxDepth, uint8_t samples, bool multithreading) {
 	// For each pixel, cast *samples* rays using traceRay.
@@ -29,15 +31,17 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 				for (float k = 0; k < 1; k += 1 / (float) samples) {
 	                for (float l = 0; l < 1; l += 1 / (float) samples) {
 						Ray ray = camera.raycast(i + k, j + l);
-			            glm::vec3 color = RaytraceEngine::traceRay(ray, scene, 0, maxDepth);
+			            glm::vec3 color = traceRay(ray, scene, 0, maxDepth);
 						total += color;
 					}
 				}
 				total /= glm::vec3(samples * samples);
-				QRgb *line = (QRgb *) image.scanLine(j);
-				line += i;
-				*line = qRgb(total.x, total.y, total.z);
+                image.setPixel(i, j, qRgb(total.x, total.y, total.z));
+                //QRgb *line = (QRgb *) image.scanLine(j);
+                //line += i;
+                //*line = qRgb(total.x, total.y, total.z);
 	        }
+	        emit updateGUI();
 		}
 	} else {
 		QThreadPool *qtp = QThreadPool::globalInstance();
@@ -61,7 +65,7 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 					maxPoint.y = j + 16;
 				}
 				taskList.push_back(new RenderTask(
-					minPoint, maxPoint, &camera, &scene, &image, maxDepth, samples));
+					minPoint, maxPoint, &camera, &scene, &image, maxDepth, samples, this));
 				qtp->start(taskList.back());
 			}
 		}
@@ -231,7 +235,7 @@ QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
 				int k = 0;
 			}
 			Ray ray = camera.raycast(i, j);
-			glm::vec4 color = RaytraceEngine::traceAORay(ray, scene, samples, spread, distance);
+			glm::vec4 color = traceAORay(ray, scene, samples, spread, distance);
 			QRgb *line = (QRgb *) ret.scanLine(j);
 			line += i;
 			*line = qRgba(color.x, color.y, color.z, color.w);
@@ -276,4 +280,13 @@ glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
 	float intensity = hitCount / (float) samples;
 
 	return glm::vec4(glm::vec3(255 * (1 - intensity)), 255);
+}
+
+void RaytraceEngine::writeColorToImage(QImage &img, int x, int y, glm::vec3 color) {
+	img.setPixel(x, y, qRgb(color.x, color.y, color.z));
+	emit updateGUI();
+}
+
+void RaytraceEngine::emitUpdateGUI() {
+	emit updateGUI();
 }

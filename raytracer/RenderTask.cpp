@@ -15,14 +15,15 @@ void RenderTask::run() {
 			for (float k = 0; k < 1; k += 1 / (float) samples) {
                 for (float l = 0; l < 1; l += 1 / (float) samples) {
 					Ray ray = camera->raycast(i + k, j + l);
-		            glm::vec3 color = RaytraceEngine::traceRay(ray, *scene, 0, maxDepth);
+		            glm::vec3 color = re->traceRay(ray, *scene, 0, maxDepth);
 					total += color;
 				}
 			}
 			total /= glm::vec3(samples * samples);
-			QRgb *line = (QRgb *) img->scanLine(j);
-			line += i;
-			*line = qRgb(total.x, total.y, total.z);
+			re->writeColorToImage(*img, i, j, total);
+			//QRgb *line = (QRgb *) img->scanLine(j);
+			//line += i;
+			//*line = qRgb(total.x, total.y, total.z);
         }
 	}
 }
