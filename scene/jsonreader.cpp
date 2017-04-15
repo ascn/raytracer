@@ -114,11 +114,11 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr) {
 
         } else if (type == QString("obj")) {
 
-              Qstring filename = currObj.value("filename").toString();
-              std::vector<tinyobj::shape_t> &shapes;
-              std::vector<tinyobj::material_t> &materials;
+              QString filename = currObj.value("filename").toString();
+              std::vector<tinyobj::shape_t> shapes;
+              std::vector<tinyobj::material_t> materials;
 
-              tinyobj::LoadObj(shapes, materials,filename);
+              tinyobj::LoadObj(shapes, materials, filename.toStdString().c_str());
         }
     }
 }

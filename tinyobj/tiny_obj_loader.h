@@ -10,8 +10,6 @@
 #include <vector>
 #include <map>
 
-class Mesh;
-
 namespace tinyobj {
 
 typedef struct {
@@ -36,8 +34,16 @@ typedef struct {
 } material_t;
 
 typedef struct {
+    std::vector<float> positions;
+    std::vector<float> normals;
+    std::vector<float> texcoords;
+    std::vector<unsigned int> indices;
+    std::vector<int> material_ids;
+} mesh_t;
+
+typedef struct {
   std::string name;
-  Mesh mesh;
+  mesh_t mesh;
 } shape_t;
 
 class MaterialReader {

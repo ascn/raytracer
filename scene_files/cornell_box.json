@@ -190,7 +190,7 @@
 				"type": "phong",
 				"name": "refractive_sphere",
 				"baseColor": [1, 1, 1],
-				"ior": 1.33
+				"ior": 0.1
 			}
 		]
 	}

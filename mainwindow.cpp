@@ -56,8 +56,8 @@ void MainWindow::loadScene() {
 	QString filename = QFileDialog::getOpenFileName(this,
 		tr("Load scene..."), "./", tr("Scene files (*.json)"));
 	if (filename == "") { return; }
+	scene->reset();
     jsonreader::readJson(camera, scene, filename);
-
     imgDisplay->img = QImage(camera->width, camera->height, QImage::Format_RGB32);
     imgDisplay->updatePreview();
 }
