@@ -20,8 +20,7 @@ void RenderTask::run() {
 				}
 			}
 			total /= glm::vec3(samples * samples);
-            //re->writeColorToImage(*img, i, j, total);
-            img->setPixel(i, j, qRgb(total.x, total.y, total.z));
+            img.setPixel(i, j, qRgb(total.x, total.y, total.z));
             //QRgb *line = (QRgb *) img->scanLine(j);
             //line += i;
             //*line = qRgb(total.x, total.y, total.z);

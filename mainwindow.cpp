@@ -59,6 +59,7 @@ void MainWindow::loadScene() {
 	scene->reset();
     jsonreader::readJson(camera, scene, filename);
     imgDisplay->img = QImage(camera->width, camera->height, QImage::Format_RGB32);
+    imgDisplay->img.fill(qRgb(0, 0, 0));
     imgDisplay->updatePreview();
 }
 

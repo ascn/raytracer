@@ -65,7 +65,7 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 					maxPoint.y = j + 16;
 				}
 				taskList.push_back(new RenderTask(
-					minPoint, maxPoint, &camera, &scene, &image, maxDepth, samples, this));
+					minPoint, maxPoint, &camera, &scene, image, maxDepth, samples, this));
 				qtp->start(taskList.back());
 			}
 		}
@@ -152,7 +152,6 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 					reflective * glm::vec3(isect.objectHit->material->reflectivity);
 		glm::vec3 total = diffuse * glm::vec3(1 - isect.objectHit->material->ks) + 
 						  specular * glm::vec3(isect.objectHit->material->ks);
-		//total /= glm::vec3(scene.lights.size());
 		return total;
 		break;
 	}

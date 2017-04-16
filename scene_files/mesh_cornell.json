@@ -5,8 +5,8 @@
 			"eye": [0, 0.5, 10],
 			"worldUp": [0, 1, 0],
 			"fov": 50,
-			"width": 512,
-			"height": 512
+			"width": 1024,
+			"height": 1024
 		},
 		"geometry": [
 			{
@@ -60,43 +60,15 @@
 				"material": "white_diffuse"				
 			},
 			{
-				"type": "cube",
-				"name": "Left Cube B1",
-				"transform": {
-					"translate": [0.3, 0.75, 1],
-					"rotate": [0, 30, 0],
-					"scale": [0.5, 0.5, 0.5]
-				},
-				"material": "mirror"
-			},
-			{
-				"type": "cube",
-				"name": "Left Cube B2",
-				"transform": {
-					"translate": [0.3, 0.4, 1.2],
-					"rotate": [0, 50, 0],
-					"scale": [0.4, 0.2, 0.4]
-				},
-				"material": "blue_diffuse"
-			},
-			{
-				"type": "sphere",
-				"name": "Right Sphere",
-				"transform": {
-					"translate": [-0.4, 0.7, 1.3],
-					"scale": [0.6, 0.6, 0.6]
-				},
-				"material": "phong_purple"
-			},
-			{
 				"type": "obj",
 				"name": "teapot",
 				"transform": {
-					"translate": [-0.4, 0, 1.3],
-					"scale": [0.6, 0.6, 0.6]
+					"translate": [0, 1, 1],
+					"rotate": [180, 150, 0],
+					"scale": [1, 1, 1]
 				},
-				"material": "white_diffuse",
-				"filename": "wt_teapot.obj"
+				"material": "phong_white",
+				"filename": "scene_files/wt_teapot.obj"
 			},
 			{
 				"type": "square",
@@ -105,16 +77,6 @@
 					"translate": [0, -0.99, 3],
 					"rotate": [90, 0, 0],
 					"scale": [0.5, 0.5, 0.5]
-				},
-				"material": "emissive_white"
-			},
-			{
-				"type": "square",
-				"name": "Light2",
-				"transform": {
-					"translate": [0, -0.99, 1],
-					"rotate": [90, 0, 0],
-					"scale":[0.5, 0.5, 0.5]
 				},
 				"material": "emissive_white"
 			}
@@ -166,11 +128,11 @@
 			},
 			{
 				"type": "phong",
-				"name": "phong_purple",
-				"baseColor": [1, 0, 1],
-				"ks": 0.5,
+				"name": "phong_white",
+				"baseColor": [1, 1, 1],
+				"ks": 0.1,
 				"n": 50,
-				"reflectivity": 0.5
+				"reflectivity": 0
 			},
 			{
 				"type": "phong",
