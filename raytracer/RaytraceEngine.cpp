@@ -82,13 +82,17 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	// stop even if current recursion depth isn't max depth. Otherwise we
 	// reflect/refract the ray and continue.
 
-	if (depth > maxDepth) { return glm::vec3(0, 0, 0); }
+
+    if (depth > maxDepth) { return glm::vec3(0, 0, 0); }
 
 	Intersection isect = Intersection::getIntersection(ray, scene);
+
+    glm::vec3 color = Geometry::getColor(Insersection &isect);
+
 	if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
 
 	if (isect.objectHit->material->emissive) {
-		return isect.objectHit->material->baseColor * glm::vec3(255);
+        return color * glm::vec3(255);
 	}
 
 	switch (isect.objectHit->material->type) {
@@ -97,9 +101,8 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	    for (auto &p : scene.lights) {
 	        Ray feeler = isect.raycast(p->transform.translation);
 			if (Intersection::getIntersection(feeler, scene).objectHit == p) {
-				total += isect.objectHit->material->baseColor *
-	                    glm::max(0.f, glm::dot(glm::normalize(isect.normal),
-	                    			  glm::normalize(feeler.direction))) *
+                total += color * glm::max(0.f, glm::dot(glm::normalize(isect.normal),
+                                 glm::normalize(feeler.direction))) *
 						glm::vec3(255);
 			}
 		}
@@ -126,8 +129,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 		for (auto &p : scene.lights) {
 			Ray feeler = isect.raycast(p->transform.translation);
 			if (Intersection::getIntersection(feeler, scene).objectHit == p) {
-				diffuse += isect.objectHit->material->baseColor *
-	                    glm::max(0.f, glm::dot(glm::normalize(isect.normal),
+                diffuse += color * glm::max(0.f, glm::dot(glm::normalize(isect.normal),
 	                    			  glm::normalize(feeler.direction))) *
 						glm::vec3(255);
 
