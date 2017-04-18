@@ -69,3 +69,11 @@ bool Mesh::intersect(const Ray &ray, Intersection *intersection) const {
 	}
 	return hit;
 }
+
+void Mesh::mapNormal(Intersection &isect) const {
+
+}
+
+glm::vec3 Mesh::getColor(Intersection &isect) const {
+    return isect.objectHit->material->baseColor;
+}

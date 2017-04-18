@@ -10,7 +10,8 @@ public:
 	Mesh(QString name, QString objFile, Transform transform, Material *material);
 	~Mesh();
 	bool intersect(const Ray &ray, Intersection *intersection) const;
-
+    void mapNormal(Intersection &isect) const;
+    glm::vec3 getColor(Intersection &isect) const;
 	std::vector<Triangle *> triangles; // all stored in world space
 };
 

@@ -3,9 +3,12 @@
 #include <tinyobj/tiny_obj_loader.h>
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
+#include <glm/vec3.hpp>
 #include <math.h>
 #include <scene/geometry/geometry.h>
 #include <scene/geometry/squareplane.h>
+#include <scene/scene.h>
+
 
 SquarePlane::SquarePlane(QString name, Transform transform, Material *material) {
     this->s = glm::vec3(0.5, 0.5, 0);
@@ -13,6 +16,8 @@ SquarePlane::SquarePlane(QString name, Transform transform, Material *material) 
     this->transform = transform;
     this->material = material;
 }
+
+SquarePlane::~SquarePlane() {}
 
 float SquarePlane::getT(glm::vec3 n, glm::vec3 s, glm::vec3 origin, glm::vec3 direction) const {
     float resultTop = glm::dot(n, s - origin);
@@ -37,6 +42,15 @@ bool SquarePlane::intersect(const Ray &ray, Intersection *intersection) const {
         return true;
     }
     return false;
+}
+
+void SquarePlane::mapNormal(Intersection &isect) const {
+
+}
+
+
+glm::vec3 SquarePlane::getColor(Intersection &isect) const {
+    return isect.objectHit->material->baseColor;
 }
 
 float SquarePlane::getAlpha(float y, float py, float qy) {
