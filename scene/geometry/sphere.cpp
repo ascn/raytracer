@@ -42,3 +42,39 @@ bool Sphere::intersect(const Ray &ray, Intersection *intersection) const {
         return true;
     }
 }
+
+
+float Sphere::getAlpha(float y, float py, float qy) {
+    float result = ((y-py)/(qy-py));
+    return result;
+}
+
+QRgb Sphere::slerp(float alpha, QRgb az, QRgb bz) {
+    float resultR = (1-alpha)*qRed(az) + alpha*qRed(bz);
+    float resultG = (1-alpha)*qGreen(az) + alpha*qGreen(bz);
+    float resultB = (1-alpha)*qBlue(az) + alpha*qBlue(bz);
+    return qRgb(resultR, resultG, resultB);
+}
+
+glm::vec3 Sphere::texMap(Intersection *intersection) {
+    glm::vec3 normA = transform.invTransform * glm::vec4(intersection->normal, 0);
+    float a = atan2f(normA[2], normA[0]);
+    const float PI = 3.1415927;
+    if (a < 0) {
+        const float PI = 3.1415927;
+        a = a+2*PI;
+    }
+    float b = acos(normA[1]);
+    float u = 1-(a/(2*PI));
+    float v = 1-(b/PI);
+
+    QImage *tex = this->material->texture;
+    float w = tex->width();
+    float h = tex->height();
+    float convU = w*u;
+    float convV = h*v;
+    QRgb first = slerp(getAlpha(convU, ceil(convU), floor(convU)), tex->pixel(QPoint(ceil(convU), ceil(convV))), tex->pixel(QPoint(floor(convU), ceil(convV))));
+    QRgb second = slerp(getAlpha(convU, ceil(convU), floor(convU)), tex->pixel(QPoint(ceil(convU), floor(convV))), tex->pixel(QPoint(floor(convU), floor(convV))));
+    QRgb final = slerp(getAlpha(convV, ceil(convV), floor(convV)), first, second);
+    return glm::vec3(qRed(final), qGreen(final), qBlue(final));
+}

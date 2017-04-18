@@ -15,6 +15,7 @@ public:
 	virtual ~Geometry() {}
 
     virtual bool intersect(const Ray &ray, Intersection *intersection) const = 0;
+    virtual glm::vec3 texMap(float u, float v);
 
 	QString name;
 	Transform transform;

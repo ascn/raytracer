@@ -8,6 +8,9 @@ public:
     Sphere(QString name, Transform transform, Material *material);
     float getT(float a, float b, float c) const;
     bool intersect(const Ray &ray, Intersection *intersection) const;
+    float getAlpha(float y, float py, float qy);
+    QRgb slerp(float alpha, QRgb az, QRgb bz);
+    glm::vec3 texMap(Intersection *intersection);
 };
 
 #endif // __SPHERE_H__
