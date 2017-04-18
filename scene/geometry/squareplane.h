@@ -12,6 +12,10 @@ public:
     bool intersect(const Ray &ray, Intersection *intersection) const;
     void mapNormal(Intersection &isect) const;
     glm::vec3 getColor(Intersection &isect) const;
+    float getAlpha(float y, float py, float qy);
+    QRgb slerp(float alpha, QRgb az, QRgb bz);
+    float slerpZ(float alpha, float az, float bz);
+    glm::vec3 texMap(Intersection *intersection);
 
     glm::vec3 s;
 };
