@@ -13,6 +13,8 @@ Sphere::Sphere(QString name, Transform transform, Material *material) {
     this->material = material;
 }
 
+Sphere::~Sphere() {}
+
 float Sphere::getT(float a, float b, float c) const {
     float result = ((-1*b) -sqrt((b*b)-(4*a*c)))/(2*a);
     if (result < 0) {
@@ -41,4 +43,12 @@ bool Sphere::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     }
+}
+
+void Sphere::mapNormal(Intersection &isect) const {
+
+}
+
+glm::vec3 Sphere::getColor(Intersection &isect) const {
+    return isect.objectHit->material->baseColor;
 }

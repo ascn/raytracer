@@ -17,7 +17,6 @@
 #include <scene/geometry/squareplane.h>
 #include <scene/geometry/triangle.h>
 #include <scene/geometry/mesh.h>
-#include <tinyobj/tiny_obj_loader.h>
 
 namespace jsonreader {
 

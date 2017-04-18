@@ -7,6 +7,8 @@ Cube::Cube(QString name, Transform transform, Material *material) {
     this->material = material;
 }
 
+Cube::~Cube() {}
+
 bool Cube::intersect(const Ray &ray, Intersection *intersection) const {
     float tNear = (-1*INFINITY);
     float tFar = INFINITY;
@@ -103,4 +105,12 @@ bool Cube::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     }
+}
+
+void Cube::mapNormal(Intersection &isect) const {
+
+}
+
+glm::vec3 Cube::getColor(Intersection &isect) const {
+    return isect.objectHit->material->baseColor;
 }

@@ -7,6 +7,8 @@
 #include <scene/scene.h>
 #include <raytracer/ray.h>
 #include <raytracer/intersection.h>
+#include <scene/geometry/geometry.h>
+
 #include <QImage>
 #include <QColor>
 #include <QDebug>
@@ -87,7 +89,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 
 	Intersection isect = Intersection::getIntersection(ray, scene);
 
-    glm::vec3 color = Geometry::getColor(Insersection &isect);
+    const glm::vec3 color = isect.objectHit->getColor(isect);
 
 	if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
 

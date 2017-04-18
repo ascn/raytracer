@@ -64,3 +64,71 @@ glm::vec3 Triangle::getNormal(glm::vec3 point) const {
 
     return (normals[0] * l2 + normals[1] * l0 + normals[2] * l1);
 }
+
+glm::vec3 Triangle::triangleInterpolation(glm::vec3 P, const glm::vec3 *vertices, const glm::vec3 *attributes) const {
+
+    float S = getArea(vertices[0], vertices[1], vertices[2]);
+    float S1 = getArea(P, vertices[1], vertices[2]) / S;
+    float S2 = getArea(P, vertices[2], vertices[0]) / S;
+    float S3 = getArea(P, vertices[0], vertices[1]) / S;
+
+    glm::vec3 result;
+    // x
+    result[0] = attributes[0][0] * (S1/S) + attributes[1][0] * (S2/S) + attributes[2][0]*(S3/S);
+    // y
+    result[1] = attributes[0][1] * (S1/S) + attributes[1][1] * (S2/S) + attributes[2][1]*(S3/S);
+    // z
+    result[2] = attributes[0][2] * (S1/S) + attributes[1][2] * (S2/S) + attributes[2][2]*(S3/S);
+    return result;
+}
+
+void Triangle::mapNormal(Intersection &isect) const {
+
+    const Triangle* obj = dynamic_cast<const Triangle*>(isect.objectHit);
+    if (!isect.objectHit->material->normalMap->isNull()) {
+        QRgb p1 = isect.objectHit->material->normalMap->pixel(obj->vertices[0][0], obj->vertices[0][1]);
+        QRgb p2 = isect.objectHit->material->normalMap->pixel(obj->vertices[1][0], obj->vertices[1][1]);
+        QRgb p3 = isect.objectHit->material->normalMap->pixel(obj->vertices[2][0], obj->vertices[2][1]);
+
+        glm::vec3 attributes[3];
+        attributes[0][0] = qRed(p1);
+        attributes[0][1] = qRed(p1);
+        attributes[0][2] = qRed(p1);
+        attributes[1][0] = qRed(p2);
+        attributes[1][1] = qRed(p2);
+        attributes[1][2] = qRed(p2);
+        attributes[2][0] = qRed(p3);
+        attributes[2][1] = qRed(p3);
+        attributes[2][2] = qRed(p3);
+
+        isect.normal = triangleInterpolation(isect.isectPoint, obj->vertices, attributes);
+    } else {
+        isect.normal = triangleInterpolation(isect.isectPoint, obj->vertices, obj->normals);
+    }
+}
+
+glm::vec3 Triangle::getColor(Intersection &isect) const {
+
+    if (isect.objectHit->material->texture->isNull()) {
+        return isect.objectHit->material->baseColor;
+    }
+    const Triangle *obj = dynamic_cast<const Triangle *>(isect.objectHit);
+    QRgb p1 = isect.objectHit->material->texture->pixel(obj->vertices[0][0], obj->vertices[0][1]);
+    QRgb p2 = isect.objectHit->material->texture->pixel(obj->vertices[1][0], obj->vertices[1][1]);
+    QRgb p3 = isect.objectHit->material->texture->pixel(obj->vertices[2][0], obj->vertices[2][1]);
+
+    glm::vec3 attributes[3];
+    attributes[0][0] = qRed(p1);
+    attributes[0][1] = qRed(p1);
+    attributes[0][2] = qRed(p1);
+    attributes[1][0] = qRed(p2);
+    attributes[1][1] = qRed(p2);
+    attributes[1][2] = qRed(p2);
+    attributes[2][0] = qRed(p3);
+    attributes[2][1] = qRed(p3);
+    attributes[2][2] = qRed(p3);
+
+    return triangleInterpolation(isect.isectPoint, obj->vertices, attributes);
+}
+
+
