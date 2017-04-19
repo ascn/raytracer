@@ -72,6 +72,7 @@ glm::vec3 SquarePlane::spInterpolation(Intersection &isect, QImage *attrib) cons
     QRgb first = slerp(getAlpha(convU, ceil(convU), floor(convU)), attrib->pixel(QPoint(ceil(convU), ceil(convV))), attrib->pixel(QPoint(floor(convU), ceil(convV))));
     QRgb second = slerp(getAlpha(convU, ceil(convU), floor(convU)), attrib->pixel(QPoint(ceil(convU), floor(convV))), attrib->pixel(QPoint(floor(convU), floor(convV))));
     QRgb final = slerp(getAlpha(convV, ceil(convV), floor(convV)), first, second);
+    glm::vec3 ret = glm::vec3(qRed(final), qGreen(final), qBlue(final));
     return glm::vec3(qRed(final), qGreen(final), qBlue(final));
 }
 
