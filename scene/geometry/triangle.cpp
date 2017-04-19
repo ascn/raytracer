@@ -85,7 +85,7 @@ glm::vec3 Triangle::triangleInterpolation(glm::vec3 P, const glm::vec3 *vertices
 void Triangle::mapNormal(Intersection &isect) const {
 
     const Triangle* obj = dynamic_cast<const Triangle*>(isect.objectHit);
-    if (!isect.objectHit->material->normalMap->isNull()) {
+    if (!isect.objectHit->material->normalMap) {
         QRgb p1 = isect.objectHit->material->normalMap->pixel(obj->vertices[0][0], obj->vertices[0][1]);
         QRgb p2 = isect.objectHit->material->normalMap->pixel(obj->vertices[1][0], obj->vertices[1][1]);
         QRgb p3 = isect.objectHit->material->normalMap->pixel(obj->vertices[2][0], obj->vertices[2][1]);
@@ -109,7 +109,7 @@ void Triangle::mapNormal(Intersection &isect) const {
 
 glm::vec3 Triangle::getColor(Intersection &isect) const {
 
-    if (isect.objectHit->material->texture->isNull()) {
+    if (isect.objectHit->material->texture == nullptr) {
         return isect.objectHit->material->baseColor;
     }
     const Triangle *obj = dynamic_cast<const Triangle *>(isect.objectHit);

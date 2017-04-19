@@ -30,6 +30,9 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 		for (int i = 0; i < camera.width; ++i) {
 			for (int j = 0; j < camera.height; ++j) {
 				glm::vec3 total = glm::vec3(0);
+                if (i == 256 && j == 256) {
+                    int k = 0;
+                }
 				for (float k = 0; k < 1; k += 1 / (float) samples) {
 	                for (float l = 0; l < 1; l += 1 / (float) samples) {
 						Ray ray = camera.raycast(i + k, j + l);
@@ -89,9 +92,8 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 
 	Intersection isect = Intersection::getIntersection(ray, scene);
 
+    if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
     const glm::vec3 color = isect.objectHit->getColor(isect);
-
-	if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
 
 	if (isect.objectHit->material->emissive) {
         return color * glm::vec3(255);

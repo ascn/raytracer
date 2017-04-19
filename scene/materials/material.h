@@ -22,8 +22,8 @@ public:
 	bool emissive;
 	float reflectivity;
 	float refractive;
-	QImage *texture;
-	QImage *normalMap;
+    QImage *texture;
+    QImage *normalMap;
 	float ks;
 	int n;
 

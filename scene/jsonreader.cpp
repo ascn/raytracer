@@ -183,7 +183,7 @@ void parseMaterial(Scene *scene, QJsonArray materialArr) {
 
         if (currObj.contains("texture")) {
             QImage img(currObj.value("texture").toString());
-            if (!img.isNull()) material->texture = &img;
+            if (!img.isNull()) material->texture = new QImage(currObj.value("texture").toString());
         }
 
         if (currObj.contains("emissive")) {
@@ -203,7 +203,7 @@ void parseMaterial(Scene *scene, QJsonArray materialArr) {
 
         if (currObj.contains("normalMap")) {
             QImage img(currObj.value("normalMap").toString());
-            if (!img.isNull()) material->normalMap = &img;
+            if (!img.isNull()) material->normalMap = new QImage(currObj.value("normalMap").toString());
         }
 
         if (currObj.contains("ks")) {

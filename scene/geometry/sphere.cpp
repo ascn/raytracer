@@ -48,7 +48,7 @@ bool Sphere::intersect(const Ray &ray, Intersection *intersection) const {
 
 void Sphere::mapNormal(Intersection &isect) const {
 
-    if (!isect.objectHit->material->normalMap->isNull()) {
+    if (!(isect.objectHit->material->normalMap == nullptr)) {
         QImage *nm = this->material->normalMap;
         isect.normal = sphereInterpolation(isect, nm);
     }
@@ -79,10 +79,10 @@ glm::vec3 Sphere::sphereInterpolation(Intersection &isect, QImage *attrib) const
 
 glm::vec3 Sphere::getColor(Intersection &isect) const {
 
-    if (isect.objectHit->material->texture->isNull()) {
+    if (isect.objectHit->material->texture == nullptr) {
         return isect.objectHit->material->baseColor;
     } else {
-        QImage *tex = this->material->normalMap;
+        QImage *tex = this->material->texture;
         return sphereInterpolation(isect, tex);
     }
 }

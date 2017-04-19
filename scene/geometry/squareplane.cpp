@@ -45,15 +45,14 @@ bool SquarePlane::intersect(const Ray &ray, Intersection *intersection) const {
 
 void SquarePlane::mapNormal(Intersection &isect) const {
 
-    if (!isect.objectHit->material->normalMap->isNull()) {
+    if (!isect.objectHit->material->normalMap) {
         QImage *nm = this->material->normalMap;
         isect.normal =  spInterpolation(isect, nm);
     }
 }
 
-
 glm::vec3 SquarePlane::getColor(Intersection &isect) const {
-    if (isect.objectHit->material->texture->isNull()) {
+    if (isect.objectHit->material->texture == nullptr) {
         return isect.objectHit->material->baseColor;
     }
 
