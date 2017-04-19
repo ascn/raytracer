@@ -131,4 +131,6 @@ glm::vec3 Triangle::getColor(Intersection &isect) const {
     return triangleInterpolation(isect.isectPoint, obj->vertices, attributes);
 }
 
-
+glm::vec3 Triangle::texMap(Intersection *isect) {
+    return glm::vec3(0);
+}

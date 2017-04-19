@@ -65,8 +65,8 @@ QRgb SquarePlane::slerp(float alpha, QRgb az, QRgb bz) {
     return qRgb(resultR, resultG, resultB);
 }
 
-glm::vec3 SquarePlane::texMap(Intersection *intersection) {
-    glm::vec3 isecA = transform.invTransform * glm::vec4(intersection->isectPoint, 1);
+glm::vec3 SquarePlane::texMap(Intersection *isect) {
+    glm::vec3 isecA = transform.invTransform * glm::vec4(isect->isectPoint, 1);
     float u = isecA[0]+0.5;
     float v = isecA[1]+0.5;
     QImage *tex = this->material->texture;

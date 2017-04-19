@@ -12,6 +12,7 @@ public:
 	bool intersect(const Ray &ray, Intersection *intersection) const;
     void mapNormal(Intersection &isect) const;
     glm::vec3 getColor(Intersection &isect) const;
+    glm::vec3 texMap(Intersection *isect);
 	std::vector<Triangle *> triangles; // all stored in world space
 };
 

@@ -77,3 +77,7 @@ void Mesh::mapNormal(Intersection &isect) const {
 glm::vec3 Mesh::getColor(Intersection &isect) const {
     return isect.objectHit->material->baseColor;
 }
+
+glm::vec3 Mesh::texMap(Intersection *isect) {
+	return glm::vec3(0);
+}

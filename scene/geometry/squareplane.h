@@ -15,7 +15,7 @@ public:
     float getAlpha(float y, float py, float qy);
     QRgb slerp(float alpha, QRgb az, QRgb bz);
     float slerpZ(float alpha, float az, float bz);
-    glm::vec3 texMap(Intersection *intersection);
+    glm::vec3 texMap(Intersection *isect);
 
     glm::vec3 s;
 };

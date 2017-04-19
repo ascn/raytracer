@@ -6,6 +6,7 @@
 #include <math.h>
 #include <scene/geometry/geometry.h>
 #include <scene/geometry/sphere.h>
+#include <QColor>
 
 Sphere::Sphere(QString name, Transform transform, Material *material) {
     this->name = name;
@@ -51,6 +52,7 @@ void Sphere::mapNormal(Intersection &isect) const {
 
 glm::vec3 Sphere::getColor(Intersection &isect) const {
     return isect.objectHit->material->baseColor;
+}
 
 float Sphere::getAlpha(float y, float py, float qy) {
     float result = ((y-py)/(qy-py));
@@ -64,8 +66,8 @@ QRgb Sphere::slerp(float alpha, QRgb az, QRgb bz) {
     return qRgb(resultR, resultG, resultB);
 }
 
-glm::vec3 Sphere::texMap(Intersection *intersection) {
-    glm::vec3 normA = transform.invTransform * glm::vec4(intersection->normal, 0);
+glm::vec3 Sphere::texMap(Intersection *isect) {
+    glm::vec3 normA = transform.invTransform * glm::vec4(isect->normal, 0);
     float a = atan2f(normA[2], normA[0]);
     const float PI = 3.1415927;
     if (a < 0) {

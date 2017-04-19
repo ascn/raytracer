@@ -3,6 +3,7 @@
 
 #include <scene/geometry/geometry.h>
 #include <glm/vec3.hpp>
+#include <QColor>
 
 class Sphere : public Geometry {
 public:
@@ -14,7 +15,7 @@ public:
     glm::vec3 getColor(Intersection &isect) const;
     float getAlpha(float y, float py, float qy);
     QRgb slerp(float alpha, QRgb az, QRgb bz);
-    glm::vec3 texMap(Intersection *intersection);
+    glm::vec3 texMap(Intersection *isect);
 };
 
 #endif // __SPHERE_H__

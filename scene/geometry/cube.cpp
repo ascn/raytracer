@@ -114,3 +114,8 @@ void Cube::mapNormal(Intersection &isect) const {
 glm::vec3 Cube::getColor(Intersection &isect) const {
     return isect.objectHit->material->baseColor;
 }
+
+glm::vec3 Cube::texMap(Intersection *isect) {
+
+    return glm::vec3(0);
+}
