@@ -98,7 +98,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	}
 
 	switch (isect.objectHit->material->type) {
-	case MaterialType::LAMBERT: {
+    case MaterialType::LAMBERT: {
 		glm::vec3 total = glm::vec3(0);
 	    for (auto &p : scene.lights) {
 	        Ray feeler = isect.raycast(p->transform.translation);
