@@ -67,18 +67,23 @@ glm::vec3 Triangle::getNormal(glm::vec3 point) const {
 
 glm::vec3 Triangle::triangleInterpolation(glm::vec3 P, const glm::vec3 *vertices, const glm::vec3 *attributes) const {
 
-    float S = getArea(vertices[0], vertices[1], vertices[2]);
-    float S1 = getArea(P, vertices[1], vertices[2]) / S;
-    float S2 = getArea(P, vertices[2], vertices[0]) / S;
-    float S3 = getArea(P, vertices[0], vertices[1]) / S;
+    glm::vec3 v0 = vertices[1] - vertices[0];
+    glm::vec3 v1 = vertices[2] - vertices[0];
+    glm::vec3 v2 = P - vertices[0];
+    float d00 = glm::dot(v0, v0);
+    float d01 = glm::dot(v0, v1);
+    float d11 = glm::dot(v1, v1);
+    float d20 = glm::dot(v2, v0);
+    float d21 = glm::dot(v2, v1);
+    float d = d00 * d11 - d01 * d01;
+    float l0 = (d11 * d20 - d01 * d21) / d;
+    float l1 = (d00 * d21 - d01 * d20) / d;
+    float l2 = 1 - l0 - l1;
 
     glm::vec3 result;
-    // x
-    result[0] = attributes[0][0] * (S1/S) + attributes[1][0] * (S2/S) + attributes[2][0]*(S3/S);
-    // y
-    result[1] = attributes[0][1] * (S1/S) + attributes[1][1] * (S2/S) + attributes[2][1]*(S3/S);
-    // z
-    result[2] = attributes[0][2] * (S1/S) + attributes[1][2] * (S2/S) + attributes[2][2]*(S3/S);
+    result.x = attributes[0][0] * l2 + attributes[1][0] * l0 + attributes[2][0] * l1;
+    result.y = attributes[0][1] * l2 + attributes[1][1] * l0 + attributes[2][1] * l1;
+    result.z = attributes[0][2] * l2 + attributes[1][2] * l0 + attributes[2][2] * l1;
     return result;
 }
 
@@ -92,14 +97,14 @@ void Triangle::mapNormal(Intersection &isect) const {
 
         glm::vec3 attributes[3];
         attributes[0][0] = qRed(p1);
-        attributes[0][1] = qRed(p1);
-        attributes[0][2] = qRed(p1);
+        attributes[0][1] = qGreen(p1);
+        attributes[0][2] = qBlue(p1);
         attributes[1][0] = qRed(p2);
-        attributes[1][1] = qRed(p2);
-        attributes[1][2] = qRed(p2);
+        attributes[1][1] = qGreen(p2);
+        attributes[1][2] = qBlue(p2);
         attributes[2][0] = qRed(p3);
-        attributes[2][1] = qRed(p3);
-        attributes[2][2] = qRed(p3);
+        attributes[2][1] = qGreen(p3);
+        attributes[2][2] = qBlue(p3);
 
         isect.normal = triangleInterpolation(isect.isectPoint, obj->vertices, attributes);
     } else {
@@ -119,14 +124,14 @@ glm::vec3 Triangle::getColor(Intersection &isect) const {
 
     glm::vec3 attributes[3];
     attributes[0][0] = qRed(p1);
-    attributes[0][1] = qRed(p1);
-    attributes[0][2] = qRed(p1);
+    attributes[0][1] = qGreen(p1);
+    attributes[0][2] = qBlue(p1);
     attributes[1][0] = qRed(p2);
-    attributes[1][1] = qRed(p2);
-    attributes[1][2] = qRed(p2);
+    attributes[1][1] = qGreen(p2);
+    attributes[1][2] = qBlue(p2);
     attributes[2][0] = qRed(p3);
-    attributes[2][1] = qRed(p3);
-    attributes[2][2] = qRed(p3);
+    attributes[2][1] = qGreen(p3);
+    attributes[2][2] = qBlue(p3);
 
     return triangleInterpolation(isect.isectPoint, obj->vertices, attributes);
 }
