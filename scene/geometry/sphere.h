@@ -13,9 +13,9 @@ public:
     bool intersect(const Ray &ray, Intersection *intersection) const;
     void mapNormal(Intersection &isect) const;
     glm::vec3 getColor(Intersection &isect) const;
-    float getAlpha(float y, float py, float qy);
-    QRgb slerp(float alpha, QRgb az, QRgb bz);
-    glm::vec3 texMap(Intersection *isect);
+    float getAlpha(float y, float py, float qy) const;
+    QRgb slerp(float alpha, QRgb az, QRgb bz) const;
+    glm::vec3 sphereInterpolation(Intersection &isect, QImage *attrib) const;
 };
 
 #endif // __SPHERE_H__

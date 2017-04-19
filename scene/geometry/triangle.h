@@ -14,7 +14,6 @@ public:
     glm::vec3 getColor(Intersection &isect) const;
     float getArea(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) const;
     glm::vec3 getNormal(glm::vec3 point) const;
-    glm::vec3 texMap(Intersection *isect);
     glm::vec3 normals[3];
     glm::vec3 vertices[3]; // vertex coordinates in WORLD SPACE
     float S;

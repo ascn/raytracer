@@ -18,7 +18,6 @@ public:
     virtual bool intersect(const Ray &ray, Intersection *intersection) const = 0;
     virtual void mapNormal(Intersection &isect) const = 0;
     virtual glm::vec3 getColor(Intersection &isect) const = 0;
-    virtual glm::vec3 texMap(Intersection *isect) = 0;
 
 	QString name;
 	Transform transform;

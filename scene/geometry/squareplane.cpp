@@ -9,7 +9,6 @@
 #include <scene/geometry/squareplane.h>
 #include <scene/scene.h>
 
-
 SquarePlane::SquarePlane(QString name, Transform transform, Material *material) {
     this->s = glm::vec3(0.5, 0.5, 0);
     this->name = name;
@@ -46,36 +45,46 @@ bool SquarePlane::intersect(const Ray &ray, Intersection *intersection) const {
 
 void SquarePlane::mapNormal(Intersection &isect) const {
 
+    if (!isect.objectHit->material->normalMap->isNull()) {
+        QImage *nm = this->material->normalMap;
+        isect.normal =  spInterpolation(isect, nm);
+    }
 }
 
 
 glm::vec3 SquarePlane::getColor(Intersection &isect) const {
-    return isect.objectHit->material->baseColor;
+    if (isect.objectHit->material->texture->isNull()) {
+        return isect.objectHit->material->baseColor;
+    }
+
+    QImage *tex = this->material->texture;
+    return spInterpolation(isect, tex);
 }
 
-float SquarePlane::getAlpha(float y, float py, float qy) {
+glm::vec3 SquarePlane::spInterpolation(Intersection &isect, QImage *attrib) const {
+    glm::vec3 isecA = transform.invTransform * glm::vec4(isect.isectPoint, 1);
+    float u = isecA[0]+0.5;
+    float v = isecA[1]+0.5;
+
+    float w = attrib->width();
+    float h = attrib->height();
+    float convU = w*u;
+    float convV = h*v;
+    QRgb first = slerp(getAlpha(convU, ceil(convU), floor(convU)), attrib->pixel(QPoint(ceil(convU), ceil(convV))), attrib->pixel(QPoint(floor(convU), ceil(convV))));
+    QRgb second = slerp(getAlpha(convU, ceil(convU), floor(convU)), attrib->pixel(QPoint(ceil(convU), floor(convV))), attrib->pixel(QPoint(floor(convU), floor(convV))));
+    QRgb final = slerp(getAlpha(convV, ceil(convV), floor(convV)), first, second);
+    return glm::vec3(qRed(final), qGreen(final), qBlue(final));
+}
+
+float SquarePlane::getAlpha(float y, float py, float qy) const {
     float result = ((y-py)/(qy-py));
     return result;
 }
 
-QRgb SquarePlane::slerp(float alpha, QRgb az, QRgb bz) {
+QRgb SquarePlane::slerp(float alpha, QRgb az, QRgb bz) const {
     float resultR = (1-alpha)*qRed(az) + alpha*qRed(bz);
     float resultG = (1-alpha)*qGreen(az) + alpha*qGreen(bz);
     float resultB = (1-alpha)*qBlue(az) + alpha*qBlue(bz);
     return qRgb(resultR, resultG, resultB);
 }
 
-glm::vec3 SquarePlane::texMap(Intersection *isect) {
-    glm::vec3 isecA = transform.invTransform * glm::vec4(isect->isectPoint, 1);
-    float u = isecA[0]+0.5;
-    float v = isecA[1]+0.5;
-    QImage *tex = this->material->texture;
-    float w = tex->width();
-    float h = tex->height();
-    float convU = w*u;
-    float convV = h*v;
-    QRgb first = slerp(getAlpha(convU, ceil(convU), floor(convU)), tex->pixel(QPoint(ceil(convU), ceil(convV))), tex->pixel(QPoint(floor(convU), ceil(convV))));
-    QRgb second = slerp(getAlpha(convU, ceil(convU), floor(convU)), tex->pixel(QPoint(ceil(convU), floor(convV))), tex->pixel(QPoint(floor(convU), floor(convV))));
-    QRgb final = slerp(getAlpha(convV, ceil(convV), floor(convV)), first, second);
-    return glm::vec3(qRed(final), qGreen(final), qBlue(final));
-}
