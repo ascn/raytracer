@@ -1,15 +1,25 @@
-MILESTONE #1
+***Basic QT Documentations were used for all milestones!***
+
+----------------------MILESTONE #1-------------------------
 
 *Primitives/shape and Intersection Calculation
  PBRT Edition #2
  https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 
+*Shaders
+ https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-normals
 
-MILESTONE #2
+----------------------MILESTONE #2-------------------------
 
+*Lambertian/Phong Shading
+ https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/diffuse-lambertian-shading
+ https://www.scratchapixel.com/lessons/3d-basic-rendering/phong-shader-BRDF
 
-
-MILESTONE #3
+----------------------MILESTONE #3-------------------------
 
 * Acceleration Structure:
  https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure
+
+ https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
+ http://www.rorydriscoll.com/2009/01/07/better-sampling/
+
