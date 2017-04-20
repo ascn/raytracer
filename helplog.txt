@@ -1,0 +1,15 @@
+MILESTONE #1
+
+*Primitives/shape and Intersection Calculation
+ PBRT Edition #2
+ https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
+
+
+MILESTONE #2
+
+
+
+MILESTONE #3
+
+* Acceleration Structure:
+ https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure
