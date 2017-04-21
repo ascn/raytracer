@@ -87,11 +87,9 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	// stop even if current recursion depth isn't max depth. Otherwise we
 	// reflect/refract the ray and continue.
 
-	Intersection isect = Intersection::getIntersection(ray, scene);
-
-    if (depth > maxDepth) { return isect.objectHit->getColor(isect); }
-
+    Intersection isect = Intersection::getIntersection(ray, scene);
     if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
+    if (depth > maxDepth) { return isect.objectHit->getColor(isect); }
     const glm::vec3 color = isect.objectHit->getColor(isect);
 
 	if (isect.objectHit->material->emissive) {
@@ -165,6 +163,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 		glm::vec3 refractive = glm::vec3(0);
 		float ior = isOutside ? isect.objectHit->material->iorOut / isect.objectHit->material->iorIn :
 								isect.objectHit->material->iorIn / isect.objectHit->material->iorOut;
+		float kr = fresnel(ray, isect.normal, ior);
 		if (isOutside) {
 			glm::vec3 refractDirection = glm::refract(ray.direction, isect.normal, ior);
 			Ray refract;
@@ -189,15 +188,15 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 			}
 		}
 		glm::vec3 reflective = glm::vec3(0);
-		if (isect.objectHit->material->reflectivity > 0) {
+		if (kr > 0) {
 			glm::vec3 reflectDirection = glm::reflect(ray.direction, isect.normal);
 			Ray reflect;
 			reflect.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
 			reflect.direction = reflectDirection;
 			reflective = traceRay(reflect, scene, depth + 1, maxDepth);			
 		}
-		glm::vec3 total = reflective * glm::vec3(isect.objectHit->material->reflectivity) +
-						  refractive * glm::vec3(1 - isect.objectHit->material->reflectivity);
+		glm::vec3 total = reflective * glm::vec3(kr) +
+						  refractive * glm::vec3(1 - kr);
 		return total;
 		break;
 	}
@@ -281,7 +280,28 @@ glm::vec3 UniformSampleHemisphere(glm::vec3 norm) {
 // points on a hemisphere.
 // https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
 glm::vec3 CosSampleHemisphere(glm::vec3 norm) {
+	float xi1 = rand() / RAND_MAX;
+	float xi2 = rand() / RAND_MAX;
+	float theta = glm::acos(glm::sqrt(1.0f - xi1));
+	float phi = 2.0 * 3.14159265 * xi2;
 
+	float xs = glm::sin(theta) * glm::cos(phi);
+	float ys = glm::cos(theta);
+	float zs = glm::sin(theta) * glm::sin(phi);
+
+	glm::vec3 y = norm;
+	glm::vec3 nCopy = y;
+	if (glm::abs(nCopy.x) <= glm::abs(nCopy.y) && glm::abs(nCopy.x) <= glm::abs(nCopy.z)) {
+		nCopy.x = 1.0f;
+	} else if (glm::abs(nCopy.y) <= glm::abs(nCopy.x) && glm::abs(nCopy.y) <= glm::abs(nCopy.z)) {
+		nCopy.y = 1.0f;
+	} else {
+		nCopy.z = 1.0f;
+	}
+	glm::vec3 x = glm::normalize(glm::cross(nCopy, y));
+	glm::vec3 z = glm::normalize(glm::cross(x, y));
+	glm::vec3 dir = glm::vec3(xs) * x + glm::vec3(ys) * y + glm::vec3(zs) * z;
+	return glm::normalize(dir);
 }
 
 glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
@@ -291,8 +311,7 @@ glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
 
 	int hitCount = 0;
 	for (int i = 0; i < samples; ++i) {
-        glm::vec3 sample = UniformSampleHemisphere(isect.normal);
-        sample = isect.normal;
+        glm::vec3 sample = CosSampleHemisphere(isect.normal);
 		Ray sampleRay = isect.raycast(sample);
 		Intersection sampleIsect = Intersection::getIntersection(sampleRay, scene);
         if (sampleIsect.t > 0 && sampleIsect.t < distance) {

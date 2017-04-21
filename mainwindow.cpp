@@ -73,7 +73,7 @@ void MainWindow::saveImage() {
 
 void MainWindow::renderScene() {
     re.render(*camera, *scene, imgDisplay->img,
-    		recursionDepthBox->value(), glm::pow(2, AABox->currentIndex()),
+    		recursionDepthBox->value(), glm::pow(AABox->currentIndex() + 1, 2),
     		multithreadingBox->isChecked());
 	imgDisplay->updatePreview();
 }
@@ -102,9 +102,8 @@ void MainWindow::createOptionDock() {
 	AABox = new QComboBox(optionDockContents);
 	AABox->addItem(tr("None"));
 	AABox->addItem(tr("4x SSAA"));
+	AABox->addItem(tr("9x SSAA"));
 	AABox->addItem(tr("16x SSAA"));
-	AABox->addItem(tr("64x SSAA"));
-	AABox->addItem(tr("256x SSAA"));
 	AALabel = new QLabel(tr("Anti-aliasing: "), optionDockContents);
 
 	optionDock = new QDockWidget(tr("Settings"), this);

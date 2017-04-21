@@ -67,7 +67,7 @@
 					"rotate": [180, 150, 0],
 					"scale": [1, 1, 1]
 				},
-				"material": "phong_white",
+				"material": "glass",
 				"filename": "scene_files/wt_teapot.obj"
 			},
 			{
@@ -151,9 +151,10 @@
 			},
 			{
 				"type": "phong",
-				"name": "refractive_sphere",
+				"name": "glass",
 				"baseColor": [1, 1, 1],
-				"ior": 0.1
+				"iorIn": 1.33,
+				"iorOut": 1
 			}
 		]
 	}
