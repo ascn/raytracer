@@ -21,9 +21,10 @@ public:
 	glm::vec3 baseColor;
 	bool emissive;
 	float reflectivity;
-	float refractive;
-	QImage *texture;
-	QImage *normalMap;
+	float iorIn;
+	float iorOut;
+    QImage *texture;
+    QImage *normalMap;
 	float ks;
 	int n;
 

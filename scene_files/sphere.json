@@ -13,9 +13,9 @@
         "type": "sphere",
         "name": "Sphere",
         "transform": {
-          "scale" : [1, 1.2, 1]
+          "scale" : [1, 1, 1]
         },
-        "material": "white_diffuse"
+        "material": "grid_tex"
       },
       {
         "type": "sphere",
@@ -38,6 +38,12 @@
         "name": "emissive_material",
         "baseColor": [1, 1, 1],
         "emissive": "true"
+      },
+      {
+        "type": "lambert",
+        "name": "grid_tex",
+        "baseColor": [1, 1, 1],
+        "texture": "scene_files/tex_nor_maps/grid.jpg"
       }
     ],
     "integrator": {

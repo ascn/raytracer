@@ -6,19 +6,22 @@
 #include <raytracer/intersection.h>
 #include <scene/transform.h>
 #include <scene/materials/material.h>
+#include <glm/vec3.hpp>
 
 class Intersection;
 
 class Geometry {
 public:
-	Geometry() {}
-	virtual ~Geometry() {}
+    Geometry() {}
+    virtual ~Geometry() {}
 
     virtual bool intersect(const Ray &ray, Intersection *intersection) const = 0;
+    virtual void mapNormal(Intersection &isect) const = 0;
+    virtual glm::vec3 getColor(Intersection &isect) const = 0;
 
-	QString name;
-	Transform transform;
-	Material *material;
+    QString name;
+    Transform transform;
+    Material *material;
 };
 
 #endif // __GEOMETRY_H__

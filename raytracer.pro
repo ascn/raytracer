@@ -27,7 +27,6 @@ SOURCES += \
     main.cpp \
     scene/materials/material.cpp \
     raytracer/RaytraceEngine.cpp \
-    scene/geometry/geometry.cpp \
     raytracer/RenderTask.cpp \
     ProgPreviewWidget.cpp
 
