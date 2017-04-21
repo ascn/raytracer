@@ -10,7 +10,7 @@
     },
     "geometry": [
       {
-        "type": "square",
+        "type": "sphere",
         "name": "Sphere",
         "transform": {
           "scale" : [1, 1, 1]

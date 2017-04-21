@@ -30,7 +30,7 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 		for (int i = 0; i < camera.width; ++i) {
 			for (int j = 0; j < camera.height; ++j) {
 				glm::vec3 total = glm::vec3(0);
-                if (i == 256 && j == 256) {
+                if (i == 343 && j == 384) {
                     int k = 0;
                 }
 				for (float k = 0; k < 1; k += 1 / (float) samples) {
@@ -87,10 +87,9 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 	// stop even if current recursion depth isn't max depth. Otherwise we
 	// reflect/refract the ray and continue.
 
-
-    if (depth > maxDepth) { return glm::vec3(0, 0, 0); }
-
 	Intersection isect = Intersection::getIntersection(ray, scene);
+
+    if (depth > maxDepth) { return isect.objectHit->getColor(isect); }
 
     if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
     const glm::vec3 color = isect.objectHit->getColor(isect);
@@ -162,33 +161,44 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 		break;
 	}
 	case MaterialType::TRANSMISSIVE: {
-		// Calculate Fresnel
-		float kr = fresnel(ray, isect.normal, isect.objectHit->material->refractive);		
 		bool isOutside = glm::dot(ray.direction, isect.normal) < 0;
-		if (depth == 1) {
-			qDebug() << isOutside;
-		}
-		glm::vec3 shift = glm::vec3(0.01) * isect.normal;
 		glm::vec3 refractive = glm::vec3(0);
-		if (kr < 1) {
-			float ior = isOutside ? 1.f / isect.objectHit->material->refractive :
-									isect.objectHit->material->refractive;
-			glm::vec3 refractDirection = glm::refract(glm::normalize(ray.direction), glm::normalize(isect.normal), isect.objectHit->material->refractive);
-
+		float ior = isOutside ? isect.objectHit->material->iorOut / isect.objectHit->material->iorIn :
+								isect.objectHit->material->iorIn / isect.objectHit->material->iorOut;
+		if (isOutside) {
+			glm::vec3 refractDirection = glm::refract(ray.direction, isect.normal, ior);
 			Ray refract;
-			refract.origin = isOutside ? isect.isectPoint - shift : isect.isectPoint + shift;
+			refract.origin = isect.isectPoint + glm::vec3(0.01) * -isect.normal;
 			refract.direction = refractDirection;
 			refractive = traceRay(refract, scene, depth + 1, maxDepth);
-			return refractive * glm::vec3(255);
+		} else {
+			if (ior * ior * (1 - glm::pow(glm::dot(
+				glm::normalize(ray.direction), glm::normalize(-isect.normal)), 2)) > 1) {
+				// total internal reflection
+				glm::vec3 reflectDirection = glm::reflect(-ray.direction, -isect.normal);
+				Ray reflect;
+				reflect.origin = isect.isectPoint + glm::vec3(0.01) * -isect.normal;
+				reflect.direction = reflectDirection;
+				refractive = traceRay(reflect, scene, depth + 1, maxDepth);
+			} else {
+				glm::vec3 refractDirection = glm::refract(ray.direction, -isect.normal, ior);
+				Ray refract;
+				refract.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
+				refract.direction = refractDirection;
+				refractive = traceRay(refract, scene, depth + 1, maxDepth);
+			}
 		}
 		glm::vec3 reflective = glm::vec3(0);
-		glm::vec3 reflectDirection = glm::reflect(ray.direction, isect.normal);
-		Ray reflect;
-		reflect.origin = isOutside ? isect.isectPoint + shift : isect.isectPoint - shift;
-		reflect.direction = reflectDirection;
-		reflective = traceRay(reflect, scene, depth + 1, maxDepth);
-		glm::vec3 total = reflective * glm::vec3(kr) + refractive * glm::vec3(1 - kr);
-        return total * glm::vec3(255);
+		if (isect.objectHit->material->reflectivity > 0) {
+			glm::vec3 reflectDirection = glm::reflect(ray.direction, isect.normal);
+			Ray reflect;
+			reflect.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
+			reflect.direction = reflectDirection;
+			reflective = traceRay(reflect, scene, depth + 1, maxDepth);			
+		}
+		glm::vec3 total = reflective * glm::vec3(isect.objectHit->material->reflectivity) +
+						  refractive * glm::vec3(1 - isect.objectHit->material->reflectivity);
+		return total;
 		break;
 	}
 	default:
