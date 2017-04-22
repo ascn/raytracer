@@ -1,8 +1,9 @@
 #include <scene/geometry/mesh.h>
+#include <acceleration/KdNode.h>
 #include <tinyobj/tiny_obj_loader.h>
 #include <vector>
 
-Mesh::Mesh(QString name, QString objFile, Transform transform, Material *material) {
+Mesh::Mesh(QString name, QString objFile, Transform transform, Material *material, bool kd) {
 	this->name = name;
 	this->transform = transform;
 	this->material = material;
@@ -11,6 +12,7 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 	std::vector<tinyobj::material_t> materials;
 	tinyobj::LoadObj(shapes, materials, objFile.toStdString().c_str());
 
+	QString tName = name.append("\'s Triangle");
 	for (const auto &s : shapes) {
 		tinyobj::mesh_t mesh = s.mesh;
 		for (size_t i = 0; i < mesh.indices.size(); i += 3) {
@@ -40,9 +42,15 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 			normals[0] = transform.invTransTrans * glm::vec4(normals[0], 0);
 			normals[1] = transform.invTransTrans * glm::vec4(normals[1], 0);
 			normals[2] = transform.invTransTrans * glm::vec4(normals[2], 0);
-			Triangle *t = new Triangle(name.append("\'s Triangle"), vertices, normals, material);
+			Triangle *t = new Triangle(tName, vertices, normals, material);
 			this->triangles.push_back(t);
 		}
+	}
+
+	if (kd) {
+		kdtree = KDNode::build(triangles);
+	} else {
+		kdtree = nullptr;
 	}
 }
 
@@ -51,6 +59,9 @@ Mesh::~Mesh() {
 }
 
 bool Mesh::intersect(const Ray &ray, Intersection *intersection) const {
+	if (kdtree != nullptr) {
+		return kdtree->intersect(ray, intersection);
+	}
 	Intersection curr, tmp;
 	bool hit = false;
 	for (const auto &p : this->triangles) {

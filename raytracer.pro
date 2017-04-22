@@ -10,7 +10,6 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += \
-    glm/detail/glm.cpp \
     raytracer/intersection.cpp \
     raytracer/ray.cpp \
     scene/geometry/cube.cpp \
@@ -28,7 +27,9 @@ SOURCES += \
     scene/materials/material.cpp \
     raytracer/RaytraceEngine.cpp \
     raytracer/RenderTask.cpp \
-    ProgPreviewWidget.cpp
+    ProgPreviewWidget.cpp \
+    acceleration/BoundingBox.cpp \
+    acceleration/KdNode.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -208,4 +209,6 @@ HEADERS += \
     scene/materials/material.h \
     raytracer/RaytraceEngine.h \
     raytracer/RenderTask.h \
-    ProgPreviewWidget.h
+    ProgPreviewWidget.h \
+    acceleration/BoundingBox.h \
+    acceleration/KdNode.h

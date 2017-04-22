@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 #include <scene/geometry/geometry.h>
+#include <acceleration/BoundingBox.h>
 
 class Triangle : public Geometry {
 public:
@@ -14,9 +15,12 @@ public:
     glm::vec3 getColor(Intersection &isect) const;
     float getArea(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) const;
     glm::vec3 getNormal(glm::vec3 point) const;
+    BoundingBox calculateAABB() const;
+
     glm::vec3 normals[3];
     glm::vec3 vertices[3]; // vertex coordinates in WORLD SPACE
     float S;
+    BoundingBox bbox;
 };
 
 #endif // __TRIANGLE_H__

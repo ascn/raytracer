@@ -13,7 +13,7 @@ Intersection::Intersection() :
 Intersection::~Intersection() {}
 
 Ray Intersection::raycast(glm::vec3 point) {
-	return Ray(this->isectPoint + glm::vec3(0.01) * this->normal,
+	return Ray(this->isectPoint + glm::vec3(0.0001) * this->normal,
 				point - this->isectPoint);
 }
 

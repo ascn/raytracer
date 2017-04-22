@@ -57,7 +57,7 @@ void MainWindow::loadScene() {
 		tr("Load scene..."), "./", tr("Scene files (*.json)"));
 	if (filename == "") { return; }
 	scene->reset();
-    jsonreader::readJson(camera, scene, filename);
+    jsonreader::readJson(camera, scene, filename, kdTreeBox->isChecked());
     imgDisplay->img = QImage(camera->width, camera->height, QImage::Format_RGB32);
     imgDisplay->img.fill(qRgb(0, 0, 0));
     imgDisplay->updatePreview();
@@ -98,6 +98,10 @@ void MainWindow::createOptionDock() {
 	multithreadingBox = new QCheckBox(optionDockContents);
 	multithreadingBox->setChecked(true);
 	multithreadingLabel = new QLabel(tr("Multithreading: "), optionDockContents);
+
+	kdTreeBox = new QCheckBox(optionDockContents);
+	kdTreeBox->setChecked(true);
+	kdTreeLabel = new QLabel(tr("Kd-Tree: "), optionDockContents);
 
 	AABox = new QComboBox(optionDockContents);
 	AABox->addItem(tr("None"));
@@ -150,11 +154,13 @@ void MainWindow::createOptionDock() {
 	optionDockLayout->addWidget(recursionDepthBox, 0, 1);
 	optionDockLayout->addWidget(multithreadingLabel, 1, 0, Qt::AlignRight);
 	optionDockLayout->addWidget(multithreadingBox, 1, 1);
-	optionDockLayout->addWidget(AALabel, 2, 0, Qt::AlignRight);
-	optionDockLayout->addWidget(AABox, 2, 1);
-	optionDockLayout->addWidget(AOSettings, 3, 0, -1, -1);
+	optionDockLayout->addWidget(kdTreeLabel, 2, 0, Qt::AlignRight);
+	optionDockLayout->addWidget(kdTreeBox, 2, 1);
+	optionDockLayout->addWidget(AALabel, 3, 0, Qt::AlignRight);
+	optionDockLayout->addWidget(AABox, 3, 1);
+	optionDockLayout->addWidget(AOSettings, 4, 0, -1, -1);
 
-	optionDockLayout->addItem(spacer, 4, 2, -1, -1, Qt::AlignTop);
+	optionDockLayout->addItem(spacer, 5, 2, -1, -1, Qt::AlignTop);
 	optionDockContents->setLayout(optionDockLayout);
 	optionDock->setWidget(optionDockContents);
 }

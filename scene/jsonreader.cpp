@@ -20,7 +20,7 @@
 
 namespace jsonreader {
 
-void readJson(Camera *camera, Scene *scene, const QString & filename)
+void readJson(Camera *camera, Scene *scene, const QString & filename, bool kd)
 {
     scene->reset();
       QString val;
@@ -42,7 +42,7 @@ void readJson(Camera *camera, Scene *scene, const QString & filename)
 
       parseCamera(camera, cameraObj);
       parseMaterial(scene, materialArr);
-      parseGeometry(scene, geometryArr);
+      parseGeometry(scene, geometryArr, kd);
 }
 
 void parseCamera(Camera *camera, QJsonObject cameraObj) {
@@ -74,7 +74,7 @@ void parseCamera(Camera *camera, QJsonObject cameraObj) {
     camera->update();
 }
 
-void parseGeometry(Scene *scene, QJsonArray geometryArr) {
+void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
 
     QJsonObject currObj;
     QString name;
@@ -114,7 +114,7 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr) {
 
         } else if (type == QString("obj")) {
             QString filename = currObj.value("filename").toString();
-            Mesh *mesh = new Mesh(name, filename, *transform, material);
+            Mesh *mesh = new Mesh(name, filename, *transform, material, kd);
             scene->primitives.append(mesh);
             if (material->emissive) {
                 scene->lights.append(mesh);

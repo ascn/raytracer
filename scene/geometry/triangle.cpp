@@ -2,6 +2,7 @@
 #include <glm/gtx/compatibility.hpp>
 #include <glm/vec3.hpp>
 #include <scene/geometry/triangle.h>
+#include <acceleration/BoundingBox.h>
 
 Triangle::Triangle(QString name, glm::vec3 vertices[3],
 		glm::vec3 normals[3], Material *material) {
@@ -14,6 +15,7 @@ Triangle::Triangle(QString name, glm::vec3 vertices[3],
 	this->normals[2] = normals[2];
 	this->material = material;
 	this->S = getArea(vertices[0], vertices[1], vertices[2]);
+    this->bbox = calculateAABB();
 }
 
 bool Triangle::intersect(const Ray &ray, Intersection *intersection) const {
@@ -134,4 +136,53 @@ glm::vec3 Triangle::getColor(Intersection &isect) const {
     attributes[2][2] = qBlue(p3);
 
     return triangleInterpolation(isect.isectPoint, obj->vertices, attributes);
+}
+
+BoundingBox Triangle::calculateAABB() const {
+    BoundingBox ret;
+    if (vertices[0].x < vertices[1].x && vertices[0].x < vertices[2].x) {
+        ret.minPoint.x = vertices[0].x;
+    } else if (vertices[1].x < vertices[0].x && vertices[1].x < vertices[2].x) {
+        ret.minPoint.x = vertices[1].x;
+    } else {
+        ret.minPoint.x = vertices[2].x;
+    }
+    if (vertices[0].x > vertices[1].x && vertices[0].x > vertices[2].x) {
+        ret.maxPoint.x = vertices[0].x;
+    } else if (vertices[1].x > vertices[0].x && vertices[1].x > vertices[2].x) {
+        ret.maxPoint.x = vertices[1].x;
+    } else {
+        ret.maxPoint.x = vertices[2].x;
+    }
+    if (vertices[0].y < vertices[1].y && vertices[0].y < vertices[2].y) {
+        ret.minPoint.y = vertices[0].y;
+    } else if (vertices[1].y < vertices[0].y && vertices[1].y < vertices[2].y) {
+        ret.minPoint.y = vertices[1].y;
+    } else {
+        ret.minPoint.y = vertices[2].y;
+    }
+    if (vertices[0].y > vertices[1].y && vertices[0].y > vertices[2].y) {
+        ret.maxPoint.y = vertices[0].y;
+    } else if (vertices[1].y > vertices[0].y && vertices[1].y > vertices[2].y) {
+        ret.maxPoint.y = vertices[1].y;
+    } else {
+        ret.maxPoint.y = vertices[2].y;
+    }
+    if (vertices[0].z < vertices[1].z && vertices[0].z < vertices[2].z) {
+        ret.minPoint.z = vertices[0].z;
+    } else if (vertices[1].z < vertices[0].z && vertices[1].z < vertices[2].z) {
+        ret.minPoint.z = vertices[1].z;
+    } else {
+        ret.minPoint.z = vertices[2].z;
+    }
+    if (vertices[0].z > vertices[1].z && vertices[0].z > vertices[2].z) {
+        ret.maxPoint.z = vertices[0].z;
+    } else if (vertices[1].z > vertices[0].z && vertices[1].z > vertices[2].z) {
+        ret.maxPoint.z = vertices[1].z;
+    } else {
+        ret.maxPoint.z = vertices[2].z;
+    }
+    ret.maxPoint += glm::vec3(0.0001);
+    ret.minPoint -= glm::vec3(0.0001);
+    return ret;
 }
