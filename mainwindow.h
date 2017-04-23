@@ -34,6 +34,7 @@ private:
 	Camera *camera;
 
 	// GUI variables
+	void setAllOptionsEnabled(bool enabled);
 	ProgPreviewWidget *imgDisplay;
 	QLabel *imgLabel;
 	QPixmap pixmap;

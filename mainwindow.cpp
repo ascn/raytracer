@@ -72,16 +72,20 @@ void MainWindow::saveImage() {
 }
 
 void MainWindow::renderScene() {
+	setAllOptionsEnabled(false);
     re.render(*camera, *scene, imgDisplay->img,
-    		recursionDepthBox->value(), glm::pow(AABox->currentIndex() + 1, 2),
+    		recursionDepthBox->value(), AABox->currentIndex() + 1,
     		multithreadingBox->isChecked());
 	imgDisplay->updatePreview();
+	setAllOptionsEnabled(true);
 }
 
 void MainWindow::genAOPass() {
+	setAllOptionsEnabled(false);
 	imgDisplay->img = re.generateAOPass(*camera, *scene,
 		AOSamplesBox->value(), AOSpreadBox->value(), AODistanceBox->value());
 	imgDisplay->updatePreview();
+	setAllOptionsEnabled(true);
 }
 
 void MainWindow::createOptionDock() {
@@ -186,4 +190,18 @@ void MainWindow::createMenus() {
 	fileMenu->addAction(saveImageAct);
 	fileMenu->addSeparator();
 	fileMenu->addAction(renderAct);
+}
+
+void MainWindow::setAllOptionsEnabled(bool enabled) {
+	recursionDepthBox->setEnabled(enabled);
+	multithreadingBox->setEnabled(enabled);
+	kdTreeBox->setEnabled(enabled);
+	AABox->setEnabled(enabled);
+	AOSamplesBox->setEnabled(enabled);
+	AOSpreadBox->setEnabled(enabled);
+	AODistanceBox->setEnabled(enabled);
+	AOButton->setEnabled(enabled);
+	loadSceneAct->setEnabled(enabled);
+	saveImageAct->setEnabled(enabled);
+	renderAct->setEnabled(enabled);
 }

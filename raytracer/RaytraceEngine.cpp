@@ -30,7 +30,7 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 		for (int i = 0; i < camera.width; ++i) {
 			for (int j = 0; j < camera.height; ++j) {
 				glm::vec3 total = glm::vec3(0);
-                if (i == 538 && j == 581) {
+                if (i == 73 && j == 252) {
                     int k = 0;
                 }
 				for (float k = 0; k < 1; k += 1 / (float) samples) {

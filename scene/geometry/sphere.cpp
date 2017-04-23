@@ -63,17 +63,18 @@ glm::vec3 Sphere::sphereInterpolation(Intersection &isect, QImage *attrib) const
         a = a+2*PI;
     }
     float b = acos(normA[1]);
-    float u = 1-(a/(2*PI));
-    float v = 1-(b/PI);
-
-    float w = attrib->width();
-    float h = attrib->height();
+    float u = 1 - (a/(2*PI));
+    float v = 1 - (b/PI);
+    float w = attrib->width() - 1;
+    float h = attrib->height() - 1;
+    u = u < 0.5 ? u + 2 * (0.5 - u) : u - 2 * (u - 0.5);
     float convU = w*u;
     float convV = h*v;
     QRgb first = slerp(getAlpha(convU, ceil(convU), floor(convU)), attrib->pixel(QPoint(ceil(convU), ceil(convV))), attrib->pixel(QPoint(floor(convU), ceil(convV))));
     QRgb second = slerp(getAlpha(convU, ceil(convU), floor(convU)), attrib->pixel(QPoint(ceil(convU), floor(convV))), attrib->pixel(QPoint(floor(convU), floor(convV))));
     QRgb final = slerp(getAlpha(convV, ceil(convV), floor(convV)), first, second);
-    return glm::vec3(qRed(final), qGreen(final), qBlue(final));
+    glm::vec3 ret = glm::vec3(qRed(final), qGreen(final), qBlue(final));
+    return ret / glm::vec3(255);
 }
 
 
