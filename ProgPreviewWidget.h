@@ -14,6 +14,7 @@ public:
 	virtual ~ProgPreviewWidget();
 	void resetPreview();
 	void saveImage(QString filename);
+	void darkenImage();
 
 	QImage img;
 

@@ -72,9 +72,10 @@ void MainWindow::saveImage() {
 }
 
 void MainWindow::renderScene() {
+	imgDisplay->darkenImage();
 	setAllOptionsEnabled(false);
     re.render(*camera, *scene, imgDisplay->img,
-    		recursionDepthBox->value(), AABox->currentIndex() + 1,
+    		recursionDepthBox->value(), glm::pow(AABox->currentIndex() + 1, 2),
     		multithreadingBox->isChecked());
 	imgDisplay->updatePreview();
 	setAllOptionsEnabled(true);

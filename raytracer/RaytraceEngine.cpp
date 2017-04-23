@@ -8,6 +8,7 @@
 #include <raytracer/ray.h>
 #include <raytracer/intersection.h>
 #include <scene/geometry/geometry.h>
+#include <sampler/sampler.h>
 
 #include <QImage>
 #include <QColor>
@@ -17,6 +18,7 @@
 #include <QThreadPool>
 #include <QVector>
 #include <QThread>
+#include <vector>
 
 RaytraceEngine::RaytraceEngine() {}
 
@@ -27,20 +29,22 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 	// color of pixel (SSAA).
 
 	if (!multithreading) {
+		Sampler sampler;
 		for (int i = 0; i < camera.width; ++i) {
 			for (int j = 0; j < camera.height; ++j) {
 				glm::vec3 total = glm::vec3(0);
-                if (i == 73 && j == 252) {
+                if (i == 256 && j == 252) {
                     int k = 0;
                 }
-				for (float k = 0; k < 1; k += 1 / (float) samples) {
-	                for (float l = 0; l < 1; l += 1 / (float) samples) {
-						Ray ray = camera.raycast(i + k, j + l);
-			            glm::vec3 color = traceRay(ray, scene, 0, maxDepth);
-						total += color;
-					}
-				}
-				total /= glm::vec3(samples * samples);
+                std::vector<glm::vec3> points;
+                sampler.generateSamples(samples, points, Warp::Square);
+                for (int k = 0; k < points.size(); ++k) {
+                	glm::vec3 v = points[k];
+                	Ray ray = camera.raycast(i + v.x, j + v.y);
+                	glm::vec3 color = traceRay(ray, scene, 0, maxDepth, samples, k);
+                	total += color;
+                }
+				total /= glm::vec3(samples);
                 image.setPixel(i, j, qRgb(total.x, total.y, total.z));
                 //QRgb *line = (QRgb *) image.scanLine(j);
                 //line += i;
@@ -80,7 +84,8 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 }
 
 glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene, 
-								   uint8_t depth, uint8_t maxDepth) {
+								   uint8_t depth, uint8_t maxDepth, uint8_t samples,
+								   uint8_t idx) {
 	// Recursively traces a ray up to maxDepth. If the ray hits a geometry,
 	// we cast light feeler rays, add up contribution, and divide by number
 	// lights. If the geometry hit is not reflective or transmissive, we
@@ -100,8 +105,8 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
     case MaterialType::LAMBERT: {
 		glm::vec3 total = glm::vec3(0);
 	    for (auto &p : scene.lights) {
-	        Ray feeler = isect.raycast(p->transform.translation);
-			if (Intersection::getIntersection(feeler, scene).objectHit == p) {
+	        Ray feeler = isect.raycast(p->getCastPoint(samples, idx));
+			if (Intersection::getIntersection(feeler, scene).objectHit == p->geometry) {
                 total += color * glm::max(0.f, glm::dot(glm::normalize(isect.normal),
                                  glm::normalize(feeler.direction))) *
 						glm::vec3(255);
@@ -114,7 +119,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 			Ray reflect;
 			reflect.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
 			reflect.direction = reflectDirection;
-			rColor = traceRay(reflect, scene, depth + 1, maxDepth);
+			rColor = traceRay(reflect, scene, depth + 1, maxDepth, samples, idx);
 		}
 
 		total /= glm::vec3(scene.lights.size());
@@ -128,8 +133,8 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 		glm::vec3 diffuse = glm::vec3(0);
 		glm::vec3 specular = glm::vec3(0);
 		for (auto &p : scene.lights) {
-			Ray feeler = isect.raycast(p->transform.translation);
-			if (Intersection::getIntersection(feeler, scene).objectHit == p) {
+			Ray feeler = isect.raycast(p->getCastPoint(samples, idx));
+			if (Intersection::getIntersection(feeler, scene).objectHit == p->geometry) {
                 diffuse += color * glm::max(0.f, glm::dot(glm::normalize(isect.normal),
 	                    			  glm::normalize(feeler.direction))) *
 						glm::vec3(255);
@@ -148,7 +153,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 			Ray reflect;
 			reflect.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
 			reflect.direction = reflectDirection;
-			reflective = traceRay(reflect, scene, depth + 1, maxDepth);			
+			reflective = traceRay(reflect, scene, depth + 1, maxDepth, samples, idx);			
 		}
 
 		diffuse = diffuse * glm::vec3(1 - isect.objectHit->material->reflectivity) +
@@ -178,13 +183,13 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 				Ray reflect;
 				reflect.origin = isect.isectPoint + glm::vec3(0.01) * -isect.normal;
 				reflect.direction = reflectDirection;
-				refractive = traceRay(reflect, scene, depth + 1, maxDepth);
+				refractive = traceRay(reflect, scene, depth + 1, maxDepth, samples, idx);
 			} else {
 				glm::vec3 refractDirection = glm::refract(ray.direction, -isect.normal, ior);
 				Ray refract;
 				refract.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
 				refract.direction = refractDirection;
-				refractive = traceRay(refract, scene, depth + 1, maxDepth);
+				refractive = traceRay(refract, scene, depth + 1, maxDepth, samples, idx);
 			}
 		}
 		glm::vec3 reflective = glm::vec3(0);
@@ -193,7 +198,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 			Ray reflect;
 			reflect.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
 			reflect.direction = reflectDirection;
-			reflective = traceRay(reflect, scene, depth + 1, maxDepth);			
+			reflective = traceRay(reflect, scene, depth + 1, maxDepth, samples, idx);			
 		}
 		glm::vec3 total = reflective * glm::vec3(kr) +
 						  refractive * glm::vec3(1 - kr);

@@ -17,6 +17,7 @@
 #include <scene/geometry/squareplane.h>
 #include <scene/geometry/triangle.h>
 #include <scene/geometry/mesh.h>
+#include <scene/lights/arealight.h>
 
 namespace jsonreader {
 
@@ -101,24 +102,19 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
 
             Sphere *sphere = new Sphere(name, *transform, material);
             scene->primitives.append(sphere);
-            if (material->emissive) {
-                scene->lights.append(sphere);
-            }
         } else if (type == QString("square")) {
 
             SquarePlane *sp = new SquarePlane(name, *transform, material);
             scene->primitives.append(sp);
             if (material->emissive) {
-                scene->lights.append(sp);
+                AreaLight *al = new AreaLight(sp);
+                scene->lights.append(al);
             }
 
         } else if (type == QString("obj")) {
             QString filename = currObj.value("filename").toString();
             Mesh *mesh = new Mesh(name, filename, *transform, material, kd);
             scene->primitives.append(mesh);
-            if (material->emissive) {
-                scene->lights.append(mesh);
-            }
         }
     }
 }

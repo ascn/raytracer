@@ -23,3 +23,13 @@ void ProgPreviewWidget::resetPreview() {
 void ProgPreviewWidget::saveImage(QString filename) {
 	img.save(filename);
 }
+
+void ProgPreviewWidget::darkenImage() {
+	for (int i = 0; i < img.width(); ++i) {
+		for (int j = 0; j < img.height(); ++j) {
+			QRgb curr = img.pixel(i, j);
+			img.setPixel(i, j, qRgb(qRed(curr) / 2, qGreen(curr) / 2, qBlue(curr) / 2));
+		}
+	}
+	updatePreview();
+}

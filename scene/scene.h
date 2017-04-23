@@ -6,6 +6,7 @@
 #include <scene/geometry/geometry.h>
 #include <scene/geometry/sphere.h>
 #include <scene/camera.h>
+#include <scene/lights/light.h>
 
 class Scene {
 public:
@@ -13,7 +14,7 @@ public:
     void reset();
 
     QList<Geometry *> primitives;
-    QList<Geometry *> lights;
+    QList<Light *> lights;
     QList<Material *> materials;
     QMap<QString, Material *> materialsMap;
 
