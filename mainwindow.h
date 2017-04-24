@@ -53,7 +53,7 @@ private:
 	QSpinBox *recursionDepthBox;
 	QCheckBox *multithreadingBox;
 	QCheckBox *kdTreeBox;
-	QComboBox *AABox;
+	QSpinBox *AABox;
 
 	QGroupBox *AOSettings;
 	QSpinBox *AOSamplesBox;

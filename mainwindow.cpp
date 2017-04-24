@@ -75,7 +75,7 @@ void MainWindow::renderScene() {
 	imgDisplay->darkenImage();
 	setAllOptionsEnabled(false);
     re.render(*camera, *scene, imgDisplay->img,
-    		recursionDepthBox->value(), glm::pow(AABox->currentIndex() + 1, 2),
+    		recursionDepthBox->value(), glm::pow(AABox->value(), 2),
     		multithreadingBox->isChecked());
 	imgDisplay->updatePreview();
 	setAllOptionsEnabled(true);
@@ -108,12 +108,11 @@ void MainWindow::createOptionDock() {
 	kdTreeBox->setChecked(true);
 	kdTreeLabel = new QLabel(tr("Kd-Tree: "), optionDockContents);
 
-	AABox = new QComboBox(optionDockContents);
-	AABox->addItem(tr("None"));
-	AABox->addItem(tr("4x SSAA"));
-	AABox->addItem(tr("9x SSAA"));
-	AABox->addItem(tr("16x SSAA"));
-	AALabel = new QLabel(tr("Anti-aliasing: "), optionDockContents);
+	AABox = new QSpinBox(optionDockContents);
+	AABox->setValue(1);
+	AABox->setSingleStep(1);
+	AABox->setRange(1, 100);
+	AALabel = new QLabel(tr("Square root of samples: "), optionDockContents);
 
 	optionDock = new QDockWidget(tr("Settings"), this);
 	optionDock->setAllowedAreas(Qt::RightDockWidgetArea);
