@@ -23,3 +23,9 @@
  https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
  http://www.rorydriscoll.com/2009/01/07/better-sampling/
 
+
+* Distribution ray tracing:
+ PBRT
+ https://pdfs.semanticscholar.org/4322/6a3916a85025acbb3a58c17f6dc0756b35ac.pdf
+ https://courses.cs.washington.edu/courses/cse557/15au/lectures/drt-4pp.pdf
+
