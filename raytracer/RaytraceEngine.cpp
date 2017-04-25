@@ -1,6 +1,7 @@
 #include <glm/glm.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <glm/mat3x3.hpp>
 #include <glm/gtc/constants.hpp>
 #include <raytracer/RaytraceEngine.h>
 #include <scene/camera.h>
@@ -117,7 +118,25 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 			glm::vec3 reflectDirection = glm::reflect(ray.direction, isect.normal);
 			Ray reflect;
 			reflect.origin = isect.isectPoint + glm::vec3(0.01) * isect.normal;
-			reflect.direction = reflectDirection;
+			if (isect.objectHit->material->reflectivity < 1) {
+				// The smaller reflectivity is, the closer the square is
+				// to the point.
+				Sampler sampler;
+				std::vector<glm::vec3> points;
+				sampler.generateSamples(samples, points, Warp::Square);
+				// Calculate transformation matrix
+                // Calculate normal in world space
+                // Tangent in world space is T * (0, 1, 0)
+                // Bitangent in world space is T * (1, 0, 0)
+                // construct tangentToWorld matrix, glm::mat3(t, b, n)
+                // multiply by sample
+                glm::vec3 tangent = isect.objectHit->transform.transform * glm::vec4(0, 1, 0, 0);
+                glm::vec3 bitang = glm::cross(isect.normal, tangent);
+                glm::vec3 transSamp = glm::mat3(tangent, bitang, isect.normal) * points[idx];
+                reflect.direction = transSamp - isect.isectPoint;
+			} else {
+				reflect.direction = reflectDirection;
+			}
 			rColor = traceRay(reflect, scene, depth + 1, maxDepth, samples, idx);
 		}
 
@@ -286,7 +305,7 @@ glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
     std::vector<glm::vec3> points;
     Sampler sampler;
     sampler.generateSamples(samples, points, Warp::HemiCos);
-    sampler.transformSamples(isect, points);
+    // sampler.transformSamples(isect, points);
     for (int i = 0; i < points.size(); ++i) {
       Ray ray = isect.raycast(points[i]);
       Intersection sampleIsect = Intersection::getIntersection(ray, scene);

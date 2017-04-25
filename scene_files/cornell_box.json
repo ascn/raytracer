@@ -57,7 +57,7 @@
 					"rotate": [90, 0, 0],
 					"scale": [10, 10, 1]
 				},
-				"material": "white_diffuse"				
+				"material": "floor"				
 			},
 			{
 				"type": "cube",
@@ -189,6 +189,12 @@
 				"type": "lambert",
 				"name": "yellow_diffuse",
 				"baseColor": [1, 1, 0]
+			},
+			{
+				"type": "lambert",
+				"name": "floor",
+				"baseColor": [1, 1, 1],
+				"reflectivity": 0.1
 			}
 		]
 	}

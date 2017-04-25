@@ -7,7 +7,7 @@
 #include <vector>
 #include <sampler/pcg32.h>
 
-enum class Warp { Square, Disk, HemiCos };
+enum class Warp { Square, Disk, Sphere, HemiCos };
 
 class Sampler {
 public:
