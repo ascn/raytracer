@@ -80,7 +80,6 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 		}
 		qtp->waitForDone(-1);
 	}
-
 }
 
 glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene, 
@@ -209,7 +208,6 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
 		break;
 	}
 
-
 	return glm::vec3(0);
 
 	// Iterate through all lights, and call isect.raycast(light position) to
@@ -267,67 +265,40 @@ QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
 			line += i;
 			*line = qRgba(color.x, color.y, color.z, color.w);
 		}
-	}
-
+    }
 	return ret;
-}
-
-glm::vec3 UniformSampleHemisphere(glm::vec3 norm) {
-	glm::vec3 b = glm::vec3(rand() % 2 - 0.5f, rand() % 2 - 0.5f, rand() % 2 - 0.5f);
-	b = glm::normalize(b);
-    if (glm::dot(b, norm) > 0) {
-		b = -b;
-	}
-	return b;
 }
 
 // Uses consine weighted sampling to uniformly sample
 // points on a hemisphere.
-// https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
-glm::vec3 CosSampleHemisphere(glm::vec3 norm) {
-	float xi1 = rand() / RAND_MAX;
-	float xi2 = rand() / RAND_MAX;
-	float theta = glm::acos(glm::sqrt(1.0f - xi1));
-	float phi = 2.0 * 3.14159265 * xi2;
-
-	float xs = glm::sin(theta) * glm::cos(phi);
-	float ys = glm::cos(theta);
-	float zs = glm::sin(theta) * glm::sin(phi);
-
-	glm::vec3 y = norm;
-	glm::vec3 nCopy = y;
-	if (glm::abs(nCopy.x) <= glm::abs(nCopy.y) && glm::abs(nCopy.x) <= glm::abs(nCopy.z)) {
-		nCopy.x = 1.0f;
-	} else if (glm::abs(nCopy.y) <= glm::abs(nCopy.x) && glm::abs(nCopy.y) <= glm::abs(nCopy.z)) {
-		nCopy.y = 1.0f;
-	} else {
-		nCopy.z = 1.0f;
-	}
-	glm::vec3 x = glm::normalize(glm::cross(nCopy, y));
-	glm::vec3 z = glm::normalize(glm::cross(x, y));
-	glm::vec3 dir = glm::vec3(xs) * x + glm::vec3(ys) * y + glm::vec3(zs) * z;
-	return glm::normalize(dir);
-}
+//glm::vec3 CosSampleHemisphere(glm::vec3 &sample) {
+//    glm::vec2 square = Sample::warpDisk(sample);
+//    float z =std::sqrt(std::max((Float)0, 1 - d.x * d.x - d.y * d.y));
+//    return vec3(d.x, d.y, d.z);
+//}
 
 glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
 								 int samples, float spread, float distance) {
 	Intersection isect = Intersection::getIntersection(ray, scene);
 	if (isect.objectHit == nullptr) { return glm::vec4(0); }
 
-	int hitCount = 0;
-	for (int i = 0; i < samples; ++i) {
-        glm::vec3 sample = CosSampleHemisphere(isect.normal);
-		Ray sampleRay = isect.raycast(sample);
-		Intersection sampleIsect = Intersection::getIntersection(sampleRay, scene);
-        if (sampleIsect.t > 0 && sampleIsect.t < distance) {
-			hitCount++;
-		}
-	}
+    int hitCount = 0;
+    std::vector<glm::vec3> points;
+    Sampler sampler;
+    sampler.generateSamples(samples, points, Warp::HemiCos);
+    sampler.transformSamples(isect, points);
+    for (int i = 0; i < points.size(); ++i) {
+      Ray ray = isect.raycast(points[i]);
+      Intersection sampleIsect = Intersection::getIntersection(ray, scene);
+      if (sampleIsect.t > 0 && sampleIsect.t < distance) {
+          hitCount++;
+      }
+    }
 
 	float intensity = hitCount / (float) samples;
-
 	return glm::vec4(glm::vec3(255 * (1 - intensity)), 255);
 }
+
 
 void RaytraceEngine::writeColorToImage(QImage &img, int x, int y, glm::vec3 color) {
 	img.setPixel(x, y, qRgb(color.x, color.y, color.z));
