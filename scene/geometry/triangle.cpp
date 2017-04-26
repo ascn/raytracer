@@ -16,6 +16,20 @@ Triangle::Triangle(QString name, glm::vec3 vertices[3],
 	this->material = material;
 	this->S = getArea(vertices[0], vertices[1], vertices[2]);
     this->bbox = calculateAABB();
+    this->useFaceNormal = false;
+}
+
+Triangle::Triangle(QString name, glm::vec3 vertices[3],
+		glm::vec3 faceNormal, Material *material) {
+	this->name = name;
+	this->vertices[0] = vertices[0];
+	this->vertices[1] = vertices[1];
+	this->vertices[2] = vertices[2];
+	this->faceNormal = faceNormal;
+	this->material = material;
+	this->S = getArea(vertices[0], vertices[1], vertices[2]);
+    this->bbox = calculateAABB();
+    this->useFaceNormal = true;
 }
 
 bool Triangle::intersect(const Ray &ray, Intersection *intersection) const {
@@ -50,7 +64,7 @@ float Triangle::getArea(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) const {
 }
 
 glm::vec3 Triangle::getNormal(glm::vec3 point) const {
-
+	if (useFaceNormal) { return faceNormal; }
 	glm::vec3 v0 = vertices[1] - vertices[0];
 	glm::vec3 v1 = vertices[2] - vertices[0];
 	glm::vec3 v2 = point - vertices[0];

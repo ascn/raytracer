@@ -9,6 +9,7 @@
 class Triangle : public Geometry {
 public:
     Triangle(QString name, glm::vec3 vertices[3], glm::vec3 normals[3], Material *material);
+    Triangle(QString name, glm::vec3 vertices[3], glm::vec3 faceNormal, Material *material);
     bool intersect(const Ray &ray, Intersection *intersection) const;
     glm::vec3 triangleInterpolation(glm::vec3 P, const glm::vec3 vertices[3], const glm::vec3 attributes[3]) const;
     void mapNormal(Intersection &isect) const;
@@ -21,6 +22,8 @@ public:
     glm::vec3 vertices[3]; // vertex coordinates in WORLD SPACE
     float S;
     BoundingBox bbox;
+    bool useFaceNormal;
+    glm::vec3 faceNormal; // if vertices do not have normals
 };
 
 #endif // __TRIANGLE_H__
