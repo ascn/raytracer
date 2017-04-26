@@ -130,10 +130,13 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
                 // Bitangent in world space is T * (1, 0, 0)
                 // construct tangentToWorld matrix, glm::mat3(t, b, n)
                 // multiply by sample
+                points[idx] = points[idx] - glm::vec3(0.5, 0.5, 0);
                 glm::vec3 tangent = isect.objectHit->transform.transform * glm::vec4(0, 1, 0, 0);
-                glm::vec3 bitang = glm::cross(isect.normal, tangent);
-                glm::vec3 transSamp = glm::mat3(tangent, bitang, isect.normal) * points[idx];
-                reflect.direction = transSamp - isect.isectPoint;
+                glm::vec3 bitang = glm::cross(reflectDirection, tangent);
+                glm::vec3 transSamp = glm::mat3(tangent, bitang, reflectDirection) * points[idx];
+                points[idx] = points[idx] + reflectDirection * glm::vec3(0.5);
+                reflectDirection = reflectDirection + transSamp;
+                reflect.direction = reflectDirection;
 			} else {
 				reflect.direction = reflectDirection;
 			}
