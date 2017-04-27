@@ -9,7 +9,6 @@ class Cylinder : public Geometry {
 public:
     Cylinder(QString name, Transform transform, Material *material);
     ~Cylinder();
-    float getT(float a, float b, float c) const;
     bool intersect(const Ray &ray, Intersection *intersection) const;
     void mapNormal(Intersection &isect) const;
     glm::vec3 getColor(Intersection &isect) const;

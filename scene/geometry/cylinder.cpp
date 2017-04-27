@@ -16,14 +16,6 @@ Cylinder::Cylinder(QString name, Transform transform, Material *material) {
 
 Cylinder::~Cylinder() {}
 
-float Cylinder::getT0(float a, float b, float c) const {
-    float result = ((-1*b) -sqrt((b*b)-(4*a*c)))/(2*a);
-    if (result < 0) {
-        result = ((-1*b) +sqrt((b*b)-(4*a*c)))/(2*a);
-    }
-    return result;
-}
-
 bool Cylinder::intersect(const Ray &ray, Intersection *intersection) const {
     float radius = 0.5;
     Ray rayMod = ray.getTransformedCopy(transform.invTransform);
@@ -32,10 +24,7 @@ bool Cylinder::intersect(const Ray &ray, Intersection *intersection) const {
     float a = (rayDirMod[0]*rayDirMod[0]) + (rayDirMod[2]*rayDirMod[2]);
     float b = 2*((rayDirMod[0]*rayOriMod[0]) + (rayDirMod[2]*rayOriMod[2]));
     float c = (rayOriMod[0]*rayOriMod[0]) + (rayOriMod[2]*rayOriMod[2]) - (radius*radius);
-    //float discriminant = (b*b)-(4*a*c);
-    //if (discriminant < 0) {
-   //     return false;
-    //} else {
+
     float t0 = ((-1*b) -sqrt((b*b)-(4*a*c)))/(2*a);
     float t1 = ((-1*b) +sqrt((b*b)-(4*a*c)))/(2*a);
     if (t1 < t0) {
@@ -53,7 +42,7 @@ bool Cylinder::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z));
+        glm::vec3 normalInit = glm::vec3(0, 1, 0);
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     } else if ((y0 < 0.5) && (y0 > -0.5)) {
@@ -69,20 +58,12 @@ bool Cylinder::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z));
+        glm::vec3 normalInit = glm::vec3(0, -1, 0);
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     } else {
         return false;
     }
-
-     /*   intersection->t = getT(a, b, c);
-        intersection->objectHit = this;
-        glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
-        intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z));
-        intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
-        return true;*/
 
 }
 
