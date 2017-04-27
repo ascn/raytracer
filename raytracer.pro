@@ -32,7 +32,8 @@ SOURCES += \
     acceleration/KdNode.cpp \
     sampler/sampler.cpp \
     scene/lights/arealight.cpp \
-    scene/lights/pointlight.cpp
+    scene/lights/pointlight.cpp \
+    scene/geometry/cylinder.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -219,4 +220,5 @@ HEADERS += \
     sampler/pcg32.h \
     scene/lights/arealight.h \
     scene/lights/light.h \
-    scene/lights/pointlight.h
+    scene/lights/pointlight.h \
+    scene/geometry/cylinder.h

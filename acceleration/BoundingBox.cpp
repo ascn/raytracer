@@ -77,7 +77,7 @@ BoundingBox getAABB(std::vector<Triangle *> &primitives) {
 		return ret;
 	}
 	ret = primitives[0]->bbox;
-	for (int i = 1; i < primitives.size(); ++i) {
+    for (unsigned int i = 1; i < primitives.size(); ++i) {
 		ret = BoundingBox::Union(ret, primitives[i]->bbox);
 	}
 	return ret;
