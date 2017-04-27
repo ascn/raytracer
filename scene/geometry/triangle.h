@@ -6,6 +6,7 @@
 #include <glm/vec2.hpp>
 #include <scene/geometry/geometry.h>
 #include <acceleration/BoundingBox.h>
+#include <QColor>
 
 class Triangle : public Geometry {
 public:
@@ -19,6 +20,8 @@ public:
     glm::vec3 getNormal(glm::vec3 point) const;
     BoundingBox calculateAABB() const;
     void setUVs(glm::vec2 uvs[3]);
+    float getAlpha(float y, float py, float qy) const;
+    QRgb slerp(float alpha, QRgb az, QRgb bz) const;
 
     glm::vec3 normals[3];
     glm::vec3 vertices[3]; // vertex coordinates in WORLD SPACE

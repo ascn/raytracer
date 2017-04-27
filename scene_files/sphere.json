@@ -10,10 +10,11 @@
     },
     "geometry": [
       {
-        "type": "square",
+        "type": "cube",
         "name": "Sphere",
         "transform": {
-          "scale" : [1, 1, 1]
+          "scale" : [1, 1, 1],
+          "rotate": [45, 45, 45]
         },
         "material": "grid_tex"
       },
@@ -43,7 +44,7 @@
         "type": "lambert",
         "name": "grid_tex",
         "baseColor": [1, 1, 1],
-        "texture": "scene_files/tex_nor_maps/brick.jpg",
+        "texture": "scene_files/tex_nor_maps/dice.png",
         "normalMap": "scene_files/tex_nor_maps/brick_norm.jpg"
       }
     ],

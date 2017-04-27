@@ -1,5 +1,5 @@
 #include <scene/geometry/cube.h>
-
+#include <QDebug>
 
 Cube::Cube(QString name, Transform transform, Material *material) {
     this->name = name;
@@ -115,4 +115,58 @@ glm::vec3 Cube::getColor(Intersection &isect) const {
     if (isect.objectHit->material->texture == nullptr) {
         return isect.objectHit->material->baseColor;
     }
+    return cubeInterp(isect, material->texture);
+}
+
+glm::vec3 Cube::cubeInterp(Intersection &isect, QImage *attrib) const {
+    glm::vec3 isectA = transform.invTransform * glm::vec4(isect.isectPoint, 1);
+    float u, v;
+    glm::vec3 absIsect = glm::abs(isectA);
+    float max = glm::max(absIsect.x, glm::max(absIsect.y, absIsect.z));
+    if (max == absIsect.x) {
+        if (isectA.x < 0) {
+            u = (isectA.y + 0.5) / 4 + 0.25;
+            v = (isectA.z + 0.5) / 3;
+        } else {
+            u = (isectA.y + 0.5) / 4 + 0.25;
+            v = (isectA.z + 0.5) / 3 + 0.66;
+        }
+    } else if (max == absIsect.y) {
+        if (isectA.y < 0) {
+            u = (isectA.x + 0.5) / 4 + 0.25;
+            v = (isectA.z + 0.5) / 3 + 0.33;
+        } else {
+            u = (isectA.x + 0.5) / 4 + 0.75;
+            v = (isectA.z + 0.5) / 3 + 0.33;
+        }
+    } else {
+        if (isectA.z < 0) {
+            u = (isectA.x + 0.5) / 4;
+            v = (isectA.y + 0.5) / 3 + 0.33;
+        } else {
+            u = (isectA.x + 0.5) / 4 + 0.5;
+            v = (isectA.y + 0.5) / 3 + 0.33;
+        }
+    }
+    float w = attrib->width() - 1;
+    float h = attrib->height() - 1;
+    float convU = w * u;
+    float convV = h * v;
+    QRgb first = slerp(getAlpha(convU, ceil(convU), floor(convU)), attrib->pixel(QPoint(ceil(convU), ceil(convV))), attrib->pixel(QPoint(floor(convU), ceil(convV))));
+    QRgb second = slerp(getAlpha(convU, ceil(convU), floor(convU)), attrib->pixel(QPoint(ceil(convU), floor(convV))), attrib->pixel(QPoint(floor(convU), floor(convV))));
+    QRgb final = slerp(getAlpha(convV, ceil(convV), floor(convV)), first, second);
+    glm::vec3 ret = glm::vec3(qRed(final), qGreen(final), qBlue(final));
+    return ret / glm::vec3(255);
+}
+
+float Cube::getAlpha(float y, float py, float qy) const {
+    float result = ((y-py)/(qy-py));
+    return result;
+}
+
+QRgb Cube::slerp(float alpha, QRgb az, QRgb bz) const {
+    float resultR = (1-alpha)*qRed(az) + alpha*qRed(bz);
+    float resultG = (1-alpha)*qGreen(az) + alpha*qGreen(bz);
+    float resultB = (1-alpha)*qBlue(az) + alpha*qBlue(bz);
+    return qRgb(resultR, resultG, resultB);
 }

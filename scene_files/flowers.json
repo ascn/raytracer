@@ -2,11 +2,11 @@
 	"scene": {
 		"camera": {
 			"target": [0, 0, 0],
-			"eye": [0, 0.5, 10],
+			"eye": [0, -3, 10],
 			"worldUp": [0, 1, 0],
 			"fov": 50,
-			"width": 512,
-			"height": 512
+			"width": 256,
+			"height": 256
 		},
 		"geometry": [
 			{
@@ -21,62 +21,43 @@
 			},
 			{
 				"type": "square",
-				"name": "Right Wall",
-				"transform": {
-					"translate": [-1, 0, 0],
-					"rotate": [0, 90, 0],
-					"scale": [10, 10, 1]
-				},
-				"material": "green_diffuse"				
-			},
-			{
-				"type": "square",
-				"name": "Left Wall",
-				"transform": {
-					"translate": [1, 0, 0],
-					"rotate": [0, -90, 0],
-					"scale": [10, 10, 1]
-				},
-				"material": "red_diffuse"
-			},
-			{
-				"type": "square",
-				"name": "Ceiling",
-				"transform": {
-					"translate": [0, -1, 0],
-					"rotate": [-90, 0, 0],
-					"scale": [10, 10, 1]
-				},
-				"material": "white_diffuse"				
-			},
-			{
-				"type": "square",
 				"name": "Floor",
 				"transform": {
 					"translate": [0, 1, 0],
 					"rotate": [90, 0, 0],
 					"scale": [10, 10, 1]
 				},
-				"material": "white_diffuse"				
+				"material": "floor"				
 			},
 			{
 				"type": "obj",
-				"name": "teapot",
-				"transform": {
-					"translate": [0, 1, 1],
-					"rotate": [180, 150, 0],
-					"scale": [0.1, 0.1, 0.1]
+				"name": "table",
+				"transform" : {
+					"translate": [0, 0.5, 0],
+					"rotate": [180, 0, 0],
+					"scale": [0.01, 0.01, 0.01]
 				},
-				"material": "mario",
-				"filename": "scene_files/wahoo.obj"
+				"material": "white_diffuse",
+				"filename": "scene_files/obj/coffee_table.obj"
+			},
+			{
+				"type": "obj",
+				"name": "flowers",
+				"transform" : {
+					"translate": [0, 0, 0],
+					"rotate": [180, 0, 0],
+					"scale": [0.01, 0.01, 0.01]
+				},
+				"material": "flowers",
+				"filename": "scene_files/obj/rose.obj"
 			},
 			{
 				"type": "square",
 				"name": "Light1",
 				"transform": {
-					"translate": [0, -0.99, 3],
-					"rotate": [90, 0, 0],
-					"scale": [0.5, 0.5, 0.5]
+					"translate": [0, 0, 12],
+					"rotate": [0, 0, 0],
+					"scale": [1, 1, 1]
 				},
 				"material": "emissive_white"
 			}
@@ -104,16 +85,6 @@
 			},
 			{
 				"type": "lambert",
-				"name": "left_cube",
-				"baseColor": [1, 0.39, 0.27]
-			},
-			{
-				"type": "lambert",
-				"name": "right_sphere",
-				"baseColor": [0.5, 0, 0.5]
-			},
-			{
-				"type": "lambert",
 				"name": "emissive_white",
 				"baseColor":[1, 1, 1],
 				"emissive": "true"
@@ -128,21 +99,11 @@
 			},
 			{
 				"type": "phong",
-				"name": "phong_white",
-				"baseColor": [1, 1, 1],
-				"ks": 0.1,
+				"name": "phong_purple",
+				"baseColor": [1, 0, 1],
+				"ks": 0.5,
 				"n": 50,
-				"reflectivity": 0
-			},
-			{
-				"type": "phong",
-				"name": "glass_sphere",
-				"baseColor": [1, 1, 1],
-				"ks": 0.2,
-				"n": 10,
-				"reflectivity": 0.2,
-				"iorIn": 1.52,
-				"iorOut": 1
+				"reflectivity": 0.5
 			},
 			{
 				"type": "lambert",
@@ -153,14 +114,25 @@
 				"type": "phong",
 				"name": "glass",
 				"baseColor": [1, 1, 1],
-				"iorIn": 1.33,
+				"iorIn": 1.5,
 				"iorOut": 1
 			},
 			{
+				"type": "phong",
+				"name": "gold",
+				"baseColor": [0.831, 0.686, 0.216]
+			},
+			{
 				"type": "lambert",
-				"name": "mario",
+				"name": "floor",
 				"baseColor": [1, 1, 1],
-				"texture": "scene_files/wahoo.bmp"
+				"reflectivity": 0.1
+			},
+			{
+				"type": "lambert",
+				"name": "flowers",
+				"baseColor": [1, 1, 1],
+				"texture": "scene_files/tex_nor_maps/rose_texture.jpg"
 			}
 		]
 	}

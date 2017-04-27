@@ -135,7 +135,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
                 glm::vec3 tangent = isect.objectHit->transform.transform * glm::vec4(0, 1, 0, 0);
                 glm::vec3 bitang = glm::cross(reflectDirection, tangent);
                 glm::vec3 transSamp = glm::mat3(tangent, bitang, reflectDirection) * points[idx];
-                transSamp = points[idx] + reflectDirection * glm::vec3(0.5);
+                transSamp = isect.isectPoint + glm::normalize(reflectDirection) * glm::vec3(1 - isect.objectHit->material->reflectivity);
                 reflectDirection = reflectDirection + transSamp;
                 reflect.direction = reflectDirection;
 			} else {

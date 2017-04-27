@@ -27,6 +27,7 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 			vertices[2] = glm::vec3(mesh.positions[mesh.indices[i + 2] * 3],
 									mesh.positions[mesh.indices[i + 2] * 3 + 1],
 									mesh.positions[mesh.indices[i + 2] * 3 + 2]);
+            Triangle *t = nullptr;
             if (mesh.normals.size() == 0) {
                 glm::vec3 norm = -glm::normalize(
                 		glm::cross(vertices[0] - vertices[1], vertices[2] - vertices[1]));
@@ -34,8 +35,7 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 				vertices[1] = transform.transform * glm::vec4(vertices[1], 1);
 				vertices[2] = transform.transform * glm::vec4(vertices[2], 1);
 				norm = transform.invTransTrans * glm::vec4(norm, 0);
-				Triangle *t = new Triangle(tName, vertices, norm, material);
-				this->triangles.push_back(t);
+                t = new Triangle(tName, vertices, norm, material);
             } else {
 				normals[0] = glm::vec3(mesh.normals[mesh.indices[i] * 3],
 									   mesh.normals[mesh.indices[i] * 3 + 1],
@@ -52,9 +52,19 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 				normals[0] = transform.invTransTrans * glm::vec4(normals[0], 0);
 				normals[1] = transform.invTransTrans * glm::vec4(normals[1], 0);
 				normals[2] = transform.invTransTrans * glm::vec4(normals[2], 0);
-				Triangle *t = new Triangle(tName, vertices, normals, material);
-				this->triangles.push_back(t);
+                t = new Triangle(tName, vertices, normals, material);
             }
+            glm::vec2 uvs[3];
+            if (mesh.texcoords.size() > 0) {
+                uvs[0] = glm::vec2(mesh.texcoords[mesh.indices[i] * 2],
+                                   mesh.texcoords[mesh.indices[i] * 2 + 1]);
+                uvs[1] = glm::vec2(mesh.texcoords[mesh.indices[i + 1] * 2],
+                                   mesh.texcoords[mesh.indices[i + 1] * 2 + 1]);
+                uvs[2] = glm::vec2(mesh.texcoords[mesh.indices[i + 2] * 2],
+                                   mesh.texcoords[mesh.indices[i + 2] * 2 + 1]);
+                t->setUVs(uvs);
+            }
+            this->triangles.push_back(t);
 		}
 	}
 

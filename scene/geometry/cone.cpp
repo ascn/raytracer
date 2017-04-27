@@ -35,30 +35,30 @@ bool Cone::intersect(const Ray &ray, Intersection *intersection) const {
     float y0 = rayOriMod[1]+(t0*rayDirMod[1]);
     float y1 = rayOriMod[1]+(t1*rayDirMod[1]);
 
-    if ((y0 > 0.5) && (y1 > 0.5)) {
+    if ((y0 > 1) && (y1 > 1)) {
         return false;
-    } else if ((y0 > 0.5) && (y1 < 0.5)) {
+    } else if ((y0 > 1) && (y1 < 1)) {
         intersection->t = t0;
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z));
+        glm::vec3 normalInit = (glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z)));
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
-    } else if ((y0 < 0.5) && (y0 > -0.5)) {
+    } else if ((y0 < 1) && (y0 > 0)) {
         intersection->t = t0;
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z));
+        glm::vec3 normalInit = (glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z)));
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
-    } else if ((y0 < -0.5) && (y1 > -0.5)) {
+    } else if ((y0 < 1) && (y1 > 0)) {
         intersection->t = t0 + (t1-t0) * (y0-1) / (y0-y1);
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::vec3(0, -1, 0);
+        glm::vec3 normalInit = glm::vec3(0, 2, 0);
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     } else {
