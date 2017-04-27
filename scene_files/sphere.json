@@ -10,7 +10,7 @@
     },
     "geometry": [
       {
-        "type": "sphere",
+        "type": "square",
         "name": "Sphere",
         "transform": {
           "scale" : [1, 1, 1]
@@ -43,7 +43,8 @@
         "type": "lambert",
         "name": "grid_tex",
         "baseColor": [1, 1, 1],
-        "texture": "scene_files/tex_nor_maps/grid.jpg"
+        "texture": "scene_files/tex_nor_maps/brick.jpg",
+        "normalMap": "scene_files/tex_nor_maps/brick_norm.jpg"
       }
     ],
     "integrator": {

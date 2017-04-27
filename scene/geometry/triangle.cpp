@@ -200,3 +200,9 @@ BoundingBox Triangle::calculateAABB() const {
     ret.minPoint -= glm::vec3(0.0001);
     return ret;
 }
+
+void Triangle::setUVs(glm::vec2 uvs[3]) {
+    this->uvs[0] = uvs[0];
+    this->uvs[1] = uvs[1];
+    this->uvs[2] = uvs[2];
+}

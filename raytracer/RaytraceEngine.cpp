@@ -96,6 +96,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
     if (isect.objectHit == nullptr) { return glm::vec3(25, 25, 25); }
     if (depth > maxDepth) { return isect.objectHit->getColor(isect); }
     const glm::vec3 color = isect.objectHit->getColor(isect);
+    isect.objectHit->mapNormal(isect);
 
 	if (isect.objectHit->material->emissive) {
         return color * glm::vec3(255);
@@ -134,7 +135,7 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
                 glm::vec3 tangent = isect.objectHit->transform.transform * glm::vec4(0, 1, 0, 0);
                 glm::vec3 bitang = glm::cross(reflectDirection, tangent);
                 glm::vec3 transSamp = glm::mat3(tangent, bitang, reflectDirection) * points[idx];
-                points[idx] = points[idx] + reflectDirection * glm::vec3(0.5);
+                transSamp = points[idx] + reflectDirection * glm::vec3(0.5);
                 reflectDirection = reflectDirection + transSamp;
                 reflect.direction = reflectDirection;
 			} else {

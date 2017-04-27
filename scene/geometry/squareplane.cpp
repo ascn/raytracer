@@ -44,10 +44,10 @@ bool SquarePlane::intersect(const Ray &ray, Intersection *intersection) const {
 }
 
 void SquarePlane::mapNormal(Intersection &isect) const {
-
-    if (!isect.objectHit->material->normalMap) {
-        QImage *nm = this->material->normalMap;
-        isect.normal =  spInterpolation(isect, nm);
+    if (!(isect.objectHit->material->normalMap == nullptr)) {
+        glm::vec3 mapNorm = spInterpolation(isect, material->normalMap);
+        mapNorm = (mapNorm * glm::vec3(255) - glm::vec3(128)) / glm::vec3(128);
+        isect.normal = transform.invTransTrans * glm::vec4(mapNorm, 0);
     }
 }
 

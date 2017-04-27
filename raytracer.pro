@@ -31,7 +31,8 @@ SOURCES += \
     acceleration/BoundingBox.cpp \
     acceleration/KdNode.cpp \
     sampler/sampler.cpp \
-    scene/lights/arealight.cpp
+    scene/lights/arealight.cpp \
+    scene/lights/pointlight.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -215,7 +216,7 @@ HEADERS += \
     acceleration/BoundingBox.h \
     acceleration/KdNode.h \
     sampler/sampler.h \
-    sampler/pcg_uint128.hpp \
     sampler/pcg32.h \
     scene/lights/arealight.h \
-    scene/lights/light.h
+    scene/lights/light.h \
+    scene/lights/pointlight.h

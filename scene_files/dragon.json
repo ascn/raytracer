@@ -109,7 +109,8 @@
 			{
 				"type": "phong",
 				"name": "gold",
-				"baseColor": [0.831, 0.686, 0.216]
+				"baseColor": [0.831, 0.686, 0.216],
+				"reflectivity": 0.5
 			},
 			{
 				"type": "lambert",

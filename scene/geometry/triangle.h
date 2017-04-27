@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 #include <scene/geometry/geometry.h>
 #include <acceleration/BoundingBox.h>
 
@@ -17,6 +18,7 @@ public:
     float getArea(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) const;
     glm::vec3 getNormal(glm::vec3 point) const;
     BoundingBox calculateAABB() const;
+    void setUVs(glm::vec2 uvs[3]);
 
     glm::vec3 normals[3];
     glm::vec3 vertices[3]; // vertex coordinates in WORLD SPACE
@@ -24,6 +26,7 @@ public:
     BoundingBox bbox;
     bool useFaceNormal;
     glm::vec3 faceNormal; // if vertices do not have normals
+    glm::vec2 uvs[3];
 };
 
 #endif // __TRIANGLE_H__

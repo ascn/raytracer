@@ -67,8 +67,9 @@
 					"rotate": [180, 150, 0],
 					"scale": [1, 1, 1]
 				},
-				"material": "glass",
-				"filename": "scene_files/wt_teapot.obj"
+				"material": "white_diffuse",
+				"filename": "scene_files/wahoo.obj",
+				"texture": "scene_files/wahoo.bmp"
 			},
 			{
 				"type": "square",

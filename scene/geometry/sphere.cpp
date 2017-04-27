@@ -47,10 +47,15 @@ bool Sphere::intersect(const Ray &ray, Intersection *intersection) const {
 }
 
 void Sphere::mapNormal(Intersection &isect) const {
-
     if (!(isect.objectHit->material->normalMap == nullptr)) {
-        QImage *nm = this->material->normalMap;
-        isect.normal = sphereInterpolation(isect, nm);
+        glm::vec3 normalInit = transform.invTransform * glm::vec4(isect.normal, 0);
+        glm::vec3 tangent = glm::normalize(glm::cross(glm::vec3(0, 1, 0), normalInit));
+        glm::vec3 bitangent = glm::normalize(glm::cross(normalInit, tangent));
+        glm::mat4 trans = glm::mat4(glm::vec4(tangent, 0), glm::vec4(bitangent, 0),
+                                    glm::vec4(normalInit, 0), glm::vec4(0, 0, 0, 1));
+        glm::vec3 mapNorm = sphereInterpolation(isect, material->normalMap);
+        mapNorm = (mapNorm * glm::vec3(255) - glm::vec3(128)) / glm::vec3(128);
+        isect.normal = trans * glm::vec4(mapNorm, 0);
     }
 }
 

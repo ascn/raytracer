@@ -8,7 +8,7 @@
 class Light {
 public:
 	virtual ~Light() {}
-	virtual glm::vec3 getCastPoint(int samples, uint8_t idx) const = 0;
+	virtual glm::vec3 getCastPoint(int samples = 1, uint8_t idx = 0) const = 0;
 	Geometry *geometry;
 };
 
