@@ -42,7 +42,7 @@ bool Cone::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z));
+        glm::vec3 normalInit = (glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z)))*(-1);
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     } else if ((y0 < 1) && (y0 > 0)) {
@@ -50,7 +50,7 @@ bool Cone::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z));
+        glm::vec3 normalInit = (glm::normalize(glm::vec3(isectInit.x, isectInit.y, isectInit.z)))*(-1);
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     } else if ((y0 < 1) && (y1 > 0)) {
@@ -58,7 +58,7 @@ bool Cone::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
-        glm::vec3 normalInit = glm::vec3(0, -2, 0);
+        glm::vec3 normalInit = glm::vec3(0, 2, 0);
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     } else {
