@@ -106,7 +106,17 @@
 					"scale": [0.4, 0.4, 0.4]
 				},
 				"material": "white_diffuse",
-				"filename": "scene_files/wt_teapot.obj"
+				"filename": "scene_files/obj/wt_teapot.obj"
+			},
+			{
+				"type": "cone",
+				"name": "cone",
+				"transform" : {
+					"translate": [-0.5, 0, 1],
+					"rotate": [0, 0, 0],
+					"scale": [0.4, 0.8, 0.4]
+				},
+				"material": "glass"
 			},
 			{
 				"type": "square",

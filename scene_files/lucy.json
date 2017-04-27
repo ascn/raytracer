@@ -38,7 +38,7 @@
 					"scale": [0.005, 0.005, 0.005]
 				},
 				"material": "white_diffuse",
-				"filename": "scene_files/Alucy.obj"
+				"filename": "scene_files/obj/Alucy.obj"
 			},
 			{
 				"type": "square",

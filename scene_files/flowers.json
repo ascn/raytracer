@@ -5,8 +5,8 @@
 			"eye": [0, -3, 10],
 			"worldUp": [0, 1, 0],
 			"fov": 50,
-			"width": 512,
-			"height": 512
+			"width": 256,
+			"height": 256
 		},
 		"geometry": [
 			{
@@ -31,22 +31,33 @@
 			},
 			{
 				"type": "obj",
-				"name": "dragon",
+				"name": "table",
 				"transform" : {
-					"translate": [0, 1, 0],
-					"rotate": [180, 200, 0],
-					"scale": [0.2, 0.2, 0.2]
+					"translate": [0, 0.5, 0],
+					"rotate": [180, 0, 0],
+					"scale": [0.01, 0.01, 0.01]
 				},
-				"material": "gold",
-				"filename": "scene_files/obj/dragon.obj"
+				"material": "white_diffuse",
+				"filename": "scene_files/obj/coffee_table.obj"
+			},
+			{
+				"type": "obj",
+				"name": "flowers",
+				"transform" : {
+					"translate": [0, 0, 0],
+					"rotate": [180, 0, 0],
+					"scale": [0.01, 0.01, 0.01]
+				},
+				"material": "flowers",
+				"filename": "scene_files/obj/rose.obj"
 			},
 			{
 				"type": "square",
 				"name": "Light1",
 				"transform": {
-					"translate": [0, -0.99, 12],
+					"translate": [0, 0, 12],
 					"rotate": [0, 0, 0],
-					"scale": [0.5, 0.5, 0.5]
+					"scale": [1, 1, 1]
 				},
 				"material": "emissive_white"
 			}
@@ -109,14 +120,19 @@
 			{
 				"type": "phong",
 				"name": "gold",
-				"baseColor": [0.831, 0.686, 0.216],
-				"reflectivity": 0.5
+				"baseColor": [0.831, 0.686, 0.216]
 			},
 			{
 				"type": "lambert",
 				"name": "floor",
 				"baseColor": [1, 1, 1],
 				"reflectivity": 0.1
+			},
+			{
+				"type": "lambert",
+				"name": "flowers",
+				"baseColor": [1, 1, 1],
+				"texture": "scene_files/tex_nor_maps/rose_texture.jpg"
 			}
 		]
 	}

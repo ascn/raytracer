@@ -18,6 +18,7 @@
 #include <scene/geometry/triangle.h>
 #include <scene/geometry/mesh.h>
 #include <scene/geometry/cylinder.h>
+#include <scene/geometry/cone.h>
 #include <scene/lights/arealight.h>
 #include <scene/lights/pointlight.h>
 
@@ -124,6 +125,9 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
         } else if (type == QString("cylinder")) {
             Cylinder *cyl = new Cylinder(name, *transform, material);
             scene->primitives.append(cyl);
+        } else if (type == QString("cone")) {
+            Cone *cone = new Cone(name, *transform, material);
+            scene->primitives.append(cone);
         }
     }
 }
