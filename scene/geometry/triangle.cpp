@@ -128,27 +128,38 @@ void Triangle::mapNormal(Intersection &isect) const {
 }
 
 glm::vec3 Triangle::getColor(Intersection &isect) const {
-
     if (isect.objectHit->material->texture == nullptr) {
         return isect.objectHit->material->baseColor;
     }
-    const Triangle *obj = dynamic_cast<const Triangle *>(isect.objectHit);
-    QRgb p1 = isect.objectHit->material->texture->pixel(obj->vertices[0][0], obj->vertices[0][1]);
-    QRgb p2 = isect.objectHit->material->texture->pixel(obj->vertices[1][0], obj->vertices[1][1]);
-    QRgb p3 = isect.objectHit->material->texture->pixel(obj->vertices[2][0], obj->vertices[2][1]);
-
     glm::vec3 attributes[3];
-    attributes[0][0] = qRed(p1);
-    attributes[0][1] = qGreen(p1);
-    attributes[0][2] = qBlue(p1);
-    attributes[1][0] = qRed(p2);
-    attributes[1][1] = qGreen(p2);
-    attributes[1][2] = qBlue(p2);
-    attributes[2][0] = qRed(p3);
-    attributes[2][1] = qGreen(p3);
-    attributes[2][2] = qBlue(p3);
+    attributes[0] = glm::vec3(uvs[0], 0);
+    attributes[1] = glm::vec3(uvs[1], 0);
+    attributes[2] = glm::vec3(uvs[2], 0);
+    glm::vec3 interpUV = triangleInterpolation(isect.isectPoint, vertices, attributes);
+    float w = material->texture->width() - 1;
+    float h = material->texture->height() - 1;
+    float u = interpUV.x;
+    float v = interpUV.y;
+    v = v < 0.5 ? v + 2 * (0.5 - v) : v - 2 * (v - 0.5);
+    float convU = w * u;
+    float convV = h * v;
+    QRgb first = slerp(getAlpha(convU, ceil(convU), floor(convU)), material->texture->pixel(QPoint(ceil(convU), ceil(convV))), material->texture->pixel(QPoint(floor(convU), ceil(convV))));
+    QRgb second = slerp(getAlpha(convU, ceil(convU), floor(convU)), material->texture->pixel(QPoint(ceil(convU), floor(convV))), material->texture->pixel(QPoint(floor(convU), floor(convV))));
+    QRgb final = slerp(getAlpha(convV, ceil(convV), floor(convV)), first, second);
+    glm::vec3 ret = glm::vec3(qRed(final), qGreen(final), qBlue(final));
+    return ret / glm::vec3(255);
+}
 
-    return triangleInterpolation(isect.isectPoint, obj->vertices, attributes);
+float Triangle::getAlpha(float y, float py, float qy) const {
+    float result = ((y-py)/(qy-py));
+    return result;
+}
+
+QRgb Triangle::slerp(float alpha, QRgb az, QRgb bz) const {
+    float resultR = (1-alpha)*qRed(az) + alpha*qRed(bz);
+    float resultG = (1-alpha)*qGreen(az) + alpha*qGreen(bz);
+    float resultB = (1-alpha)*qBlue(az) + alpha*qBlue(bz);
+    return qRgb(resultR, resultG, resultB);
 }
 
 BoundingBox Triangle::calculateAABB() const {
