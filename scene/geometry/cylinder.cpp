@@ -38,7 +38,7 @@ bool Cylinder::intersect(const Ray &ray, Intersection *intersection) const {
     if ((y0 > 0.5) && (y1 > 0.5)) {
         return false;
     } else if ((y0 > 0.5) && (y1 < 0.5)) {
-        intersection->t = t0;
+        intersection->t = t0 + (t1-t0) * (y0-1) / (y0-y1);
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
@@ -54,7 +54,7 @@ bool Cylinder::intersect(const Ray &ray, Intersection *intersection) const {
         intersection->normal = transform.invTransTrans * glm::vec4(normalInit, 0);
         return true;
     } else if ((y0 < -0.5) && (y1 > -0.5)) {
-        intersection->t = t0;
+        intersection->t = t0 + (t1-t0) * (y0-1) / (y0-y1);
         intersection->objectHit = this;
         glm::vec3 isectInit = rayOriMod + intersection->t*rayDirMod;
         intersection->isectPoint = transform.transform * glm::vec4(isectInit, 1);
