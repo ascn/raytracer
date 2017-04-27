@@ -97,7 +97,7 @@ void Mesh::mapNormal(Intersection &isect) const {
 }
 
 glm::vec3 Mesh::getColor(Intersection &isect) const {
-    if (isect.objectHit->material->texture->isNull()) {
+    if (isect.objectHit->material->texture == nullptr) {
         return isect.objectHit->material->baseColor;
     }
 }

@@ -17,6 +17,7 @@
 #include <scene/geometry/squareplane.h>
 #include <scene/geometry/triangle.h>
 #include <scene/geometry/mesh.h>
+#include <scene/geometry/cylinder.h>
 #include <scene/lights/arealight.h>
 #include <scene/lights/pointlight.h>
 
@@ -120,6 +121,9 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
             QString filename = currObj.value("filename").toString();
             Mesh *mesh = new Mesh(name, filename, *transform, material, kd);
             scene->primitives.append(mesh);
+        } else if (type == QString("cylinder")) {
+            Cylinder *cyl = new Cylinder(name, *transform, material);
+            scene->primitives.append(cyl);
         }
     }
 }
