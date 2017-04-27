@@ -309,7 +309,7 @@ glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
     std::vector<glm::vec3> points;
     Sampler sampler;
     sampler.generateSamples(samples, points, Warp::HemiCos);
-    // sampler.transformSamples(isect, points);
+    sampler.transformSamples(isect, points);
     for (int i = 0; i < points.size(); ++i) {
       Ray ray = isect.raycast(points[i]);
       Intersection sampleIsect = Intersection::getIntersection(ray, scene);

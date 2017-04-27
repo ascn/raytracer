@@ -7,12 +7,15 @@
 #include <vector>
 #include <sampler/pcg32.h>
 
+#include <raytracer/intersection.h>
+
 enum class Warp { Square, Disk, Sphere, HemiCos };
 
 class Sampler {
 public:
 	Sampler();
 	void generateSamples(int samples, std::vector<glm::vec3> &vec, Warp method);
+	void transformSamples(Intersection isect, std::vector<glm::vec3> &points);
 
 private:
 	static glm::vec3 warpDisk(const glm::vec2 &sample);
