@@ -109,6 +109,33 @@ bool Cube::intersect(const Ray &ray, Intersection *intersection) const {
 
 void Cube::mapNormal(Intersection &isect) const {
 
+    if (!(isect.objectHit->material->normalMap == nullptr)) {
+        
+        glm::vec3 normalInit = transform.invTransform * glm::vec4(isect.normal, 0);
+        glm::vec3 direction;
+        
+        if (normalInit[2] > 0) {
+            direction = glm::vec3(0, 1, 0);
+        } else if (normalInit[2] < 0) {
+            direction = glm::vec3(0, -1, 0);
+        } else if (normalInit[1] >  0) {
+            direction = glm::vec3(1, 0, 0);
+        } else if (normalInit[1] >  0) {
+            direction = glm::vec3(-1, 1, 0);
+        } else if (normalInit[0] >  0){
+            direction = glm::vec3(0, 0, 1);
+        } else if (normalInit[0] < 0) {
+            direction = glm::vec3(0, 0, -1);
+        }
+        
+        glm::vec3 tangent = glm::normalize(direction, normalInit));
+        glm::vec3 bitangent = glm::normalize(glm::cross(normalInit, tangent));
+        glm::mat4 trans = glm::mat4(glm::vec4(tangent, 0), glm::vec4(bitangent, 0),
+                                    glm::vec4(normalInit, 0), glm::vec4(0, 0, 0, 1));
+        glm::vec3 mapNorm = cubeInterp(isect, material->normalMap);
+        mapNorm = (mapNorm * glm::vec3(255) - glm::vec3(128)) / glm::vec3(128);
+        isect.normal = trans * glm::vec4(mapNorm, 0);
+    }
 }
 
 glm::vec3 Cube::getColor(Intersection &isect) const {
