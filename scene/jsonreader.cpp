@@ -20,6 +20,8 @@
 #include <scene/geometry/cylinder.h>
 #include <scene/geometry/cone.h>
 #include <scene/geometry/disk.h>
+#include <scene/geometry/hyperboloid.h>
+#include <scene/geometry/paraboloid.h>
 #include <scene/lights/arealight.h>
 #include <scene/lights/pointlight.h>
 
@@ -121,7 +123,13 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
 
         } else if (type == QString("obj")) {
             QString filename = currObj.value("filename").toString();
-            Mesh *mesh = new Mesh(name, filename, *transform, material, kd);
+            bool flip = false;
+            if (currObj.contains("flipNormal")) {
+                if (currObj.value("flipNormal").toString() == "true") {
+                    flip = true;
+                }
+            }
+            Mesh *mesh = new Mesh(name, filename, *transform, material, kd, flip);
             scene->primitives.append(mesh);
         } else if (type == QString("cylinder")) {
             Cylinder *cyl = new Cylinder(name, *transform, material);
@@ -132,6 +140,12 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
         } else if (type == QString("disk")) {
             Disk *disk = new Disk(name, *transform, material);
             scene->primitives.append(disk);
+        } else if (type == QString("hyperboloid")) {
+            Hyperboloid *hyper = new Hyperboloid(name, *transform, material);
+            scene->primitives.append(hyper);
+        } else if (type == QString("paraboloid")) {
+            Paraboloid *para = new Paraboloid(name, *transform, material);
+            scene->primitives.append(para);
         }
     }
 }

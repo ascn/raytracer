@@ -44,7 +44,7 @@
         "type": "lambert",
         "name": "grid_tex",
         "baseColor": [1, 1, 1],
-        "texture": "scene_files/tex_nor_maps/dice.png",
+        "texture": "scene_files/tex_nor_maps/brick.jpg",
         "normalMap": "scene_files/tex_nor_maps/brick_norm.jpg"
       }
     ],

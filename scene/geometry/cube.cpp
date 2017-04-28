@@ -127,8 +127,9 @@ void Cube::mapNormal(Intersection &isect) const {
         } else if (normalInit[0] < 0) {
             direction = glm::vec3(0, 0, -1);
         }
+        direction *= glm::vec3(-1);
         
-        glm::vec3 tangent = glm::normalize(direction, normalInit));
+        glm::vec3 tangent = glm::normalize(glm::cross(direction, normalInit));
         glm::vec3 bitangent = glm::normalize(glm::cross(normalInit, tangent));
         glm::mat4 trans = glm::mat4(glm::vec4(tangent, 0), glm::vec4(bitangent, 0),
                                     glm::vec4(normalInit, 0), glm::vec4(0, 0, 0, 1));

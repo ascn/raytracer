@@ -35,7 +35,9 @@ SOURCES += \
     scene/lights/pointlight.cpp \
     scene/geometry/cylinder.cpp \
     scene/geometry/cone.cpp \
-    scene/geometry/disk.cpp
+    scene/geometry/disk.cpp \
+    scene/geometry/hyperboloid.cpp \
+    scene/geometry/paraboloid.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -225,4 +227,6 @@ HEADERS += \
     scene/lights/pointlight.h \
     scene/geometry/cylinder.h \
     scene/geometry/cone.h \
-    scene/geometry/disk.h
+    scene/geometry/disk.h \
+    scene/geometry/hyperboloid.h \
+    scene/geometry/paraboloid.h

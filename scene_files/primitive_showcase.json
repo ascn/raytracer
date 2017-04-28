@@ -1,12 +1,12 @@
 {
 	"scene": {
 		"camera": {
-			"target": [0, 0, 0],
-			"eye": [0, -1, 10],
+			"target": [0, 1, 0],
+			"eye": [0, -2, 10],
 			"worldUp": [0, 1, 0],
 			"fov": 50,
-			"width": 512,
-			"height": 512
+			"width": 256,
+			"height": 256
 		},
 		"geometry": [
 			{
@@ -30,42 +30,191 @@
 				"material": "floor"				
 			},
 			{
-				"type": "obj",
+				"type": "cube",
 				"name": "Cube Pedestal",
 				"transform": {
-					"translate": [0, 0, 0],
+					"translate": [0, 0.5, 1],
 					"rotate": [0, 0, 0],
-					"scale": [1, 1, 1]
+					"scale": [0.5, 1, 0.5]
 				},
-				"material": "white_diffuse",
-				"filename": "scene_files/obj/pedestal.obj"
+				"material": "white_diffuse"
 			},
 			{
 				"type": "cube",
 				"name": "Left Cube B1",
 				"transform": {
-					"translate": [0.5, 0.75, 0.3],
-					"rotate": [0, 60, 0],
-					"scale": [0.5, 0.5, 0.5]
+					"translate": [0, -0.25, 1],
+					"rotate": [30, 60, 30],
+					"scale": [0.2, 0.2, 0.2]
 				},
 				"material": "yellow_diffuse"
 			},
 			{
+				"type": "cube",
+				"name": "Sphere Pedestal",
+				"transform": {
+					"translate": [-0.75, 0.5, 1],
+					"rotate": [0, 0, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "sphere",
+				"name": "Sphere",
+				"transform": {
+					"translate": [-0.75, -0.25, 1],
+					"rotate": [0, 0, 0],
+					"scale": [0.3, 0.3, 0.3]
+				},
+				"material": "mirror"
+			},
+			{
+				"type": "cube",
+				"name": "Square Pedestal",
+				"transform": {
+					"translate": [0.75, 0.5, 1],
+					"rotate": [0, 0, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "square",
+				"name": "Plane",
+				"transform": {
+					"translate": [0.75, -0.25, 1],
+					"rotate": [0, 0, 0],
+					"scale": [0.3, 0.3, 0.3]
+				},
+				"material": "brick"
+			},
+			{
+				"type": "cube",
+				"name": "Cylinder Pedestal",
+				"transform": {
+					"translate": [0.75, 0.5, 2.25],
+					"rotate": [0, 0, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "cylinder",
+				"name": "Cylinder",
+				"transform": {
+					"translate": [0.75, -0.25, 2.25],
+					"rotate": [0, 0, 0],
+					"scale": [0.3, 0.3, 0.3]
+				},
+				"material": "glass"
+			},
+			{
+				"type": "cube",
+				"name": "Cone Pedestal",
+				"transform": {
+					"translate": [0, 0.5, 2.25],
+					"rotate": [0, 0, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "cone",
+				"name": "cone",
+				"transform": {
+					"translate": [0, -0.25, 2],
+					"rotate": [0, 0, 0],
+					"scale": [0.2, 0.5, 0.2]
+				},
+				"material": "red_diffuse"
+			},
+			{
+				"type": "cube",
+				"name": "disk Pedestal",
+				"transform": {
+					"translate": [-0.75, 0.5, 2.25],
+					"rotate": [0, 0, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "disk",
+				"name": "cone",
+				"transform": {
+					"translate": [-0.75, -0.25, 2.25],
+					"rotate": [30, 0, 0],
+					"scale": [0.3, 0.3, 0.3]
+				},
+				"material": "green_diffuse"
+			},
+			{
+				"type": "cube",
+				"name": "teapot Pedestal",
+				"transform": {
+					"translate": [-0.75, 0.5, 3.5],
+					"rotate": [0, 0, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "white_diffuse"
+			},
+			{
 				"type": "obj",
 				"name": "teapot",
-				"transform" : {
-					"translate": [-0.5, 0.25, 0.3],
+				"transform": {
+					"translate": [-0.75, -0.1, 3.5],
 					"rotate": [180, 20, 0],
-					"scale": [0.4, 0.4, 0.4]
+					"scale": [0.3, 0.3, 0.3]
 				},
-				"material": "white_diffuse",
+				"material": "mirror",
 				"filename": "scene_files/obj/wt_teapot.obj"
+			},
+			{
+				"type": "cube",
+				"name": "Paraboloid Pedestal",
+				"transform": {
+					"translate": [0, 0.5, 3.5],
+					"rotate": [0, 0, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "paraboloid",
+				"name": "paraboloid",
+				"transform": {
+					"translate": [0, -0.25, 3.5],
+					"rotate": [0, 0, 0],
+					"scale": [0.2, 0.5, 0.2]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "cube",
+				"name": "Hyperboloid Pedestal",
+				"transform": {
+					"translate": [0.75, 0.5, 3.5],
+					"rotate": [0, 0, 0],
+					"scale": [0.5, 1, 0.5]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "hyperboloid",
+				"name": "hyperboloid",
+				"transform": {
+					"translate": [0.75, -0.25, 3.5],
+					"rotate": [0, 0, 0],
+					"scale": [0.3, 0.3, 0.3]
+				},
+				"material": "glass"
 			},
 			{
 				"type": "square",
 				"name": "Light1",
 				"transform": {
-					"translate": [0, -0.99, 3],
+					"translate": [0, -2, 5],
 					"rotate": [90, 0, 0],
 					"scale": [0.5, 0.5, 0.5]
 				},
@@ -75,9 +224,9 @@
 				"type": "square",
 				"name": "Light2",
 				"transform": {
-					"translate": [0, -0.99, 1],
+					"translate": [0, -2, 7],
 					"rotate": [90, 0, 0],
-					"scale":[0.5, 0.5, 0.5]
+					"scale": [0.5, 0.5, 0.5]
 				},
 				"material": "emissive_white"
 			}
@@ -147,6 +296,13 @@
 				"name": "floor",
 				"baseColor": [1, 1, 1],
 				"reflectivity": 0
+			},
+			{
+				"type": "lambert",
+				"name": "brick",
+				"baseColor": [1, 1, 1],
+				"texture": "scene_files/tex_nor_maps/brick.jpg",
+				"normalMap": "scene_files/tex_nor_maps/brick_norm.jpg"
 			}
 		]
 	}
