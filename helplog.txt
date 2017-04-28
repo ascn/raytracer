@@ -23,13 +23,14 @@ http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping
 
 * Acceleration Structure:
  https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure
-
- https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
- http://www.rorydriscoll.com/2009/01/07/better-sampling/
-
+ 
 * Ambient Occlusion & Sampling
  http://joomla.renderwiki.com/joomla/index.php?option=com_content&view=article&id=140&Itemid=157
  PBRT Edition #2
+ 
+ https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
+ http://www.rorydriscoll.com/2009/01/07/better-sampling/
+
 
 * Distribution ray tracing:
  PBRT
