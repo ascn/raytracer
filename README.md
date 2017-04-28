@@ -1,6 +1,6 @@
 # raytracer
 
-## Alexander Chan, Julia Chun, Ray Kim
+## Alexander Chan, *Julia Chun, *Ray Kim
 
 ![](renders/soft_shadows_8x8.png)
 
