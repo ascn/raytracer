@@ -6,12 +6,13 @@
 
 ## Overview
 
-A distribution ray tracer supporting JSON scenes, Lambert and Blinn-Phong shading, acceleration structures, ambient occlusion, and stochastic features including soft shadows and glossy reflection.
+A distribution ray tracer supporting JSON scenes, Lambert and Blinn-Phong shading, acceleration structures, ambient occlusion, and stochastic features including soft shadows.
 
 ## Renders
 
-![](renders/cornell_recursive_reflect_larger_depth.png)
-![](renders/teapot_16aa.png)
+![](renders/reflective_dragon.png)
+![](renders/lucy_144.png)
+![](renders/primitives.png)
 
 ## Work Division
 
