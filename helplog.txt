@@ -23,6 +23,7 @@ http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping
 
 * Acceleration Structure:
  https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure
+ https://blog.frogslayer.com/kd-trees-for-faster-ray-tracing-with-triangles/
  
 * Ambient Occlusion & Sampling
  http://joomla.renderwiki.com/joomla/index.php?option=com_content&view=article&id=140&Itemid=157
