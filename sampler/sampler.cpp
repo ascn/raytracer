@@ -2,6 +2,7 @@
 #include <sampler/pcg32.h>
 #include <glm/glm.hpp>
 #include <glm/vec2.hpp>
+#include <scene/geometry/geometry.h>
 
 Sampler::Sampler() {}
 
@@ -69,16 +70,14 @@ glm::vec3 Sampler::warpDisk(const glm::vec2 &sample) {
 }
 
 void Sampler::transformSamples(Intersection isect, std::vector<glm::vec3> &points) {
-  
-    for (int idx = 0; i < points.size(); ++idx) {
-
+    for (unsigned int idx = 0; idx < points.size(); ++idx) {
     	points[idx] -= glm::vec3(0.5, 0.5, 0.5);
    		glm::vec3 normal = isect.objectHit->transform.invTransform * glm::vec4(isect.normal, 0);
-	    glm::vec3 tangent = glm::normalize(glm::cross(glm::vec3(0, 1, 0), normalInit));
-        glm::vec3 bitangent = glm::normalize(glm::cross(normalInit, tangent));
+        glm::vec3 tangent = glm::normalize(glm::cross(glm::vec3(0, 1, 0), isect.normal));
+        glm::vec3 bitangent = glm::normalize(glm::cross(isect.normal, tangent));
         glm::mat3 trans = glm::mat4(glm::vec4(tangent, 0), glm::vec4(bitangent, 0),
                                     glm::vec4(normal, 0), glm::vec4(0, 0, 0, 1));
         points[idx] =  isect.isectPoint + trans * points[idx];
-        points[idx] += glm::vec3(0.1) * normal
+        points[idx] += glm::vec3(0.1) * normal;
 	}
 }

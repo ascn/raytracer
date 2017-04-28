@@ -13,9 +13,9 @@ A distribution ray tracer supporting JSON scenes, Lambert and Blinn-Phong shadin
 ![](renders/cornell_recursive_reflect_larger_depth.png)
 ![](renders/teapot_16aa.png)
 
-## Work Divsion
+## Work Division
 
-Alex worked on ray casting, Lambert and Blinn-Phong shading, the kd-tree, sampling, soft shadows, glossy reflections, reflection, refraction with Fresnel, meshes, multithreading, and progressive preview.
+Alex worked on ray casting, Lambert and Blinn-Phong shading, the kd-tree, sampling, soft shadows, glossy reflections, reflection, refraction with Fresnel, meshes, multithreading, progressive preview, .
 
 Julia worked on reading JSON scenes, normal mapping, and ambient occlusion.
 
