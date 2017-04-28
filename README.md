@@ -19,4 +19,4 @@ Alex worked on ray casting, Lambert and Blinn-Phong shading, the kd-tree, sampli
 
 Julia worked on reading JSON scenes, normal mapping, and ambient occlusion.
 
-Ray worked on all the primitives, including cubes, spheres, squares, cylinders, cones, disks, and texture mapping.
+Ray worked on all the basic primitives (cubes, spheres, squares), additional primitives (cylinders, cones, disks, paraboloids, hyperboloids), and texture mapping.
