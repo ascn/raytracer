@@ -1,21 +1,21 @@
-***Basic QT Documentations were used for all milestones!***
+***Basic QT Documentations &  PBRT 2nd Edition were used for all milestones!***
 
 ----------------------MILESTONE #1-------------------------
 
-*Primitives/shape and Intersection Calculation
+* Primitives/shape and Intersection Calculation
  PBRT Edition #2
  https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 
-*Shaders
+* Shaders
  https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-normals
 
 ----------------------MILESTONE #2-------------------------
 
-*Lambertian/Phong Shading
+* Lambertian/Phong Shading
  https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/diffuse-lambertian-shading
  https://www.scratchapixel.com/lessons/3d-basic-rendering/phong-shader-BRDF
 
-*Normal/Texture Mapping
+* Normal/Texture Mapping
 https://learnopengl.com/#!Advanced-Lighting/Normal-Mapping
 http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/
 
@@ -27,6 +27,9 @@ http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping
  https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
  http://www.rorydriscoll.com/2009/01/07/better-sampling/
 
+* Ambient Occlusion & Sampling
+ http://joomla.renderwiki.com/joomla/index.php?option=com_content&view=article&id=140&Itemid=157
+ PBRT Edition #2
 
 * Distribution ray tracing:
  PBRT
