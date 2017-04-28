@@ -32,6 +32,10 @@ http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping
  https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
  http://www.rorydriscoll.com/2009/01/07/better-sampling/
 
+* Additional Primitives:
+http://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf
+http://www.bmsc.washington.edu/people/merritt/graphics/quadrics.html
+https://www.cl.cam.ac.uk/teaching/1999/AGraphHCI/SMAG/node2.html#eqn:rectray
 
 * Distribution ray tracing:
  PBRT
