@@ -3,7 +3,7 @@
 Describes the scene and the camera, along with utilities to load a scene (`JsonReader`). `JsonReader` reads in a valid scene file and creates a valid scene file (described as a scene graph).
 
 ### `scene/geometry/`
-Describes the behavior of various primitives. Each primitive inherits `Geometry` and implements the `bool intersect(const Ray &ray, Intersection *intersection) const;` method, that returns whether or not the given ray intersects the primitive, and if so, populates the `Intersection` object with the geometry hit, the `t` value, the point of intersection, and the surface normal of the intersection point.
+Describes the behavior of various primitives. Each primitive inherits `Geometry` and implements the `bool intersect(const Ray &ray, Intersection *intersection) const;` method, that returns whether or not the given ray intersects the primitive, and if so, populates the `Intersection` object with the geometry hit, the `t` value, the point of intersection, and the surface normal of the intersection point. The primitives include squareplane, cube, triangle, mesh, sphere, disk, cone, cylidner, paraboloid, hyperboloid.
 
 ### `scene/materials/`
 Describes how rays interact with different materials. Contains member variables for storing textures, normal maps, reflectivity, and refractive indices of the material, as well as whether the material is Lambertian or Blinn-Phong.
