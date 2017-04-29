@@ -122,8 +122,6 @@ void Triangle::mapNormal(Intersection &isect) const {
         attributes[2][2] = qBlue(p3);
 
         isect.normal = triangleInterpolation(isect.isectPoint, obj->vertices, attributes);
-    } else {
-        isect.normal = triangleInterpolation(isect.isectPoint, obj->vertices, obj->normals);
     }
 }
 

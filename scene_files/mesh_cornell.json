@@ -68,7 +68,7 @@
 					"scale": [0.1, 0.1, 0.1]
 				},
 				"material": "mario",
-				"filename": "scene_files/wahoo.obj"
+				"filename": "scene_files/obj/wahoo.obj"
 			},
 			{
 				"type": "square",
@@ -160,7 +160,7 @@
 				"type": "lambert",
 				"name": "mario",
 				"baseColor": [1, 1, 1],
-				"texture": "scene_files/wahoo.bmp"
+				"texture": "scene_files/tex_nor_maps/wahoo.bmp"
 			}
 		]
 	}

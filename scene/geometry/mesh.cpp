@@ -29,14 +29,11 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 									mesh.positions[mesh.indices[i + 2] * 3 + 2]);
             Triangle *t = nullptr;
             if (mesh.normals.size() == 0) {
-                glm::vec3 norm = glm::normalize(
+                glm::vec3 norm = -glm::normalize(
                 		glm::cross(vertices[0] - vertices[1], vertices[2] - vertices[1]));
     			vertices[0] = transform.transform * glm::vec4(vertices[0], 1);
 				vertices[1] = transform.transform * glm::vec4(vertices[1], 1);
-				vertices[2] = transform.transform * glm::vec4(vertices[2], 1);
-				if (flipNorm) {
-					norm *= glm::vec3(-1);
-				}
+                vertices[2] = transform.transform * glm::vec4(vertices[2], 1);
 				norm = transform.invTransTrans * glm::vec4(norm, 0);
                 t = new Triangle(tName, vertices, norm, material);
             } else {

@@ -1,0 +1,133 @@
+{
+	"scene": {
+		"camera": {
+			"target": [0, 0, 0],
+			"eye": [0, -3, 20],
+			"worldUp": [0, 1, 0],
+			"fov": 50,
+			"width": 256,
+			"height": 256
+		},
+		"geometry": [
+			{
+				"type": "square",
+				"name": "Back Wall",
+				"transform": {
+					"translate": [0, 0, -1],
+					"scale": [10, 10, 1],
+					"rotate": [0, 0, 0]
+				},
+				"material": "white_diffuse"
+			},
+			{
+				"type": "square",
+				"name": "Floor",
+				"transform": {
+					"translate": [0, 1, 0],
+					"rotate": [90, 0, 0],
+					"scale": [20, 20, 1]
+				},
+				"material": "floor"				
+			},
+			{
+				"type": "obj",
+				"name": "venus",
+				"transform" : {
+					"translate": [1.25, 1, 5],
+					"rotate": [180, 200, 0],
+					"scale": [0.0015, 0.0015, 0.0015]
+				},
+				"material": "white_diffuse",
+				"filename": "scene_files/obj/venus_de_milo_10.obj"
+			},
+			{
+				"type": "obj",
+				"name": "hermes",
+				"transform" : {
+					"translate": [-1.25, 1, 5],
+					"rotate": [180, 220, 0],
+					"scale": [0.0015, 0.0015, 0.0015]
+				},
+				"material": "white_diffuse",
+				"filename": "scene_files/obj/hermes.obj"
+			},
+			{
+				"type": "square",
+				"name": "Light1",
+				"transform": {
+					"translate": [0, -3.5, 10],
+					"rotate": [0, 0, 0],
+					"scale": [1, 1, 1]
+				},
+				"material": "emissive_white"
+			}
+		],
+		"material": [
+			{
+				"type": "lambert",
+				"name": "white_diffuse",
+				"baseColor": [1, 1, 1]
+			},
+			{
+				"type": "lambert",
+				"name": "red_diffuse",
+				"baseColor": [1, 0, 0]
+			},
+			{
+				"type": "lambert",
+				"name": "green_diffuse",
+				"baseColor": [0, 1, 0]
+			},
+			{
+				"type": "lambert",
+				"name": "gray_diffuse",
+				"baseColor": [0.1, 0.1, 0.1]
+			},
+			{
+				"type": "lambert",
+				"name": "emissive_white",
+				"baseColor":[1, 1, 1],
+				"emissive": "true"
+			},
+			{
+				"type": "phong",
+				"name": "mirror",
+				"baseColor": [1, 1, 1],
+				"reflectivity": 1,
+				"ks": 0.2,
+				"n": 1000
+			},
+			{
+				"type": "phong",
+				"name": "phong_purple",
+				"baseColor": [1, 0, 1],
+				"ks": 0.5,
+				"n": 50,
+				"reflectivity": 0.5
+			},
+			{
+				"type": "lambert",
+				"name": "blue_diffuse",
+				"baseColor": [0.1, 0.1, 1]
+			},
+			{
+				"type": "phong",
+				"name": "glass",
+				"baseColor": [1, 1, 1],
+				"iorIn": 1.5,
+				"iorOut": 1
+			},
+			{
+				"type": "phong",
+				"name": "gold",
+				"baseColor": [0.831, 0.686, 0.216]
+			},
+			{
+				"type": "lambert",
+				"name": "floor",
+				"baseColor": [1, 1, 1],
+				"reflectivity": 0.1
+			}
+		]
+	}
+}

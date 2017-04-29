@@ -1,6 +1,9 @@
 QT += core \
     widgets
 
+QMAKE_CXXFLAGS += -Wl,--stack,128000000 \
+                  -Wl,--heap,2000000000
+
 CONFIG += c++11
 
 TARGET = raytracer
