@@ -12,6 +12,7 @@ Sphere::Sphere(QString name, Transform transform, Material *material) {
     this->name = name;
     this->transform = transform;
     this->material = material;
+    this->bbox = calculateAABB();
 }
 
 Sphere::~Sphere() {}
@@ -103,4 +104,14 @@ QRgb Sphere::slerp(float alpha, QRgb az, QRgb bz) const {
     float resultG = (1-alpha)*qGreen(az) + alpha*qGreen(bz);
     float resultB = (1-alpha)*qBlue(az) + alpha*qBlue(bz);
     return qRgb(resultR, resultG, resultB);
+}
+
+BoundingBox Sphere::calculateAABB() const {
+    glm::vec3 center = transform.transform * glm::vec4(0, 0, 0, 1);
+    BoundingBox ret;
+    ret.minPoint = glm::vec3(center - glm::vec3(0.5));
+    ret.maxPoint = glm::vec3(center + glm::vec3(0.5));
+    ret.maxPoint += glm::vec3(0.0001);
+    ret.minPoint -= glm::vec3(0.0001);
+    return ret;
 }

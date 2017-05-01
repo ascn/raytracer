@@ -71,7 +71,7 @@ glm::vec3 Sampler::warpDisk(const glm::vec2 &sample) {
 
 void Sampler::transformSamples(Intersection isect, std::vector<glm::vec3> &points) {
     for (unsigned int idx = 0; idx < points.size(); ++idx) {
-    	points[idx] -= glm::vec3(0.5, 0.5, 0.5);
+    	points[idx] -= glm::vec3(0.5, 0.5, 0);
    		glm::vec3 normal = isect.objectHit->transform.invTransform * glm::vec4(isect.normal, 0);
         glm::vec3 tangent = glm::normalize(glm::cross(glm::vec3(0, 1, 0), isect.normal));
         glm::vec3 bitangent = glm::normalize(glm::cross(isect.normal, tangent));

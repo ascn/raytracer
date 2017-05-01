@@ -16,6 +16,7 @@ public:
     float getAlpha(float y, float py, float qy) const;
     QRgb slerp(float alpha, QRgb az, QRgb bz) const;
     float slerpZ(float alpha, float az, float bz);
+    BoundingBox calculateAABB() const;
 
     glm::vec3 s;
 };

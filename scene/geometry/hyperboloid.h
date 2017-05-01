@@ -15,6 +15,7 @@ public:
     float getAlpha(float y, float py, float qy) const;
     QRgb slerp(float alpha, QRgb az, QRgb bz) const;
     glm::vec3 sphereInterpolation(Intersection &isect, QImage *attrib) const;
+    BoundingBox calculateAABB() const;
 };
 
 #endif // HYPERBOLOID_H

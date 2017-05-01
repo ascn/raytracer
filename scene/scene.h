@@ -7,17 +7,19 @@
 #include <scene/geometry/sphere.h>
 #include <scene/camera.h>
 #include <scene/lights/light.h>
+#include <acceleration/KdNode.h>
+#include <vector>
 
 class Scene {
 public:
 	Scene();
     void reset();
 
-    QList<Geometry *> primitives;
+    std::vector<Geometry *> primitives;
     QList<Light *> lights;
     QList<Material *> materials;
     QMap<QString, Material *> materialsMap;
-
+    KDNode *kdtree;
 };
 
 #endif // __SCENE_H__

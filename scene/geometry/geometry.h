@@ -7,6 +7,7 @@
 #include <scene/transform.h>
 #include <scene/materials/material.h>
 #include <glm/vec3.hpp>
+#include <acceleration/BoundingBox.h>
 
 class Intersection;
 
@@ -22,6 +23,9 @@ public:
     QString name;
     Transform transform;
     Material *material;
+    BoundingBox bbox; // Axis aligned (world space) bounding box
+protected:
+	virtual BoundingBox calculateAABB() const = 0;
 };
 
 #endif // __GEOMETRY_H__

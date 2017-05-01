@@ -17,7 +17,8 @@ bool KDNode::intersect(const Ray &ray, Intersection *intersection) const {
 		Intersection tmp;
 		bool leftHit = left->intersect(ray, &tmp);
 		bool rightHit = right->intersect(ray, &tmp);
-		if ((leftHit || rightHit) && (intersection->t < 0 || tmp.t < intersection->t)) {
+        if ((leftHit || rightHit) &&
+                ((intersection->t < 0 && tmp.t > 0) || tmp.t < intersection->t)) {
 			intersection->isectPoint = tmp.isectPoint;
 			intersection->normal = tmp.normal;
 			intersection->objectHit = tmp.objectHit;
@@ -27,15 +28,15 @@ bool KDNode::intersect(const Ray &ray, Intersection *intersection) const {
 	} else {
 		bool hit = false;
 		Intersection curr, tmp;
-		for (const auto &p : triangles) {
+		for (const auto &p : geometries) {
 			if (p->intersect(ray, &tmp)) {
-				if (curr.t < 0 || tmp.t < curr.t) {
+                if (tmp.t < curr.t && tmp.t > 0) {
 					curr = tmp;
 					hit = true;
 				}
 			}
 		}
-		if (hit && (intersection->t < 0 || curr.t < intersection->t)) {
+        if (hit && curr.t < intersection->t && curr.t > 0) {
 			intersection->isectPoint = curr.isectPoint;
 			intersection->normal = curr.normal;
 			intersection->objectHit = curr.objectHit;
@@ -45,20 +46,20 @@ bool KDNode::intersect(const Ray &ray, Intersection *intersection) const {
 	}
 }
 
-KDNode *KDNode::build(std::vector<Triangle *> &triangles) {
+KDNode *KDNode::build(std::vector<Geometry *> &geometries, int depth, int maxDepth) {
 	KDNode *node = new KDNode();
-	node->bbox = getAABB(triangles);
+	node->bbox = BoundingBox(geometries);
 
-	if (triangles.size() < 5) {
-		node->triangles = triangles;
+	if (geometries.size() < 5 || depth > maxDepth) {
+		node->geometries = geometries;
 		return node;
 	}
 
 	Axis longestAxis = node->bbox.getLongestAxis();
-	std::vector<Triangle *> rightTriangles;
-	std::vector<Triangle *> leftTriangles;
+	std::vector<Geometry *> rightTriangles;
+	std::vector<Geometry *> leftTriangles;
 	std::vector<float> vals;
-	for (const auto &p : triangles) {
+	for (const auto &p : geometries) {
 		switch (longestAxis) {
 		case Axis::X:
 			vals.push_back(p->bbox.getMidpoint().x);
@@ -74,7 +75,7 @@ KDNode *KDNode::build(std::vector<Triangle *> &triangles) {
 	std::nth_element(vals.begin(), vals.begin() + (vals.size() / 2), vals.end());
 	float median = vals[vals.size() / 2];
 	vals.clear();
-	for (const auto &p : triangles) {
+	for (const auto &p : geometries) {
 		switch (longestAxis) {
 		case Axis::X:
 			median < p->bbox.getMidpoint().x ? leftTriangles.push_back(p) : rightTriangles.push_back(p);
@@ -88,12 +89,12 @@ KDNode *KDNode::build(std::vector<Triangle *> &triangles) {
 		}
 	}
 	if (leftTriangles.size() == 0) {
-		node->triangles = rightTriangles;
+		node->geometries = rightTriangles;
 	} else if (rightTriangles.size() == 0) {
-		node->triangles = leftTriangles;
+		node->geometries = leftTriangles;
 	} else {
-		node->left = KDNode::build(leftTriangles);
-		node->right = KDNode::build(rightTriangles);
+		node->left = KDNode::build(leftTriangles, depth + 1, maxDepth);
+		node->right = KDNode::build(rightTriangles, depth + 1, maxDepth);
 	}
 	return node;
 }

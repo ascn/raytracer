@@ -14,6 +14,7 @@ public:
     glm::vec3 cubeInterp(Intersection &isect, QImage *attrib) const;
     float getAlpha(float y, float py, float qy) const;
     QRgb slerp(float alpha, QRgb az, QRgb bz) const;
+    BoundingBox calculateAABB() const;
 };
 
 #endif // __CUBE_H__

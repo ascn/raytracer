@@ -8,7 +8,7 @@
 
 Intersection::Intersection() :
 	isectPoint(glm::vec3(0, 0, 0)), normal(glm::vec3(0, 0, 0)),
-	objectHit(nullptr), t(-1) {}
+	objectHit(nullptr), t(INFINITY) {}
 
 Intersection::~Intersection() {}
 
@@ -21,6 +21,11 @@ Intersection Intersection::getIntersection(const Ray &ray, const Scene &scene) {
 	// Iterate through the geometries in the scene for the given ray
 	// and calculate the intersection for each. Update if the t value
 	// for a new intersection is less than the current.
+	if (scene.kdtree != nullptr) {
+		Intersection ret;
+		scene.kdtree->intersect(ray, &ret);
+		return ret;
+	}
 	Intersection ret, tmp;
 
 	for (auto &p : scene.primitives) {

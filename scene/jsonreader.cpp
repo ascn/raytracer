@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QDebug>
 #include <QImage>
+#include <cmath>
 
 #include <scene/jsonreader.h>
 #include <scene/scene.h>
@@ -24,6 +25,8 @@
 #include <scene/geometry/paraboloid.h>
 #include <scene/lights/arealight.h>
 #include <scene/lights/pointlight.h>
+
+#include <acceleration/KdNode.h>
 
 namespace jsonreader {
 
@@ -50,6 +53,12 @@ void readJson(Camera *camera, Scene *scene, const QString & filename, bool kd)
       parseCamera(camera, cameraObj);
       parseMaterial(scene, materialArr);
       parseGeometry(scene, geometryArr, kd);
+      if (kd) {
+        scene->kdtree = KDNode::build(
+            scene->primitives, 0, std::round(8 + 1.3f * std::log2(scene->primitives.size())));
+      } else {
+        scene->kdtree = nullptr;
+      }
 }
 
 void parseCamera(Camera *camera, QJsonObject cameraObj) {
@@ -102,23 +111,23 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
         if (type == QString("cube")) {
 
             Cube *cube = new Cube(name, *transform, material);
-            scene->primitives.append(cube);
+            scene->primitives.push_back(cube);
 
         } else if (type == QString("sphere")) {
 
             Sphere *sphere = new Sphere(name, *transform, material);
-            scene->primitives.append(sphere);
+            scene->primitives.push_back(sphere);
             if (material->emissive) {
                 PointLight *pl = new PointLight(sphere);
-                scene->lights.append(pl);
+                scene->lights.push_back(pl);
             }
         } else if (type == QString("square")) {
 
             SquarePlane *sp = new SquarePlane(name, *transform, material);
-            scene->primitives.append(sp);
+            scene->primitives.push_back(sp);
             if (material->emissive) {
                 AreaLight *al = new AreaLight(sp);
-                scene->lights.append(al);
+                scene->lights.push_back(al);
             }
 
         } else if (type == QString("obj")) {
@@ -130,22 +139,22 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
                 }
             }
             Mesh *mesh = new Mesh(name, filename, *transform, material, kd, flip);
-            scene->primitives.append(mesh);
+            scene->primitives.push_back(mesh);
         } else if (type == QString("cylinder")) {
             Cylinder *cyl = new Cylinder(name, *transform, material);
-            scene->primitives.append(cyl);
+            scene->primitives.push_back(cyl);
         } else if (type == QString("cone")) {
             Cone *cone = new Cone(name, *transform, material);
-            scene->primitives.append(cone);
+            scene->primitives.push_back(cone);
         } else if (type == QString("disk")) {
             Disk *disk = new Disk(name, *transform, material);
-            scene->primitives.append(disk);
+            scene->primitives.push_back(disk);
         } else if (type == QString("hyperboloid")) {
             Hyperboloid *hyper = new Hyperboloid(name, *transform, material);
-            scene->primitives.append(hyper);
+            scene->primitives.push_back(hyper);
         } else if (type == QString("paraboloid")) {
             Paraboloid *para = new Paraboloid(name, *transform, material);
-            scene->primitives.append(para);
+            scene->primitives.push_back(para);
         }
     }
 }

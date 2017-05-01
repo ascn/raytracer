@@ -91,3 +91,7 @@ QRgb Disk::slerp(float alpha, QRgb az, QRgb bz) const {
     return qRgb(resultR, resultG, resultB);
 }
 
+BoundingBox Disk::calculateAABB() const {
+    BoundingBox ret;
+    return ret;
+}

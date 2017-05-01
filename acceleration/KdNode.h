@@ -9,12 +9,12 @@ class KDNode {
 public:
 	KDNode();
 	bool intersect(const Ray &ray, Intersection *intersection) const;
-	static KDNode *build(std::vector<Triangle *> &triangles);
+	static KDNode *build(std::vector<Geometry *> &geometries, int depth, int maxDepth);
 
 	BoundingBox bbox;
 	KDNode *left;
 	KDNode *right;
-	std::vector<Triangle *> triangles;
+	std::vector<Geometry *> geometries;
 };
 
 #endif // __KDNODE_H__

@@ -13,8 +13,9 @@ public:
 	bool intersect(const Ray &ray, Intersection *intersection) const;
     void mapNormal(Intersection &isect) const;
     glm::vec3 getColor(Intersection &isect) const;
+    BoundingBox calculateAABB() const;
     KDNode *kdtree;
-	std::vector<Triangle *> triangles; // all stored in world space
+	std::vector<Geometry *> triangles; // all stored in world space
 };
 
 #endif // __MESH_H__

@@ -71,16 +71,18 @@ BoundingBox BoundingBox::Union(const BoundingBox &bb1, const BoundingBox &bb2) {
 	return ret;
 }
 
-BoundingBox getAABB(std::vector<Triangle *> &primitives) {
-	BoundingBox ret;
+BoundingBox::BoundingBox(const std::vector<Geometry *> &primitives) {
+	minPoint = glm::vec3(0);
+	maxPoint = glm::vec3(0);
 	if (primitives.size() == 0) {
-		return ret;
+		return;
 	}
-	ret = primitives[0]->bbox;
+	BoundingBox ret = primitives[0]->bbox;
     for (unsigned int i = 1; i < primitives.size(); ++i) {
 		ret = BoundingBox::Union(ret, primitives[i]->bbox);
 	}
-	return ret;
+	minPoint = ret.minPoint;
+	maxPoint = ret.maxPoint;
 }
 
 Axis BoundingBox::getLongestAxis() const {
@@ -100,4 +102,10 @@ glm::vec3 BoundingBox::getMidpoint() const {
 	return glm::vec3((minPoint.x + maxPoint.x) / 2,
                      (minPoint.y + maxPoint.y) / 2,
                      (minPoint.z + maxPoint.z) / 2);
+}
+
+float BoundingBox::getVolume() const {
+	return ((maxPoint.x - minPoint.x) *
+			(maxPoint.y - minPoint.y) *
+			(maxPoint.z - minPoint.z));
 }

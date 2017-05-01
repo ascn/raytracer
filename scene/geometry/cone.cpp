@@ -125,3 +125,8 @@ QRgb Cone::slerp(float alpha, QRgb az, QRgb bz) const {
     float resultB = (1-alpha)*qBlue(az) + alpha*qBlue(bz);
     return qRgb(resultR, resultG, resultB);
 }
+
+BoundingBox Cone::calculateAABB() const {
+    BoundingBox ret;
+    return ret;
+}

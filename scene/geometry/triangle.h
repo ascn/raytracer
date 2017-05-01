@@ -26,7 +26,6 @@ public:
     glm::vec3 normals[3];
     glm::vec3 vertices[3]; // vertex coordinates in WORLD SPACE
     float S;
-    BoundingBox bbox;
     bool useFaceNormal;
     glm::vec3 faceNormal; // if vertices do not have normals
     glm::vec2 uvs[3];

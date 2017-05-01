@@ -2,6 +2,8 @@
 #include <acceleration/KdNode.h>
 #include <tinyobj/tiny_obj_loader.h>
 #include <vector>
+#include <cmath>
+#include <acceleration/BoundingBox.h>
 
 Mesh::Mesh(QString name, QString objFile, Transform transform, Material *material, bool kd, bool flipNorm) {
 	this->name = name;
@@ -69,7 +71,7 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 	}
 
 	if (kd) {
-		kdtree = KDNode::build(triangles);
+		kdtree = KDNode::build(triangles, 0, std::round(8 + 1.3f * std::log2(triangles.size())));
 	} else {
 		kdtree = nullptr;
 	}
@@ -112,3 +114,6 @@ glm::vec3 Mesh::getColor(Intersection &isect) const {
     }
 }
 
+BoundingBox Mesh::calculateAABB() const {
+	return BoundingBox(triangles);
+}

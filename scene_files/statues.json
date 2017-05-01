@@ -5,8 +5,8 @@
 			"eye": [0, -3, 20],
 			"worldUp": [0, 1, 0],
 			"fov": 50,
-			"width": 256,
-			"height": 256
+			"width": 512,
+			"height": 512
 		},
 		"geometry": [
 			{
@@ -50,6 +50,17 @@
 				},
 				"material": "white_diffuse",
 				"filename": "scene_files/obj/hermes.obj"
+			},
+			{
+				"type": "obj",
+				"name": "lucy",
+				"transform" : {
+					"translate": [0, 1, 3],
+					"rotate": [180, 240, 0],
+					"scale": [0.004, 0.004, 0.004]
+				},
+				"material": "white_diffuse",
+				"filename": "scene_files/obj/ALucy.obj"
 			},
 			{
 				"type": "square",

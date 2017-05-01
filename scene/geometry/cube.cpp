@@ -1,10 +1,12 @@
 #include <scene/geometry/cube.h>
 #include <QDebug>
+#include <vector>
 
 Cube::Cube(QString name, Transform transform, Material *material) {
     this->name = name;
     this->transform = transform;
     this->material = material;
+    this->bbox = calculateAABB();
 }
 
 Cube::~Cube() {}
@@ -197,4 +199,31 @@ QRgb Cube::slerp(float alpha, QRgb az, QRgb bz) const {
     float resultG = (1-alpha)*qGreen(az) + alpha*qGreen(bz);
     float resultB = (1-alpha)*qBlue(az) + alpha*qBlue(bz);
     return qRgb(resultR, resultG, resultB);
+}
+
+BoundingBox Cube::calculateAABB() const {
+    // transform vertices to world space
+    std::vector<glm::vec3> world;
+    world.push_back(transform.transform * glm::vec4(-0.5, -0.5, -0.5, 1));
+    world.push_back(transform.transform * glm::vec4(-0.5, -0.5, 0.5, 1));
+    world.push_back(transform.transform * glm::vec4(-0.5, 0.5, -0.5, 1));
+    world.push_back(transform.transform * glm::vec4(-0.5, 0.5, 0.5, 1));
+    world.push_back(transform.transform * glm::vec4(0.5, -0.5, -0.5, 1));
+    world.push_back(transform.transform * glm::vec4(0.5, -0.5, 0.5, 1));
+    world.push_back(transform.transform * glm::vec4(0.5, 0.5, -0.5, 1));
+    world.push_back(transform.transform * glm::vec4(0.5, 0.5, 0.5, 1));
+    BoundingBox ret;
+    ret.minPoint = glm::vec3(INFINITY);
+    ret.maxPoint = glm::vec3(-1 * INFINITY);
+    for (const auto &v : world) {
+        ret.minPoint.x = v.x < ret.minPoint.x ? v.x : ret.minPoint.x;
+        ret.maxPoint.x = v.x > ret.maxPoint.x ? v.x : ret.maxPoint.x;
+        ret.minPoint.y = v.y < ret.minPoint.y ? v.y : ret.minPoint.y;
+        ret.maxPoint.y = v.y > ret.maxPoint.y ? v.y : ret.maxPoint.y;
+        ret.minPoint.z = v.z < ret.minPoint.z ? v.z : ret.minPoint.z;
+        ret.maxPoint.z = v.z > ret.maxPoint.z ? v.z : ret.maxPoint.z;
+    }
+    ret.maxPoint += glm::vec3(0.0001);
+    ret.minPoint -= glm::vec3(0.0001);
+    return ret;
 }
