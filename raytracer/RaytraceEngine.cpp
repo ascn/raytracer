@@ -34,7 +34,7 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 		for (int i = 0; i < camera.width; ++i) {
 			for (int j = 0; j < camera.height; ++j) {
 				glm::vec3 total = glm::vec3(0);
-                if (i == 256 && j == 256) {
+                if (i == 398 && j == 427) {
                     int k = 0;
                 }
                 std::vector<glm::vec3> points;

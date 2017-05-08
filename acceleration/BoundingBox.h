@@ -8,7 +8,7 @@
 
 class Geometry;
 
-enum class Axis { X, Y, Z };
+enum class Axis { X = 0, Y = 1, Z = 2 };
 
 class BoundingBox {
 public:

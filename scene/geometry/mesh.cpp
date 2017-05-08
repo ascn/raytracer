@@ -75,6 +75,7 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 	} else {
 		kdtree = nullptr;
 	}
+	this->bbox = calculateAABB();
 }
 
 Mesh::~Mesh() {

@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <scene/geometry/triangle.h>
 #include <raytracer/intersection.h>
+#include <QtConcurrent/QtConcurrentRun>
+#include <QFuture>
 
 KDNode::KDNode() : left(nullptr), right(nullptr) {}
 
@@ -72,29 +74,18 @@ KDNode *KDNode::build(std::vector<Geometry *> &geometries, int depth, int maxDep
 			break;
 		}
 	}
-	std::nth_element(vals.begin(), vals.begin() + (vals.size() / 2), vals.end());
-	float median = vals[vals.size() / 2];
-	vals.clear();
-	for (const auto &p : geometries) {
-		switch (longestAxis) {
-		case Axis::X:
-			median < p->bbox.getMidpoint().x ? leftTriangles.push_back(p) : rightTriangles.push_back(p);
-			break;
-		case Axis::Y:
-			median < p->bbox.getMidpoint().y ? leftTriangles.push_back(p) : rightTriangles.push_back(p);
-			break;
-		case Axis::Z:
-			median < p->bbox.getMidpoint().z ? leftTriangles.push_back(p) : rightTriangles.push_back(p);
-			break;
-		}
-	}
+	std::sort(geometries.begin(), geometries.end(), [&](const Geometry *g1, const Geometry *g2) {
+		return g1->bbox.getMidpoint()[(int) longestAxis] < g2->bbox.getMidpoint()[(int) longestAxis];
+	});
+	leftTriangles = std::vector<Geometry *>(geometries.begin(), geometries.begin() + (geometries.size() / 2));
+	rightTriangles = std::vector<Geometry *>(geometries.begin() + (geometries.size() / 2), geometries.end());
 	if (leftTriangles.size() == 0) {
 		node->geometries = rightTriangles;
 	} else if (rightTriangles.size() == 0) {
 		node->geometries = leftTriangles;
-	} else {
-		node->left = KDNode::build(leftTriangles, depth + 1, maxDepth);
-		node->right = KDNode::build(rightTriangles, depth + 1, maxDepth);
+    } else {
+        node->left = KDNode::build(leftTriangles, depth + 1, maxDepth);
+        node->right = KDNode::build(rightTriangles, depth + 1, maxDepth);
 	}
 	return node;
 }
