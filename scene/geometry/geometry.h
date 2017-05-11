@@ -24,6 +24,7 @@ public:
     Transform transform;
     Material *material;
     BoundingBox bbox; // Axis aligned (world space) bounding box
+    int tris = 0;
 protected:
 	virtual BoundingBox calculateAABB() const = 0;
 };

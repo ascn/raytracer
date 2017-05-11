@@ -69,6 +69,21 @@ private:
 	QLabel *AOSpreadLabel;
 	QLabel *AODistanceLabel;
 
+	void createStatsDock();
+	QDockWidget *statsDock;
+	QGroupBox *statsDockContents;
+	QLabel *renderTimeLabel;
+	QLabel *renderTimeValue;
+	QLabel *kdTreeTimeLabel;
+	QLabel *kdTreeTimeValue;
+	QLabel *trisLabel;
+	QLabel *trisValue;
+	QLabel *geoIsectLabel;
+	QLabel *geoIsectValue;
+	QLabel *bboxIsectLabel;
+	QLabel *bboxIsectValue;
+
+	QString formatMs(qint64 ms);
 private slots:
 	void loadScene();
 	void renderScene();

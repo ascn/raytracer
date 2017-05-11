@@ -76,6 +76,7 @@ Mesh::Mesh(QString name, QString objFile, Transform transform, Material *materia
 		kdtree = nullptr;
 	}
 	this->bbox = calculateAABB();
+	this->tris = this->triangles.size();
 }
 
 Mesh::~Mesh() {

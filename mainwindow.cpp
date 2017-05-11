@@ -13,6 +13,7 @@
 #include <QComboBox>
 #include <QDoubleSpinBox>
 #include <QIcon>
+#include <QElapsedTimer>
 
 #include <raytracer/RaytraceEngine.h>
 #include <scene/camera.h>
@@ -41,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 	createMenus();
 
 	createOptionDock();
+	createStatsDock();
 
 	imgDisplay->resetPreview();
 
@@ -57,10 +59,26 @@ void MainWindow::loadScene() {
 		tr("Load scene..."), "./", tr("Scene files (*.json)"));
 	if (filename == "") { return; }
 	scene->reset();
+	QElapsedTimer timer;
+	if (kdTreeBox->isChecked()) {
+		timer.start();
+	} else {
+		kdTreeTimeValue->setText(tr("N/A"));
+	}
     jsonreader::readJson(camera, scene, filename, kdTreeBox->isChecked());
+    if (kdTreeBox->isChecked()) {
+    	kdTreeTimeValue->setText(formatMs(timer.elapsed()));
+    }
     imgDisplay->img = QImage(camera->width, camera->height, QImage::Format_RGB32);
     imgDisplay->img.fill(qRgb(0, 0, 0));
     imgDisplay->updatePreview();
+    renderTimeValue->setText(tr("N/A"));
+    int tris = 0;
+    for (const auto &p : scene->primitives) {
+    	tris += p->tris;
+    }
+    const QLocale &cLocale = QLocale::c();
+    trisValue->setText(cLocale.toString(tris));
 }
 
 void MainWindow::saveImage() {
@@ -74,9 +92,12 @@ void MainWindow::saveImage() {
 void MainWindow::renderScene() {
 	imgDisplay->darkenImage();
 	setAllOptionsEnabled(false);
+	QElapsedTimer timer;
+	timer.start();
     re.render(*camera, *scene, imgDisplay->img,
     		recursionDepthBox->value(), glm::pow(AABox->value(), 2),
     		multithreadingBox->isChecked());
+    renderTimeValue->setText(formatMs(timer.elapsed()));
 	imgDisplay->updatePreview();
 	setAllOptionsEnabled(true);
 }
@@ -169,6 +190,49 @@ void MainWindow::createOptionDock() {
 	optionDock->setWidget(optionDockContents);
 }
 
+void MainWindow::createStatsDock() {
+	QGridLayout *statsDockLayout = new QGridLayout;
+	statsDockLayout->setVerticalSpacing(5);
+	statsDockContents = new QGroupBox(tr(""));
+
+	renderTimeLabel = new QLabel(tr("Time to Render: "), statsDockContents);
+	renderTimeValue = new QLabel(tr("N/A"), statsDockContents);
+
+	kdTreeTimeLabel = new QLabel(tr("Time to build Kd-Tree: "), statsDockContents);
+    kdTreeTimeValue = new QLabel(tr("N/A"), statsDockContents);
+
+	trisLabel = new QLabel(tr("Tris: "), statsDockContents);
+	trisValue = new QLabel(tr("N/A"), statsDockContents);
+
+	geoIsectLabel = new QLabel(tr("Geometry Intersection Tests: "), statsDockContents);
+	geoIsectValue = new QLabel(tr("N/A"));
+
+	bboxIsectLabel = new QLabel(tr("Bounding Box Intersection Tests: "), statsDockContents);
+	bboxIsectValue = new QLabel(tr("N/A"));
+
+	statsDock = new QDockWidget(tr("Statistics"), this);
+	statsDock->setAllowedAreas(Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, statsDock);
+
+	QSpacerItem *spacer = new QSpacerItem(
+					40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+	statsDockLayout->addWidget(renderTimeLabel, 0, 0, Qt::AlignRight);
+	statsDockLayout->addWidget(renderTimeValue, 0, 1);
+    statsDockLayout->addWidget(kdTreeTimeLabel, 1, 0, Qt::AlignRight);
+    statsDockLayout->addWidget(kdTreeTimeValue, 1, 1);
+	statsDockLayout->addWidget(trisLabel, 2, 0, Qt::AlignRight);
+	statsDockLayout->addWidget(trisValue, 2, 1);
+	statsDockLayout->addWidget(geoIsectLabel, 3, 0, Qt::AlignRight);
+	statsDockLayout->addWidget(geoIsectValue, 3, 1);
+	statsDockLayout->addWidget(bboxIsectLabel, 4, 0, Qt::AlignRight);
+	statsDockLayout->addWidget(bboxIsectValue, 4, 1);
+    statsDockLayout->addItem(spacer, 5, 2, -1, -1, Qt::AlignTop);
+
+	statsDockContents->setLayout(statsDockLayout);
+	statsDock->setWidget(statsDockContents);
+}
+
 void MainWindow::createActions() {
 	loadSceneAct = new QAction(tr("&Load scene..."), this);
 	loadSceneAct->setShortcuts(QKeySequence::Open);
@@ -204,4 +268,19 @@ void MainWindow::setAllOptionsEnabled(bool enabled) {
 	loadSceneAct->setEnabled(enabled);
 	saveImageAct->setEnabled(enabled);
 	renderAct->setEnabled(enabled);
+}
+
+QString MainWindow::formatMs(qint64 ms) {
+    if (ms < 1000) {
+		return (QString::number(ms) + "ms");
+	} else if (ms < 60000) {
+		int sec = ms / 1000;
+		return (QString::number(sec) + "s");
+	} else if (ms < 3600000) {
+		int min = ms / (1000 * 60);
+		int sec = (ms / 1000) % 60;
+		return (QString::number(min) + "m " + QString::number(sec) + "s");
+	} else {
+        int hrs = ms / (1000 * 60 * 60);
+	}
 }
