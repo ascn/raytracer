@@ -17,7 +17,6 @@ Cone::Cone(QString name, Transform transform, Material *material) {
 Cone::~Cone() {}
 
 bool Cone::intersect(const Ray &ray, Intersection *intersection) const {
-    float radius = 0.5;
     Ray rayMod = ray.getTransformedCopy(transform.invTransform);
     glm::vec3 rayOriMod = rayMod.origin;
     glm::vec3 rayDirMod = rayMod.direction;

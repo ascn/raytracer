@@ -16,7 +16,7 @@ void RenderTask::run() {
 			glm::vec3 total = glm::vec3(0);
 			std::vector<glm::vec3> points;
 			sampler.generateSamples(samples, points, Warp::Square);
-			for (int k = 0; k < points.size(); ++k) {
+            for (unsigned int k = 0; k < points.size(); ++k) {
 				glm::vec3 v = points[k];
 				Ray ray = camera->raycast(i + v.x, j + v.y);
 				glm::vec3 color = re->traceRay(ray, *scene, 0, maxDepth, samples, k);

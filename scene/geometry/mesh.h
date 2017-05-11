@@ -8,7 +8,7 @@
 
 class Mesh : public Geometry {
 public:
-	Mesh(QString name, QString objFile, Transform transform, Material *material, bool kd, bool flipNorm = false);
+    Mesh(QString name, QString objFile, Transform transform, Material *material, bool kd);
 	~Mesh();
 	bool intersect(const Ray &ray, Intersection *intersection) const;
     void mapNormal(Intersection &isect) const;

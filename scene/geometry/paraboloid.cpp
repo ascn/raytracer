@@ -17,7 +17,6 @@ Paraboloid::Paraboloid(QString name, Transform transform, Material *material) {
 Paraboloid::~Paraboloid() {}
 
 bool Paraboloid::intersect(const Ray &ray, Intersection *intersection) const {
-    float radius = 0.5;
     Ray rayMod = ray.getTransformedCopy(transform.invTransform);
     glm::vec3 rayOriMod = rayMod.origin;
     glm::vec3 rayDirMod = rayMod.direction;

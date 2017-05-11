@@ -282,5 +282,11 @@ QString MainWindow::formatMs(qint64 ms) {
 		return (QString::number(min) + "m " + QString::number(sec) + "s");
 	} else {
         int hrs = ms / (1000 * 60 * 60);
+        ms -= hrs * (1000 * 60 * 60);
+        int min =  ms / (1000 * 60);
+        int sec = (ms / 1000) % 60;
+        return (QString::number(hrs) + "h " +
+                QString::number(min) + "m " +
+                QString::number(sec) + "s");
 	}
 }

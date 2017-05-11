@@ -132,13 +132,7 @@ void parseGeometry(Scene *scene, QJsonArray geometryArr, bool kd) {
 
         } else if (type == QString("obj")) {
             QString filename = currObj.value("filename").toString();
-            bool flip = false;
-            if (currObj.contains("flipNormal")) {
-                if (currObj.value("flipNormal").toString() == "true") {
-                    flip = true;
-                }
-            }
-            Mesh *mesh = new Mesh(name, filename, *transform, material, kd, flip);
+            Mesh *mesh = new Mesh(name, filename, *transform, material, kd);
             scene->primitives.push_back(mesh);
         } else if (type == QString("cylinder")) {
             Cylinder *cyl = new Cylinder(name, *transform, material);

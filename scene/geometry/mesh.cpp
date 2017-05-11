@@ -5,7 +5,7 @@
 #include <cmath>
 #include <acceleration/BoundingBox.h>
 
-Mesh::Mesh(QString name, QString objFile, Transform transform, Material *material, bool kd, bool flipNorm) {
+Mesh::Mesh(QString name, QString objFile, Transform transform, Material *material, bool kd) {
 	this->name = name;
 	this->transform = transform;
 	this->material = material;
@@ -107,12 +107,14 @@ bool Mesh::intersect(const Ray &ray, Intersection *intersection) const {
 }
 
 void Mesh::mapNormal(Intersection &isect) const {
-
+    (void) isect;
 }
 
 glm::vec3 Mesh::getColor(Intersection &isect) const {
     if (isect.objectHit->material->texture == nullptr) {
         return isect.objectHit->material->baseColor;
+    } else {
+        return glm::vec3(0);
     }
 }
 

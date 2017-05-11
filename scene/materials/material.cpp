@@ -11,13 +11,4 @@ Material::Material() :
 	baseColor(glm::vec3(0.1f, 0.1f, 0.1f)),
 	emissive(false), reflectivity(0), iorIn(0), iorOut(0),
 	texture(nullptr), normalMap(nullptr), ks(0), n(0)
-{
-}
-
-
-
-void convertMaterial(tinyobj::material_t material) {
-
-
-}
-
+{}

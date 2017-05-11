@@ -36,10 +36,11 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 				glm::vec3 total = glm::vec3(0);
                 if (i == 398 && j == 427) {
                     int k = 0;
+                    (void) k;
                 }
                 std::vector<glm::vec3> points;
                 sampler.generateSamples(samples, points, Warp::Square);
-                for (int k = 0; k < points.size(); ++k) {
+                for (unsigned int k = 0; k < points.size(); ++k) {
                 	glm::vec3 v = points[k];
                 	Ray ray = camera.raycast(i + v.x, j + v.y);
                 	glm::vec3 color = traceRay(ray, scene, 0, maxDepth, samples, k);
@@ -276,6 +277,7 @@ QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
 		for (int j = 0; j < camera.height; ++j) {
 			if (i == 304 && j == 208) {
 				int k = 0;
+                (void) k;
 			}
 			Ray ray = camera.raycast(i, j);
 			glm::vec4 color = traceAORay(ray, scene, samples, spread, distance);
@@ -297,6 +299,7 @@ QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
 
 glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
 								 int samples, float spread, float distance) {
+    (void) spread;
 	Intersection isect = Intersection::getIntersection(ray, scene);
 	if (isect.objectHit == nullptr) { return glm::vec4(0); }
 
@@ -305,7 +308,7 @@ glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
     Sampler sampler;
     sampler.generateSamples(samples, points, Warp::HemiCos);
     sampler.transformSamples(isect, points);
-    for (int i = 0; i < points.size(); ++i) {
+    for (unsigned int i = 0; i < points.size(); ++i) {
       Ray ray = isect.raycast(points[i]);
       Intersection sampleIsect = Intersection::getIntersection(ray, scene);
       if (sampleIsect.t > 0 && sampleIsect.t < distance) {
