@@ -12,7 +12,7 @@
 class RenderTask : public QRunnable {
 public:
 	RenderTask(glm::vec2 minPoint, glm::vec2 maxPoint, const Camera *c, const Scene *s,
-		QImage &img, uint8_t maxDepth, uint8_t samples, RaytraceEngine *re) :
+		QImage &img, uint8_t maxDepth, int samples, RaytraceEngine *re) :
 		minPoint(minPoint), maxPoint(maxPoint), camera(c), scene(s),
 		img(img), maxDepth(maxDepth), samples(samples), re(re) {}
 
@@ -24,7 +24,7 @@ public:
 	const Scene *scene;
 	QImage &img;
 	uint8_t maxDepth;
-	uint8_t samples;
+	int samples;
 	RaytraceEngine *re;
 };
 

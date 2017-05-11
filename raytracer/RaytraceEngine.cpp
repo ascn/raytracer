@@ -24,7 +24,7 @@
 RaytraceEngine::RaytraceEngine() {}
 
 void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &image,
-                            uint8_t maxDepth, uint8_t samples, bool multithreading) {
+                            uint8_t maxDepth, int samples, bool multithreading) {
 	// For each pixel, cast *samples* rays using traceRay.
 	// Average the color over all samples from traceRay and set
 	// color of pixel (SSAA).
@@ -84,7 +84,7 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 }
 
 glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene, 
-								   uint8_t depth, uint8_t maxDepth, uint8_t samples,
+								   uint8_t depth, uint8_t maxDepth, int samples,
 								   uint8_t idx) {
 	// Recursively traces a ray up to maxDepth. If the ray hits a geometry,
 	// we cast light feeler rays, add up contribution, and divide by number
