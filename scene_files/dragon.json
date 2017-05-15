@@ -1,12 +1,12 @@
 {
 	"scene": {
 		"camera": {
-			"target": [0, 0, 0],
-			"eye": [0, -3, 10],
+			"target": [0, 0.5, 0],
+			"eye": [0, -0.3, 7],
 			"worldUp": [0, 1, 0],
 			"fov": 50,
-			"width": 512,
-			"height": 512
+			"width": 1920,
+			"height": 1080
 		},
 		"geometry": [
 			{
@@ -14,10 +14,10 @@
 				"name": "Back Wall",
 				"transform": {
 					"translate": [0, 0, -1],
-					"scale": [10, 10, 1],
+					"scale": [4, 4, 1],
 					"rotate": [0, 0, 0]
 				},
-				"material": "white_diffuse"
+				"material": "brick"
 			},
 			{
 				"type": "square",
@@ -33,11 +33,11 @@
 				"type": "obj",
 				"name": "dragon",
 				"transform" : {
-					"translate": [0, 1, 0],
+					"translate": [-1, 1, 0],
 					"rotate": [180, 200, 0],
-					"scale": [0.2, 0.2, 0.2]
+					"scale": [0.1, 0.1, 0.1]
 				},
-				"material": "gold",
+				"material": "green_glass",
 				"filename": "scene_files/obj/dragon.obj"
 			},
 			{
@@ -108,15 +108,31 @@
 			},
 			{
 				"type": "phong",
+				"name": "green_glass",
+				"baseColor": [0.31, 1, 0.5],
+				"iorIn": 1.5,
+				"iorOut": 1
+			},
+			{
+				"type": "phong",
 				"name": "gold",
 				"baseColor": [0.831, 0.686, 0.216],
-				"reflectivity": 0.5
+				"reflectivity": 0.3
+			},
+			{
+				"type": "phong",
+				"name": "floor",
+				"baseColor": [1, 1, 1],
+				"reflectivity": 0.2,
+				"ks": 0.2,
+				"n": 1000
 			},
 			{
 				"type": "lambert",
-				"name": "floor",
+				"name": "brick",
 				"baseColor": [1, 1, 1],
-				"reflectivity": 0.1
+		        "texture": "scene_files/tex_nor_maps/brick.jpg",
+		        "normalMap": "scene_files/tex_nor_maps/brick_norm.jpg"
 			}
 		]
 	}
