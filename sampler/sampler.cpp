@@ -32,6 +32,13 @@ void Sampler::generateSamples(int samples, std::vector<glm::vec3> &vec, Warp met
 			break;
 		case Warp::Sphere:
 			break;
+        case Warp::Hemi: {
+            float z = pt.x;
+            float r = std::sqrt(std::max(0.f, 1.f - z * z));
+            float phi = 2.f * 3.1415 * pt.y;
+            warped = glm::vec3(r * std::cos(phi), r * std::sin(phi), z);
+            break;
+        }
 		case Warp::HemiCos:
 			warped = Sampler::warpDisk(pt);
 			warped.z = glm::sqrt(glm::max(0.f, 1 - warped.x * warped.x - warped.y * warped.y));

@@ -9,7 +9,7 @@
 
 #include <raytracer/intersection.h>
 
-enum class Warp { Square, Disk, Sphere, HemiCos };
+enum class Warp { Square, Disk, Sphere, Hemi, HemiCos };
 
 class Sampler {
 public:

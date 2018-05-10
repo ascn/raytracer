@@ -6,6 +6,7 @@
 #include <scene/camera.h>
 #include <scene/scene.h>
 #include <raytracer/ray.h>
+#include <sampler/sampler.h>
 #include <QImage>
 #include <QObject>
 
@@ -21,7 +22,7 @@ public:
 	QImage generateAOPass(const Camera &camera, const Scene &scene,
 		int samples, float spread, float distance);
 	glm::vec4 traceAORay(const Ray &ray, const Scene &scene,
-		int samples, float spread, float distance);
+        int samples, float spread, float distance, Sampler sampler);
 	float fresnel(const Ray &ray, glm::vec3 normal, float ior);
 	void writeColorToImage(QImage &img, int x, int y, glm::vec3 color);
 	void emitUpdateGUI();

@@ -34,7 +34,7 @@ void RaytraceEngine::render(const Camera &camera, const Scene &scene, QImage &im
 		for (int i = 0; i < camera.width; ++i) {
 			for (int j = 0; j < camera.height; ++j) {
 				glm::vec3 total = glm::vec3(0);
-                if (i == 398 && j == 427) {
+                if (i == 330 && j == 200) {
                     int k = 0;
                     (void) k;
                 }
@@ -112,6 +112,8 @@ glm::vec3 RaytraceEngine::traceRay(const Ray &ray, const Scene &scene,
                 total += color * glm::max(0.f, glm::dot(glm::normalize(isect.normal),
                                  glm::normalize(feeler.direction))) *
 						glm::vec3(255);
+			} else {
+				total += color * glm::vec3(0.1);
 			}
 		}
 
@@ -272,6 +274,7 @@ QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
 	// completely transparent.
 	// This resulting AO image can be blended (multiply) with
 	// the rendered image to generate the desired effect.
+    Sampler sampler;
 	QImage ret = QImage(camera.width, camera.height, QImage::Format_RGB32);
 	for (int i = 0; i < camera.width; ++i) {
 		for (int j = 0; j < camera.height; ++j) {
@@ -280,7 +283,7 @@ QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
                 (void) k;
 			}
 			Ray ray = camera.raycast(i, j);
-			glm::vec4 color = traceAORay(ray, scene, samples, spread, distance);
+            glm::vec4 color = traceAORay(ray, scene, samples, spread, distance, sampler);
 			QRgb *line = (QRgb *) ret.scanLine(j);
 			line += i;
 			*line = qRgba(color.x, color.y, color.z, color.w);
@@ -298,15 +301,14 @@ QImage RaytraceEngine::generateAOPass(const Camera &camera, const Scene &scene,
 //}
 
 glm::vec4 RaytraceEngine::traceAORay(const Ray &ray, const Scene &scene,
-								 int samples, float spread, float distance) {
+                                 int samples, float spread, float distance, Sampler sampler) {
     (void) spread;
 	Intersection isect = Intersection::getIntersection(ray, scene);
 	if (isect.objectHit == nullptr) { return glm::vec4(0); }
 
     int hitCount = 0;
     std::vector<glm::vec3> points;
-    Sampler sampler;
-    sampler.generateSamples(samples, points, Warp::HemiCos);
+    sampler.generateSamples(samples, points, Warp::Hemi);
     sampler.transformSamples(isect, points);
     for (unsigned int i = 0; i < points.size(); ++i) {
       Ray ray = isect.raycast(points[i]);

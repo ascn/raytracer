@@ -24,7 +24,7 @@ Intersection Intersection::getIntersection(const Ray &ray, const Scene &scene) {
 	if (scene.kdtree != nullptr) {
 		Intersection ret;
 		scene.kdtree->intersect(ray, &ret);
-		return ret;
+        return ret;
 	}
 	Intersection ret, tmp;
 
